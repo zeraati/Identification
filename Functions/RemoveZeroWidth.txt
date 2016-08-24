@@ -1,0 +1,17 @@
+﻿CREATE FUNCTION [dbo].[RemoveZeroWidth] ( @String NVARCHAR(255) )
+RETURNS NVARCHAR(255)
+AS
+    BEGIN
+        DECLARE @position AS INT;
+        DECLARE @Result AS NVARCHAR(255);
+        SET @position = 1;
+        SET @Result = '';
+        WHILE @position <= LEN(@String)
+            BEGIN
+                IF NOT ( UNICODE(SUBSTRING(@String, @position, 1)) IN ( 8204,
+                                                              8205, 8206, 8207 ) )
+                    SET @Result = @Result + SUBSTRING(@String, @position, 1);
+                SET @position = @position + 1;
+            END;
+        RETURN @Result;
+    END; 

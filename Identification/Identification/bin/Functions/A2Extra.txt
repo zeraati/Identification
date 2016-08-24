@@ -1,0 +1,39 @@
+﻿CREATE FUNCTION [dbo].[A2Extra]
+    (
+      @Str1 VARCHAR(40) ,
+      @Str2 VARCHAR(40)
+    )
+RETURNS SMALLINT
+AS
+    BEGIN
+        IF @Str1 = @Str2
+            RETURN 100;
+        IF @Str1 IS NULL
+            SET @Str1 = '';
+        IF @Str2 IS NULL
+            SET @Str2 = '';
+        IF @Str1 = ''
+            AND @Str2 = ''
+            RETURN 0;
+        IF @Str1 = ''
+            AND @Str2 <> ''
+            RETURN 50;
+        IF @Str1 <> ''
+            AND @Str2 = ''
+            RETURN 50;
+        IF REPLACE(@Str1, ' ', '') = REPLACE(@Str2, ' ', '')
+            RETURN 99;
+        SET @Str1 = REPLACE(@Str1, ' ', '');
+        SET @Str2 = REPLACE(@Str2, ' ', '');
+        SET @Str1 = dbo.RemoveZeroWidth(@Str1);
+        SET @Str2 = dbo.RemoveZeroWidth(@Str2);
+        DECLARE @Em1 AS INTEGER;
+        DECLARE @Em2 AS INTEGER;
+        SET @Em1 = 0;
+        SET @Em2 = 0;
+        SET @Em1 = dbo.Check2Str(@Str1, @Str2);
+        SET @Em2 = dbo.Check2StrM(@Str1, @Str2);
+        IF @Em2 > @Em1
+            SET @Em1 = @Em2;
+        RETURN @Em1;
+    END; 

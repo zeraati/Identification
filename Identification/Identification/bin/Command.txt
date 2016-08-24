@@ -1,0 +1,1 @@
+SELECT  FROM [Ehraz].dbo.[TBL_Student_95-02-21] a JOIN [Ehraz].dbo.[TBL_MKsarparast_95-02-21] b ON  master.dbo.ReplaceAB( a.[CodeMelli])= master.dbo.ReplaceAB( b.[CodeMelli]) Where a.CodeMelli=b.CodeMelli AND b.CodeMelli is not null  AND b.[STID_vld] IS NULL 

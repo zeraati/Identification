@@ -1,0 +1,37 @@
+CREATE FUNCTION [dbo].[Ch_Codemelli] (@code nvarchar(30))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @code2	NVARCHAR(30)
+	DECLARE @code3	INT
+	DECLARE @count	INT
+	DECLARE @count2 INT
+	DECLARE @control INT
+	DECLARE @reti	INT
+
+	SET @count=1
+	SET @count2=10
+	SET @code3=0
+	
+	WHILE @count<10 BEGIN
+		SET @code2=SUBSTRING(@code,@count,1)*@count2
+		SET @code3=@code2+@code3
+		SET @count=@count+1
+		SET @count2=@count2-1
+	END
+		SET @control=SUBSTRING(@code,10,1)
+		SET @code2=@code3/11
+		SET @code2=@code3-(@code2*11)
+		IF @code2>2 SET @code2=11-@code2 
+		IF @control<2 
+			BEGIN
+				IF @code2=@control SET @reti=1	--True = 1
+				ELSE SET @reti=0			--False = 0
+			END    
+	ELSE
+		BEGIN
+			IF @code2=@control SET @reti=1
+			ELSE SET @reti=0
+		END	
+RETURN @reti
+END

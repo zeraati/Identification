@@ -1,0 +1,248 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+using System.Data.SqlClient;
+namespace Identification
+{
+    public partial class Form1 : Form
+    {
+        Functions Functions = new Functions();
+
+        Boolean answer, EnableFrm;
+        SqlConnection sqlConnection = new SqlConnection();
+
+        string strPathLoginFolder = @"..\Login.pos";
+        string strUser, strPass, str, Alltext;
+
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            //  Load Server Name
+            cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+            //  Defualt
+            //btnConnect_Click(null, null);
+            //احرازهویتToolStripMenuItem_Click(null, null);
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            //  desable open other forms
+            EnableFrm = false;
+
+            // get server info ==> server , user , pass
+            string strServer = cmbServer.Text, strUser = txtUser.Text, strPass = txtPass.Text;
+
+
+            //  create sql connection            
+            sqlConnection = Functions.SqlConnect(strServer, strUser, strPass);
+
+
+            //  test sql connection
+            if (Functions.SqlConnectionTest(sqlConnection))
+            {
+
+                #region save login info with encrypt pass
+
+                //  save login info with encrypt pass
+                if (chbRemember.CheckState == CheckState.Checked)
+                {
+                    //  encrypt pass
+                    string strPassEncrypt = CryptorEngine.Encrypt(strPass, true);
+
+                    List<string> lst = Functions.ReadTxt(strPathLoginFolder);
+
+
+                    //  save login when login file info is empty
+                    if (File.ReadAllText(strPathLoginFolder) == "")
+                    { File.WriteAllText(strPathLoginFolder, strServer + "," + strUser + "," + strPassEncrypt); }
+
+
+                    //  save or replace login when login file info is not empty
+                    if (File.ReadAllText(strPathLoginFolder) != "")
+                    {
+                        int intFind = Functions.listFind(lst, strServer);
+
+                        if (intFind != -1)
+                        {
+                            lst[intFind] = strServer + "," + strUser + "," + strPassEncrypt;
+                            Functions.saveList(lst, strPathLoginFolder);
+                        }
+
+                        else File.WriteAllText(strPathLoginFolder, File.ReadAllText(strPathLoginFolder) + "\r\n" + strServer + "," + strUser + "," + strPassEncrypt);
+                    }
+
+                    //  load server name
+                    cmbServer.DataSource = lstSvrName(strPathLoginFolder);
+                }
+
+                #endregion
+
+
+                //  load database name  // set source cmbDBNames 
+                cmbDBNames.DataSource = Functions.SqlGetDBName(sqlConnection);
+
+                // set btnConnect text
+                btnConnect.Text = "اتصال مجدد";
+
+                //  enable open other forms
+                EnableFrm = true;
+
+            }
+
+            else   //   if problem in sql connection
+            {
+                MessageBox.Show("عدم برقراری ارتباط", "!هشدار");
+                btnConnect.Text = "اتصال";
+
+                //  desable open other forms
+                EnableFrm = false;
+            }
+
+
+            //Connect();
+        }
+
+        private void cmbServer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<string> list = new List<string>();
+            FileStream fileStream = new FileStream(strPathLoginFolder, FileMode.Open, FileAccess.Read);
+
+
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+            {
+                string line;
+                while ((line = streamReader.ReadLine()) != null)
+                {
+
+                    str = line.Substring(0, line.IndexOf(","));
+                    Alltext = line.Replace(str + ",", "").Trim();
+                    if (cmbServer.Text == str)
+                    {
+                        strUser = Alltext.Substring(0, Alltext.IndexOf(","));
+                        strPass = Alltext.Replace(strUser + ",", "").Trim();
+                    }
+                }
+            }
+            if (cmbServer.Text == ".")
+            {
+                txtUser.Text = "";
+                txtPass.Text = "";
+            }
+            else
+            {
+                txtUser.Text = strUser;
+                txtPass.Text = strPass;
+            }
+        }
+
+        private void بازکردنفرماستانداردسازیToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EnableFrm == true)
+            {
+                Estandard frmEst = new Estandard(sqlConnection);
+                frmEst.ShowDialog();
+            }
+        }
+
+        private void خروجToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void اتصالToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnConnect_Click(null, null);
+        }
+
+        private void احرازهویتToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EnableFrm == true)
+            {
+                SetPerson SPFrm = new SetPerson(sqlConnection);
+                SPFrm.ShowDialog();
+            }
+        }
+
+        private void یونیکToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Uniqe unFrm = new Uniqe(sqlConnection);
+            unFrm.ShowDialog();
+        }
+
+        private void نمایشاطلاعاتخالیToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NullSearch nlsch = new NullSearch(sqlConnection);
+            nlsch.ShowDialog();
+        }
+
+        private void پشتیبانگیریToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLDBbackup sqlbackup = new SQLDBbackup(sqlConnection);
+            sqlbackup.ShowDialog();
+        }
+
+        private void سرورمحلیToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnRefresh_Click(null, null);
+        }
+       
+
+        //************      Functions
+
+
+        #region lstSvrName
+        /// <summary>
+        /// get server name from file
+        /// </summary>
+        /// <param name="strPathLogin">login file path</param>
+        /// <returns>List</returns>
+        private List<string> lstSvrName(string strPathLogin)
+        {
+            List<string> lstSvrName = new List<string>();
+
+            //  load server names into cmbServer
+            if (File.Exists(strPathLogin))
+            {
+                lstSvrName = Functions.ReadTxt(strPathLogin);
+
+                lstSvrName.Insert(0, "., ,");
+
+                //  get server from read line
+                for (int i = 0; i < lstSvrName.Count; i++)
+                { lstSvrName[i] = lstSvrName[i].Substring(0, lstSvrName[i].IndexOf(",")); }
+
+            }
+
+            return lstSvrName;
+        }
+        #endregion
+
+
+
+    }
+}

@@ -1,0 +1,35 @@
+CREATE FUNCTION [dbo].[FE_Date] 
+(
+@date	VARCHAR(20)
+)
+RETURNS VARCHAR(10)
+AS
+BEGIN
+	DECLARE @Result VARCHAR(10)
+	DECLARE @year	VARCHAR(10)
+	DECLARE @month	VARCHAR(10)
+	DECLARE @day	VARCHAR(10)
+	--SET			@date	=	'0'
+			SET @year = SUBSTRING(@date,0,CHARINDEX('/',@date))
+			SET @month = SUBSTRING((SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date)))),0,CHARINDEX('/',(SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))))))
+			SET @day = SUBSTRING(SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))),CHARINDEX('/',SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))))+1,LEN(SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))))-LEN(SUBSTRING((SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date)))),0,CHARINDEX('/',(SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))))))))
+
+	--SET @Result = @date
+	IF ISNUMERIC(@date) = 1 SET @Result = RIGHT('13'+@date,4)
+	ELSE
+	IF 
+			ISNUMERIC(SUBSTRING(@date,0,CHARINDEX('/',@date))) = 0
+		OR	ISNUMERIC(SUBSTRING((SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date)))),0,CHARINDEX('/',(SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))))))) = 0
+		OR	ISNUMERIC(SUBSTRING(SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))),CHARINDEX('/',SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))))+1,LEN(SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))))-LEN(SUBSTRING((SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date)))),0,CHARINDEX('/',(SUBSTRING(@date,CHARINDEX('/',@date)+1,LEN(@date)-(CHARINDEX('/',@date))))))))) = 0
+	SET @Result = NULL
+	ELSE
+		BEGIN
+		SET @Result = @date			
+			IF LEN(@year) = 4 OR @year > 31   SET @Result = RIGHT('0'+@day,2)    + '/' + RIGHT('0'+@month,2)  + '/' + RIGHT('13'+@year,4)
+			IF LEN(@day)  = 4 OR @day  > 31   SET @Result = RIGHT('0'+@year,2)   + '/' + RIGHT('0'+@month,2)  + '/' + RIGHT('13'+@day,4)
+			IF @month > 12					  SET @Result = RIGHT('0'+@month,2)  + '/' +RIGHT('0'+@year,2)    + '/' + RIGHT('13'+@day,4)
+		RETURN @Result
+		END        
+RETURN @Result
+END
+

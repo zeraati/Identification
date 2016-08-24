@@ -1,0 +1,107 @@
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe.config
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\bin\Debug\CheckBoxComboBox.dll
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Estandard.resources
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Find.resources
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Form1.resources
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Message.resources
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.NullSearch.resources
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Properties.Resources.resources
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SetPerson.resources
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SQLDBbackup.resources
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Uniqe.resources
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csproj.GenerateResource.Cache
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csprojResolveAssemblyReference.cache
+D:\Projects\EstandardSazi-1V0-950207\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.DateConvert.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe.config
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csprojResolveAssemblyReference.cache
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.DateConvert.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Estandard.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Find.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Form1.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Message.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.NullSearch.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Properties.Resources.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SetPerson.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SQLDBbackup.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Uniqe.resources
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csproj.GenerateResource.Cache
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi-1V0-950207 - Copy\EstandardSazi\EstandardSazi\bin\Debug\CheckBoxComboBox.dll
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe.config
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\bin\Debug\CheckBoxComboBox.dll
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.DateConvert.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Estandard.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Find.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Form1.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Message.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.NullSearch.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Properties.Resources.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SetPerson.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SQLDBbackup.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Uniqe.resources
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csproj.GenerateResource.Cache
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csprojResolveAssemblyReference.cache
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe.config
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csprojResolveAssemblyReference.cache
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.DateConvert.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Estandard.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Find.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Form1.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Message.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.NullSearch.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Properties.Resources.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SetPerson.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SQLDBbackup.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Uniqe.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csproj.GenerateResource.Cache
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950207 - CopyCopy\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe.config
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.DateConvert.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Estandard.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Find.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Form1.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.NullSearch.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Properties.Resources.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SetPerson.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SQLDBbackup.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Uniqe.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csproj.GenerateResource.Cache
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950521\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csprojResolveAssemblyReference.cache
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe.config
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csprojResolveAssemblyReference.cache
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.DateConvert.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Estandard.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Find.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Form1.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.NullSearch.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Properties.Resources.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SetPerson.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.SQLDBbackup.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.Uniqe.resources
+D:\Projects\EstandardSazi Software\EstandardSazi-1V0-950601\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.csproj.GenerateResource.Cache
+D:\Projects\EstandardSazi Software\Identification\EstandardSazi\EstandardSazi\bin\Debug\EstandardSazi.exe.config
+D:\Projects\EstandardSazi Software\Identification\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.exe
+D:\Projects\EstandardSazi Software\Identification\EstandardSazi\EstandardSazi\obj\Debug\EstandardSazi.pdb
+D:\Projects\EstandardSazi Software\Identification\EstandardSazi\EstandardSazi\bin\Debug\Identification.exe.config

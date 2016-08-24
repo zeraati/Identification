@@ -1,0 +1,16 @@
+﻿CREATE FUNCTION [dbo].[FixKY](@Str nvarchar(255)) 
+RETURNS nvarchar(255)
+AS
+BEGIN
+	if (@Str is null) return null
+	declare @F as nvarchar(255)
+    set @F =  dbo.RemoveDuplicateSpace(@Str)
+    set @F =  Replace(@F,N'ک', N'ك')
+    set @F =  Replace(@F,N'ی', N'ي')
+    set @F =  Replace(@F,N'ى', N'ي')
+	SET @F =  REPLACE(@F,N'ئ', N'ي')
+	set @F = ltrim(rtrim(@F))       
+	return @F
+END
+
+

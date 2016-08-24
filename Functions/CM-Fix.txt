@@ -1,0 +1,16 @@
+CREATE function [dbo].[CM-Fix](@Code nvarchar(50))
+RETURNS nvarchar(50)
+AS
+BEGIN
+       declare @J tinyint
+       declare @T nvarchar(50)
+       set @T = ''
+              
+       set @J = 1
+       while (@J<>LEN(@Code)+1)
+       begin
+              if not (CHARINDEX(SUBSTRING(@Code,@J,1),'%0123456789%') = 0) set @T = @T + SUBSTRING(@Code,@J,1)
+              set @J = @J + 1
+       end
+       return @T
+END
