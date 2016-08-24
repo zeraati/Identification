@@ -55,10 +55,6 @@ namespace Identification
             cmb1.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
             cmb2.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
 
-            
-            //cmbTB.SelectedIndex = Variables.int_TName;
-            //cmb1.SelectedIndex = Variables.int_FName;
-
             label3.Text = "نام سرور : " + sqlConnection.DataSource + " نام بانک اطلاعاتی : " + sqlConnection.Database;
 
             CenterToScreen();
@@ -69,31 +65,6 @@ namespace Identification
             //  load cmb field source
             cmb1.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
             cmb2.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
-        }
-
-
-
-        public string func_PersianDateFormat(DateTime date)
-        {
-            PersianCalendar pc = new PersianCalendar();
-            StringBuilder sb = new StringBuilder();
-            sb.Append(pc.GetYear(date).ToString("0000"));
-            sb.Append("/");
-            sb.Append(pc.GetMonth(date).ToString("00"));
-            sb.Append("/");
-            sb.Append(pc.GetDayOfMonth(date).ToString("00"));
-            return sb.ToString();
-        }
-        public string func_milady(DateTime date)
-        {
-            GregorianCalendar gc = new GregorianCalendar();
-            StringBuilder sb = new StringBuilder();
-            sb.Append(gc.GetYear(date).ToString("0000"));
-            sb.Append("/");
-            sb.Append(gc.GetMonth(date).ToString("00"));
-            sb.Append("/");
-            sb.Append(gc.GetDayOfMonth(date).ToString("00"));
-            return sb.ToString();
         }
 
 
@@ -148,7 +119,7 @@ namespace Identification
 
             //dataGridView1.DataSource = dtgrid;
             //تبدیل شمسی به میلادی
-            command =   "Update [" + sqlConnection.Database + "].dbo.[" + cmbTB.Text + "] SET [" + cmb2.Text + "] = " +
+            command = "Update [" + sqlConnection.Database + "].dbo.[" + cmbTB.Text + "] SET [" + cmb2.Text + "] = " +
                         "master.dbo.UDF_Julian_To_Gregorian(master.dbo.UDF_Persian_To_Julian" +
                         "(CONVERT(INT,RIGHT([" + cmb1.Text + "],4))," +
                         "CONVERT(INT,SUBSTRING([" + cmb1.Text + "],4,2))," +
@@ -179,5 +150,37 @@ namespace Identification
                 progressBar1.Value = (100 / 100) * progressBar1.Maximum;
             }
         }
+
+
+
+        #region Functions
+
+        public string func_PersianDateFormat(DateTime date)
+        {
+            PersianCalendar pc = new PersianCalendar();
+            StringBuilder sb = new StringBuilder();
+            sb.Append(pc.GetYear(date).ToString("0000"));
+            sb.Append("/");
+            sb.Append(pc.GetMonth(date).ToString("00"));
+            sb.Append("/");
+            sb.Append(pc.GetDayOfMonth(date).ToString("00"));
+            return sb.ToString();
+        }
+        public string func_milady(DateTime date)
+        {
+            GregorianCalendar gc = new GregorianCalendar();
+            StringBuilder sb = new StringBuilder();
+            sb.Append(gc.GetYear(date).ToString("0000"));
+            sb.Append("/");
+            sb.Append(gc.GetMonth(date).ToString("00"));
+            sb.Append("/");
+            sb.Append(gc.GetDayOfMonth(date).ToString("00"));
+            return sb.ToString();
+        }
+
+        #endregion
+
+
+
     }
 }

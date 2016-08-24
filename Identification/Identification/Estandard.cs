@@ -649,7 +649,7 @@ namespace Identification
                             break;
                         #endregion
 
-                        #region استاندارد کردن تاریخ
+                        #region Standard Date
                         case 5:
                             for (int l = 0; l < chlstbxField.Items.Count; l++)
                             {
@@ -658,6 +658,7 @@ namespace Identification
                                     //  column name
                                     strFieldName = ColumnName(chlstbxField.Items[l].ToString());
 
+                                    #region Standard Formated Date
                                     //  sql update query
                                     Functions.SqlUpdateColumnData(cmbTB.Text, strFieldName, "Replace ([" + strFieldName + "],'-','/')", sqlConnection);
                                     Functions.SqlUpdateColumnData(cmbTB.Text, strFieldName, "Replace ([" + strFieldName + "],'_','/')", sqlConnection);
@@ -672,11 +673,12 @@ namespace Identification
                                     lst1.Items.Add("استاندارد کردن تاریخ" +
                                                     Functions.SqlUpdateColumnData(cmbTB.Text, strFieldName, "dbo.[FE_Date]([" + strFieldName + "]) where [" + strFieldName + "] IS NOT NULL", sqlConnection)
                                                     );
+                                    #endregion
 
                                     #region حذف تاریخ غیر قابل قبول
                                     //  run query
                                     lst1.Items.Add("تاریخ های غیرقابل قبول حذف شد" +
-                                                    Functions.SqlUpdateColumnData(cmbTB.Text, strFieldName, " NULL where dbo.[CM-Fix]([" + strFieldName + "])=0 ", sqlConnection)
+                                                    Functions.SqlUpdateColumnData(cmbTB.Text, strFieldName, " NULL where dbo.[CM-Fix]([" + strFieldName + "])= 0 ", sqlConnection)
                                                     );
                                     #endregion
 

@@ -30,3 +30,19 @@ D:\Projects\EstandardSazi Software\Identification\Identification\Identification\
 D:\Projects\EstandardSazi Software\Identification\Identification\Identification\obj\Debug\Identification.csproj.GenerateResource.Cache
 D:\Projects\EstandardSazi Software\Identification\Identification\Identification\obj\Debug\Identification.exe
 D:\Projects\EstandardSazi Software\Identification\Identification\Identification\obj\Debug\Identification.pdb
+D:\Projects\Identification\Identification\Identification\bin\Debug\Identification.exe.config
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.exe
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.pdb
+D:\Projects\Identification\Identification\Identification\bin\Debug\Identification.exe
+D:\Projects\Identification\Identification\Identification\bin\Debug\Identification.pdb
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.csprojResolveAssemblyReference.cache
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.DateConvert.resources
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Estandard.resources
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Find.resources
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Form1.resources
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.NullSearch.resources
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Properties.Resources.resources
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.SetPerson.resources
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.SQLDBbackup.resources
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Uniqe.resources
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.csproj.GenerateResource.Cache
