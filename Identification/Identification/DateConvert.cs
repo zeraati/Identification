@@ -15,7 +15,7 @@ namespace Identification
     public partial class DateConvert : Form
     {
         #region Global
-        
+
         Functions Functions = new Functions();
         clsUpdate clsupd = new clsUpdate();
         clsDateConvert clsdate = new clsDateConvert();
@@ -48,23 +48,24 @@ namespace Identification
 
         private void DateConvert_Load(object sender, EventArgs e)
         {
-            //  load table name source
-            cmbTB.DataSource = Functions.SqlGetDBName(sqlConnection);            
-            
-            //  load cmb field source
-            cmb1.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
-            cmb2.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
-
-            label3.Text = "نام سرور : " + sqlConnection.DataSource + " نام بانک اطلاعاتی : " + sqlConnection.Database;
-
             CenterToScreen();
+
+            //  name form
+            this.Text = "Convert Date - Server : " + sqlConnection.DataSource + " - DataBase : " + sqlConnection.Database;
+
+            //  load table name of source
+            cmbTB.DataSource = Functions.SqlTableName(sqlConnection);
+
+            //  load table names of source
+            // cmb1.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
+            //cmb2.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
         }
 
         private void cmbTB_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //  load cmb field source
-            cmb1.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
-            cmb2.DataSource = Functions.SqlColumnNames(cmbTB.Text, sqlConnection);
+            //  load column names of source
+            cmb1.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTB.Text, sqlConnection));
+            cmb2.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTB.Text, sqlConnection));
         }
 
 
@@ -119,11 +120,17 @@ namespace Identification
 
             //dataGridView1.DataSource = dtgrid;
             //تبدیل شمسی به میلادی
+
+
+            //  update date after converter persion to milady
+
+
             command = "Update [" + sqlConnection.Database + "].dbo.[" + cmbTB.Text + "] SET [" + cmb2.Text + "] = " +
-                        "master.dbo.UDF_Julian_To_Gregorian(master.dbo.UDF_Persian_To_Julian" +
+                        "dbo.UDF_Julian_To_Gregorian(dbo.UDF_Persian_To_Julian" +
                         "(CONVERT(INT,RIGHT([" + cmb1.Text + "],4))," +
                         "CONVERT(INT,SUBSTRING([" + cmb1.Text + "],4,2))," +
-                        "CONVERT(INT,LEFT([" + cmb1.Text + "],2)))) WHERE  LEN([" + cmb1.Text + "]) = 10 and [" + cmb2.Text + "] is null AND RIGHT([" + cmb1.Text + "],4)>1300";
+                        "CONVERT(INT,LEFT([" + cmb1.Text + "],2)))) " +
+                        "WHERE  LEN([" + cmb1.Text + "]) = 10 and [" + cmb2.Text + "] is null AND RIGHT([" + cmb1.Text + "],4)>1300";
             //textBox2.Text = command;
             //"master.dbo.UDF_Julian_To_Gregorian(master.dbo.UDF_Persian_To_Julian(SUBSTRING([" + cmb1.Text + "],0,5),SUBSTRING([" + cmb1.Text + "],6,2),SUBSTRING([" + cmb1.Text + "],9,2))) where [" + cmb2.Text + "] is null AND LEN([" + cmb1.Text + "])>9 AND [" + cmb1.Text + "] LIKE '____/__/__'";
 

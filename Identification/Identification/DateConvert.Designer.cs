@@ -72,6 +72,7 @@
             this.cmb1.FormattingEnabled = true;
             this.cmb1.Location = new System.Drawing.Point(77, 93);
             this.cmb1.Name = "cmb1";
+            this.cmb1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.cmb1.Size = new System.Drawing.Size(330, 21);
             this.cmb1.TabIndex = 2;
             // 
@@ -80,6 +81,7 @@
             this.cmb2.FormattingEnabled = true;
             this.cmb2.Location = new System.Drawing.Point(77, 123);
             this.cmb2.Name = "cmb2";
+            this.cmb2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.cmb2.Size = new System.Drawing.Size(330, 21);
             this.cmb2.TabIndex = 3;
             // 
@@ -107,7 +109,7 @@
             this.ابزارهاToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(428, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(759, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -155,6 +157,7 @@
             this.cmbTB.FormattingEnabled = true;
             this.cmbTB.Location = new System.Drawing.Point(77, 64);
             this.cmbTB.Name = "cmbTB";
+            this.cmbTB.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.cmbTB.Size = new System.Drawing.Size(330, 21);
             this.cmbTB.TabIndex = 7;
             this.cmbTB.SelectedIndexChanged += new System.EventHandler(this.cmbTB_SelectedIndexChanged);
@@ -189,7 +192,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(428, 248);
+            this.ClientSize = new System.Drawing.Size(759, 244);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label3);
