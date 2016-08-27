@@ -19,7 +19,7 @@ namespace Identification
         Boolean answer, EnableFrm;
         SqlConnection sqlConnection = new SqlConnection();
 
-        string strPathLoginFolder = @"..\Login.pos";
+        string strPathLoginFolder = @"..\Login.pos";        
         string strUser, strPass, str, Alltext;
 
 
@@ -41,7 +41,9 @@ namespace Identification
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
+            //cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
+
+            if (cmbDBNames.Text != "") sqlConnection = Functions.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection);
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -210,7 +212,7 @@ namespace Identification
         {
             btnRefresh_Click(null, null);
         }
-       
+
 
         //************      Functions
 
@@ -241,7 +243,6 @@ namespace Identification
             return lstSvrName;
         }
         #endregion
-
 
 
     }

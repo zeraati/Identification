@@ -334,6 +334,47 @@ namespace Identification
 
 
         //**************    functions
+
+        #region Check SQL Functions
+
+        public string CheckSqlFunctions(string strFilePath, string strDataBaseName, SqlConnection sqlConnection)
+        {
+            string strRetrun = "";
+            List<string> lst = new List<string>();
+            List<string> lstSql = new List<string>();
+
+            bool bol = false;
+
+            string strQuery = "SELECT name FROM [" + strDataBaseName + "].sys.objects WHERE type='FN'";
+
+            //  list sql functions of source
+            lstSql = DataTableToList(SqlDataAdapter(strQuery, sqlConnection.DataSource, sqlConnection.Database, ""));
+
+            //  function file
+            string[] files = Directory.GetFiles(strFilePath, "*.txt");
+
+            foreach (string file in files)
+            {
+                bol = false;
+
+                //  list filename functions
+                lst.Add(Path.GetFileNameWithoutExtension(file));
+
+                //  check functions in sql & file
+                for (int i = 0; i < lstSql.Count; i++)
+                {
+                    if (lst[lst.Count - 1] == lstSql[i])
+                    { bol = true; break; }
+                }
+
+                //  create function is not sql
+                if (bol == false) { SqlExcutCommand(File.ReadAllText(file), sqlConnection); strRetrun = "Create Function Is Not Sql"; }
+            }
+            return strRetrun;
+        }
+        #endregion
+
+
         #region DataTypeToList
         public List<string> DataTypeToList(DataTable dt)
         {
@@ -1203,15 +1244,39 @@ namespace Identification
         }
         #endregion
 
+        #region Sql Return Function Name
+
+
+
+        #endregion
+
+
+        #region Date
+
+        #region Sql Update Persion To Milady
+
+        public string SqlUpdatePersionToMilady(string strTableName, string strColumnMilady, string strColumnPersion, SqlConnection sqlConnection)
+        {
+            string strQuery = "Update dbo.[" + strTableName + "] SET [" + strColumnMilady + "] = " +
+                "CAST(dbo.UDF_Julian_To_Gregorian(dbo.UDF_Persian_To_Julian(CAST(RIGHT([" + strColumnPersion + "],4) AS INT),CONVERT(INT,SUBSTRING([" + strColumnPersion + "],4,2)),CAST(LEFT([" + strColumnPersion + "],2)AS INT))) AS DATE)" +
+                " where [" + strColumnMilady + "] is null";
+            return SqlExcutCommand(strQuery, sqlConnection, "Sql Update Persion To Milady");
+        }
+
+        #endregion
+
         #region Sql Update Milady To Persion
 
         public string SqlUpdateMiladyToPersion(string strTableName, string strColumnMilady, string strColumnPersion, SqlConnection sqlConnection)
         {
-            string strQuery = "Update dbo.[" + strTableName + "] SET [" + strColumnPersion + "] = master.dbo.UDF_Gregorian_To_Persian([" + strColumnMilady + "]) where [" + strColumnPersion + "] is null";
+            string strQuery = "Update dbo.[" + strTableName + "] SET [" + strColumnPersion + "] = dbo.UDF_Gregorian_To_Persian([" + strColumnMilady + "]) where [" + strColumnPersion + "] is null";
             return SqlExcutCommand(strQuery, sqlConnection, "Sql Update Milady To Persion ");
         }
 
         #endregion
+
+        #endregion
+
 
         #region Sql MaxLen Column Data
         public string SqlMaxLenColumnData(string strTableName, string strColumnName, SqlConnection sqlConnection)

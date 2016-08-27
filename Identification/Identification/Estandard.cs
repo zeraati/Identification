@@ -17,10 +17,10 @@ namespace Identification
     public partial class Estandard : Form
     {
         Functions Functions = new Functions();
-        clsUpdate clsupd = new clsUpdate();
-        clsSuggest clssug = new clsSuggest();
-
         SqlConnection sqlConnection = new SqlConnection();
+
+        string strFunctionsFile = @"..\Functions";
+
         Substring frmsubstring = new Substring();
 
         //string strFieldName;
@@ -63,8 +63,16 @@ namespace Identification
 
         private void cmbDBName_SelectedIndexChanged(object sender, EventArgs e)
         {
+            string strReport = "";
             //  change data base name
             sqlConnection = Functions.SqlConnectionChangeDB(cmbDBName.Text, sqlConnection);
+
+            //  check sql functions
+            strReport = Functions.CheckSqlFunctions(strFunctionsFile, cmbDBName.Text, sqlConnection);
+
+            //  report
+            if (strReport != "")
+            { lstReport(strReport); }
 
             //  dafault value
             //cmbDBName.Text = "Ehraz";
@@ -630,7 +638,7 @@ namespace Identification
                             lstReport("ShenasCode With Len > 7 To CodeMelli => " + strFieldName + ": " + strFinal);
 
                             if (strFinal.Contains("Done"))
-                            {StandardCodeMelli("CodeMelli");}
+                            { StandardCodeMelli("CodeMelli"); }
 
                             #endregion
 
@@ -666,18 +674,18 @@ namespace Identification
                                     Functions.SqlUpdateColumnData(cmbTB.Text, strFieldName, "Replace ([" + strFieldName + "],',','/')", sqlConnection);
 
                                     //  run query                                    
-                                    lst1.Items.Add("Ltrim & Rtrim" +
+                                    lst1.Items.Add(" Ltrim & Rtrim " +
                                                     Functions.SqlUpdateColumnData(cmbTB.Text, strFieldName, "ltrim(rtrim([" + strFieldName + "]))", sqlConnection)
                                                     );
                                     //  run query
-                                    lst1.Items.Add("استاندارد کردن تاریخ" +
+                                    lst1.Items.Add(" Standard Date " +
                                                     Functions.SqlUpdateColumnData(cmbTB.Text, strFieldName, "dbo.[FE_Date]([" + strFieldName + "]) where [" + strFieldName + "] IS NOT NULL", sqlConnection)
                                                     );
                                     #endregion
 
-                                    #region حذف تاریخ غیر قابل قبول
+                                    #region Delete Not Valid Date
                                     //  run query
-                                    lst1.Items.Add("تاریخ های غیرقابل قبول حذف شد" +
+                                    lst1.Items.Add(" Delete Not Valid Date " +
                                                     Functions.SqlUpdateColumnData(cmbTB.Text, strFieldName, " NULL where dbo.[CM-Fix]([" + strFieldName + "])= 0 ", sqlConnection)
                                                     );
                                     #endregion
