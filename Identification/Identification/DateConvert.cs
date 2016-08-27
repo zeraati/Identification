@@ -93,37 +93,10 @@ namespace Identification
 
         private void btnP2G_Click(object sender, EventArgs e)
         {
-            //DataTable dt = new DataTable();
-            //DataTable dtgrid = new DataTable();
 
-            //command = "SELECT Id,[" + cmb1.Text + "] FROM dbo.[" + cmbTB.Text + "] WHERE [" + cmb1.Text + "] IS NOT NULL order by Id";
-            //dt = clsFunctions.sqlDataAdapter(command, Variables.DBName);            
-
-            //dtgrid.Columns.Add("Id");
-            //dtgrid.Columns.Add("PBirthdate");
-            //dtgrid.Columns.Add("Birthdate");
-
-
-
-            //for (int i = 0; i < dt.Rows.Count; i++)
-            //{
-            //    DataRow dr = dtgrid.NewRow();
-            //    dr["Id"]=dt.Rows[i][0].ToString();
-            //    dr["PBirthdate"] = dt.Rows[i][1].ToString();
-
-
-            //    dr["PBirthdate"] = clsstd.time(dt.Rows[i][1].ToString());
-
-
-            //    dtgrid.Rows.Add(dr);
-            //}
-
-            //dataGridView1.DataSource = dtgrid;
-            //تبدیل شمسی به میلادی
 
 
             //  update date after converter persion to milady
-
 
             command = "Update [" + sqlConnection.Database + "].dbo.[" + cmbTB.Text + "] SET [" + cmb2.Text + "] = " +
                         "dbo.UDF_Julian_To_Gregorian(dbo.UDF_Persian_To_Julian" +
@@ -158,6 +131,17 @@ namespace Identification
             }
         }
 
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            string strQuery = "SELECT dbo.UDF_Julian_To_Gregorian(dbo.UDF_Persian_To_Julian " +
+                                "(CONVERT(INT,RIGHT([" + cmb1.Text + "],4))," +
+                                "CONVERT(INT,SUBSTRING([" + cmb1.Text + "],4,2))," +
+                                "CONVERT(INT,LEFT([" + cmb1.Text + "],2)))) " +
+                                "FROM dbo.[" + cmbTB.Text + "] " +
+                                "WHERE  LEN([" + cmb1.Text + "]) = 10 and [" + cmb2.Text + "] is null AND RIGHT([" + cmb1.Text + "],4)>1300";
+            dgvTest.DataSource = Functions.SqlDataAdapter(strQuery, sqlConnection);
+        }
+
 
 
         #region Functions
@@ -186,6 +170,8 @@ namespace Identification
         }
 
         #endregion
+
+
 
 
 

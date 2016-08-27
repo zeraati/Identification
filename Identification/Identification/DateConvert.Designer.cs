@@ -44,7 +44,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnTest = new System.Windows.Forms.Button();
+            this.dgvTest = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTest)).BeginInit();
             this.SuspendLayout();
             // 
             // btnG2P
@@ -187,12 +190,32 @@
             this.label4.TabIndex = 13;
             this.label4.Text = "جدول";
             // 
+            // btnTest
+            // 
+            this.btnTest.Location = new System.Drawing.Point(422, 203);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(75, 23);
+            this.btnTest.TabIndex = 14;
+            this.btnTest.Text = "Test";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
+            // dgvTest
+            // 
+            this.dgvTest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTest.Location = new System.Drawing.Point(413, 35);
+            this.dgvTest.Name = "dgvTest";
+            this.dgvTest.Size = new System.Drawing.Size(334, 150);
+            this.dgvTest.TabIndex = 15;
+            // 
             // DateConvert
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(759, 244);
+            this.Controls.Add(this.dgvTest);
+            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label3);
@@ -213,6 +236,7 @@
             this.Load += new System.EventHandler(this.DateConvert_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTest)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -236,5 +260,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.DataGridView dgvTest;
     }
 }
