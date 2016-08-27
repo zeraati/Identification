@@ -45,9 +45,9 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.btnTest = new System.Windows.Forms.Button();
-            this.dgvTest = new System.Windows.Forms.DataGridView();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.lstReport = new System.Windows.Forms.ListBox();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvTest)).BeginInit();
             this.SuspendLayout();
             // 
             // btnG2P
@@ -200,13 +200,20 @@
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
-            // dgvTest
+            // textBox1
             // 
-            this.dgvTest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTest.Location = new System.Drawing.Point(413, 35);
-            this.dgvTest.Name = "dgvTest";
-            this.dgvTest.Size = new System.Drawing.Size(334, 150);
-            this.dgvTest.TabIndex = 15;
+            this.textBox1.Location = new System.Drawing.Point(527, 205);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(141, 20);
+            this.textBox1.TabIndex = 16;
+            // 
+            // lstReport
+            // 
+            this.lstReport.FormattingEnabled = true;
+            this.lstReport.Location = new System.Drawing.Point(422, 64);
+            this.lstReport.Name = "lstReport";
+            this.lstReport.Size = new System.Drawing.Size(325, 121);
+            this.lstReport.TabIndex = 17;
             // 
             // DateConvert
             // 
@@ -214,7 +221,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(759, 244);
-            this.Controls.Add(this.dgvTest);
+            this.Controls.Add(this.lstReport);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.progressBar1);
@@ -236,7 +244,6 @@
             this.Load += new System.EventHandler(this.DateConvert_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvTest)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -261,6 +268,7 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnTest;
-        private System.Windows.Forms.DataGridView dgvTest;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ListBox lstReport;
     }
 }

@@ -90,6 +90,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cmbTB = new System.Windows.Forms.ComboBox();
             this.cmbDBName = new System.Windows.Forms.ComboBox();
+            this.تبدیلتاریخToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -118,6 +119,7 @@
             this.اجراییToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.گزارشازبانکموردنظرToolStripMenuItem,
             this.پشتیبانگیریToolStripMenuItem,
+            this.تبدیلتاریخToolStripMenuItem,
             this.بستنToolStripMenuItem,
             this.خروجToolStripMenuItem});
             this.اجراییToolStripMenuItem.Name = "اجراییToolStripMenuItem";
@@ -774,6 +776,14 @@
             this.cmbDBName.TabIndex = 1;
             this.cmbDBName.SelectedIndexChanged += new System.EventHandler(this.cmbDBName_SelectedIndexChanged);
             // 
+            // تبدیلتاریخToolStripMenuItem
+            // 
+            this.تبدیلتاریخToolStripMenuItem.Name = "تبدیلتاریخToolStripMenuItem";
+            this.تبدیلتاریخToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            this.تبدیلتاریخToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.تبدیلتاریخToolStripMenuItem.Text = "تبدیل تاریخ";
+            this.تبدیلتاریخToolStripMenuItem.Click += new System.EventHandler(this.تبدیلتاریخToolStripMenuItem_Click);
+            // 
             // Estandard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -876,5 +886,6 @@
         private System.Windows.Forms.DataGridView dgvDesign;
         private System.Windows.Forms.DataGridViewCheckBoxColumn dgvChBxClm;
         private System.Windows.Forms.Button btnUpdDesign;
+        private System.Windows.Forms.ToolStripMenuItem تبدیلتاریخToolStripMenuItem;
     }
 }

@@ -1194,6 +1194,25 @@ namespace Identification
         #region sql functions
         //****************      sql functions
 
+        #region Sql Update Character Save
+        public string SqlUpdateCharacter(string strTableName, string strColumnName, int intStartIndex, int intLength, SqlConnection sqlConnection, string strState = "")
+        {
+            string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "] = SUBSTRING([" + strColumnName + "]," + intStartIndex + "," + intLength + ") WHERE [" + strColumnName + "] IS NOT NULL ";
+
+            return SqlExcutCommand(strQuery, sqlConnection, strState);
+        }
+        #endregion
+
+        #region Sql Update Milady To Persion
+
+        public string SqlUpdateMiladyToPersion(string strTableName, string strColumnMilady, string strColumnPersion, SqlConnection sqlConnection)
+        {
+            string strQuery = "Update dbo.[" + strTableName + "] SET [" + strColumnPersion + "] = master.dbo.UDF_Gregorian_To_Persian([" + strColumnMilady + "]) where [" + strColumnPersion + "] is null";
+            return SqlExcutCommand(strQuery, sqlConnection, "Sql Update Milady To Persion ");
+        }
+
+        #endregion
+
         #region Sql MaxLen Column Data
         public string SqlMaxLenColumnData(string strTableName, string strColumnName, SqlConnection sqlConnection)
         {
@@ -1346,7 +1365,7 @@ namespace Identification
 
         public string SqlUpdateColumnData(string strTableName, string strColumnName, string strData, SqlConnection sqlConnection)
         {
-            string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]= " + strData ;
+            string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]= " + strData;
             return SqlExcutCommand(strQuery, sqlConnection, "UpdateColumn");
         }
         public string SqlUpdateColumnData(string strTableName, string strColumnName, string strColumnData, SqlConnection sqlConnection, string strState = "")
@@ -1709,11 +1728,12 @@ namespace Identification
         #region SqlColumnsInfo
 
         /// <summary>
+        /// name , nullable , type , len
         /// list of columns name
         /// </summary>
         /// <param name="sqlConnection">SqlConnection</param>
         /// <param name="strTableName">TableName</param>
-        /// <returns>List > string</returns>
+        /// <returns>data table</returns>
         public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection)
         {
             string Query = "SELECT  Name ," +

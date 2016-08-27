@@ -67,7 +67,7 @@ namespace Identification
             sqlConnection = Functions.SqlConnectionChangeDB(cmbDBName.Text, sqlConnection);
 
             //  dafault value
-            cmbDBName.Text = "Ehraz";
+            //cmbDBName.Text = "Ehraz";
 
             //  set cmbTBName source    // load table names
             loadTbName();
@@ -1254,6 +1254,12 @@ namespace Identification
         private void dgvDesign_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             txtTest.Text = dgvDesign.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+        }
+
+        private void تبدیلتاریخToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DateConvert frm = new DateConvert(sqlConnection);
+            frm.ShowDialog();
         }
 
 
