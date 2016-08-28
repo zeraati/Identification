@@ -54,15 +54,15 @@ namespace Identification
             this.Text = "Convert Date - Server : " + sqlConnection.DataSource + " - DataBase : " + sqlConnection.Database;
 
             //  load table name of source
-            cmbTB.DataSource = Functions.SqlTableName(sqlConnection);
+            cmbTableName.DataSource = Functions.SqlTableName(sqlConnection);
 
         }
 
         private void cmbTB_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  load column names of source
-            cmb1.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTB.Text, sqlConnection));
-            cmb2.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTB.Text, sqlConnection));
+            cmbFirst.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTableName.Text, sqlConnection));
+            cmbConvertion.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTableName.Text, sqlConnection));
         }
 
         //  bottun milady to persion
@@ -70,144 +70,126 @@ namespace Identification
         {
             string strFinal = "";
             //  check column data type
-            if (checkDataType(cmb1.Text, "date") == false | checkDataType(cmb2.Text, "varchar") == false)
-            { MessageBox.Show("Not Standard " + cmb1.Text + " OR " + cmb2.Text); }
+            if (checkDataType(cmbFirst.Text, "date") == false | checkDataType(cmbConvertion.Text, "varchar") == false)
+            { MessageBox.Show("Not Standard " + cmbFirst.Text + " OR " + cmbConvertion.Text); }
             else
             {
                 //  update convert milady to persion
-                strFinal = Functions.SqlUpdateMiladyToPersion(cmbTB.Text, cmb1.Text, cmb2.Text, sqlConnection);
+                strFinal = Functions.SqlUpdateMiladyToPersion(cmbTableName.Text, cmbFirst.Text, cmbConvertion.Text, sqlConnection);
 
 
                 #region Standard Formated Date
                 //  sql update query
-                Functions.SqlUpdateColumnData(cmbTB.Text, cmb2.Text, "Replace ([" + cmb2.Text + "],'-','/')", sqlConnection);
-                Functions.SqlUpdateColumnData(cmbTB.Text, cmb2.Text, "Replace ([" + cmb2.Text + "],'_','/')", sqlConnection);
-                Functions.SqlUpdateColumnData(cmbTB.Text, cmb2.Text, "Replace ([" + cmb2.Text + "],'.','/')", sqlConnection);
-                Functions.SqlUpdateColumnData(cmbTB.Text, cmb2.Text, "Replace ([" + cmb2.Text + "],',','/')", sqlConnection);
+                Functions.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],'-','/')", sqlConnection);
+                Functions.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],'_','/')", sqlConnection);
+                Functions.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],'.','/')", sqlConnection);
+                Functions.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],',','/')", sqlConnection);
 
                 //  run query                                    
                 lstReport.Items.Add(" Ltrim & Rtrim " +
-                                Functions.SqlUpdateColumnData(cmbTB.Text, cmb2.Text, "ltrim(rtrim([" + cmb2.Text + "]))", sqlConnection)
+                                Functions.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "ltrim(rtrim([" + cmbConvertion.Text + "]))", sqlConnection)
                                 );
                 //  run query
                 lstReport.Items.Add(" Standard Date " +
-                                Functions.SqlUpdateColumnData(cmbTB.Text, cmb2.Text, "dbo.[FE_Date]([" + cmb2.Text + "]) where [" + cmb2.Text + "] IS NOT NULL", sqlConnection)
+                                Functions.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "dbo.[FE_Date]([" + cmbConvertion.Text + "]) where [" + cmbConvertion.Text + "] IS NOT NULL", sqlConnection)
                                 );
                 #endregion
 
                 #region Delete Not Valid Date
                 //  run query
                 lstReport.Items.Add(" Delete Not Valid Date " +
-                                Functions.SqlUpdateColumnData(cmbTB.Text, cmb2.Text, " NULL where dbo.[CM-Fix]([" + cmb2.Text + "])= 0 ", sqlConnection)
+                                Functions.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, " NULL where dbo.[CM-Fix]([" + cmbConvertion.Text + "])= 0 ", sqlConnection)
                                 );
                 #endregion
 
-                #region save final Persion Date
+                //  save persion column
 
-                //  conclude final
-                if (strFinal.Contains("Done"))
-                {
-                    //  report
-                    lstReport.Items.Add(
-                        //  save only year of persion date
-                                        Functions.SqlUpdateCharacter(cmbTB.Text, cmb2.Text, 7, 4, sqlConnection, "SqlUpdateCharacter ")
-                                        );
-
-                    //  report
-                    lstReport.Items.Add(
-                        //  convert column persion varchar to smallint
-                                        "SqlEditDataTypeColumn " + Functions.SqlEditDataTypeColumn(cmbTB.Text, cmb2.Text, " smallint ", " NULL ", sqlConnection, sqlConnection.Database)
-                                        );
-
-                    //  report
-                    lstReport.Items.Add(
-                        //  standard column persion
-                                        Functions.SqlUpdateColumnData(cmbTB.Text, cmb2.Text, "NULL", sqlConnection, " < 1300 ", " SqlUpdateColumnData ")
-                                        );
-
-                }
-                #endregion
-
-                else MessageBox.Show("Error!");
+                SaveFinalPersionDate(strFinal, cmbConvertion.Text);
 
             }
         }
 
-
-
-
-
-
-
-
+        //  bottun persion to milady
         private void btnP2G_Click(object sender, EventArgs e)
         {
             string strFinal = "";
 
             //  check column data type
-            if (checkDataType(cmb2.Text, "date") == false | checkDataType(cmb1.Text, "varchar") == false)
+            if (checkDataType(cmbFirst.Text, "varchar") == false | checkDataType(cmbConvertion.Text, "date") == false)
             { MessageBox.Show("Not Standard"); }
             else
             {
                 //  update date after converter persion to milady
-                strFinal = Functions.SqlUpdatePersionToMilady(cmbTB.Text, cmb2.Text, cmb1.Text, sqlConnection);
+                strFinal = Functions.SqlUpdatePersionToMilady(cmbTableName.Text, cmbConvertion.Text, cmbFirst.Text, sqlConnection);
 
                 //  report
                 lstReport.Items.Add(strFinal);
 
+                //  save persion column
 
-                #region save final Persion Date
-
-                //  conclude final
-                if (strFinal.Contains("Done"))
-                {
-                    //  report
-                    lstReport.Items.Add(
-                        //  save only year of persion date
-                                        Functions.SqlUpdateCharacter(cmbTB.Text, cmb1.Text, 7, 4, sqlConnection, "SqlUpdateCharacter ")
-                                        );
-
-                    //  report
-                    lstReport.Items.Add(
-                        //  convert column persion varchar to smallint
-                                        "SqlEditDataTypeColumn " + Functions.SqlEditDataTypeColumn(cmbTB.Text, cmb1.Text, " smallint ", " NULL ", sqlConnection, sqlConnection.Database)
-                                        );
-
-                    //  report
-                    lstReport.Items.Add(
-                        //  standard column persion
-                                        Functions.SqlUpdateColumnData(cmbTB.Text, cmb1.Text, "NULL", sqlConnection, " < 1300 ", " SqlUpdateColumnData ")
-                                        );
-
-                }
-                #endregion
+                SaveFinalPersionDate(strFinal, cmbFirst.Text);
             }
 
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
-        {
 
+        private void تبدیلتاریخمیلادیبهشمسیToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnG2P_Click(null, null);
         }
 
-
+        private void تبدیلتاریخشمسیبهمیلادیToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnP2G_Click(null, null);
+        }
 
         #region Functions
+
+        #region save final Persion Date
+
+        public void SaveFinalPersionDate(string strFinal, string strPersion)
+        {
+
+            //  conclude final
+            if (strFinal.Contains("Done"))
+            {
+                //  report
+                lstReport.Items.Add(
+                    //  save only year of persion date
+                                    Functions.SqlUpdateCharacter(cmbTableName.Text, strPersion, 7, 4, sqlConnection, "SqlUpdateCharacter ")
+                                    );
+
+                //  report
+                lstReport.Items.Add(
+                    //  convert column persion varchar to smallint
+                                    "SqlEditDataTypeColumn " + Functions.SqlEditDataTypeColumn(cmbTableName.Text, strPersion, " smallint ", " NULL ", sqlConnection, sqlConnection.Database)
+                                    );
+
+                //  report
+                lstReport.Items.Add(
+                    //  standard column persion
+                                    Functions.SqlUpdateColumnData(cmbTableName.Text, strPersion, "NULL", sqlConnection, " < 1300 ", " Nullable Date<1300 ").Replace("Error", "does not have")
+                                    );
+
+            }
+            else MessageBox.Show("Error!");
+        }
+
+        #endregion
+
 
         #region checkDataType
         public bool checkDataType(string strColumn, string strType)
         {
             bool bolReturn = false;
-            if (Functions.SqlColumns(cmbTB.Text, sqlConnection, strColumn).Rows[0][2].ToString().ToUpper().Contains(strType.ToUpper())) bolReturn = true;
+            if (Functions.SqlColumns(cmbTableName.Text, sqlConnection, strColumn).Rows[0][2].ToString().ToUpper().Contains(strType.ToUpper())) bolReturn = true;
             return bolReturn;
         }
         #endregion
 
+
+
         #endregion
-
-
-
-
 
     }
 }

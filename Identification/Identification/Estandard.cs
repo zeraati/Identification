@@ -704,39 +704,9 @@ namespace Identification
 
                         #region ذخیره چند کاراکتر تاریخ
                         case 7:
-                            //frmsubstring.ShowDialog();
-                            //if (Variables.Sub_Char != "")
-                            //{
-                            //    for (int p = 0; p < chlstbxField.Items.Count; p++)
-                            //    {
-                            //        if (chlstbxField.GetItemCheckState(p) == CheckState.Checked)
-                            //        {
-                            //            str = chlstbxField.Items[p].ToString();
-                            //            strFieldName = str.Substring(0, str.IndexOf("[")).Trim();   // نام فیلد را برمی گرداند.
-                            //            if (chbtoField.CheckState == CheckState.Checked)
-                            //            {
-                            //                strQuery = "UPDATE " + com + " SET [" + cmbtoField.Text + "] = SUBSTRING([" + strFieldName + "],0," + Variables.Sub_Char + ") WHERE [" + strFieldName + "] IS NOT NULL and [" + cmbtoField.Text + "] IS NULL and [" + strFieldName + "] not like '12%'";
-                            //                //textBox1.Text = strQuery;
-                            //                lst1.Items.Add("ذخیره چند کاراکتر تاریخ : " + Functions.SqlExcutCommand(strQuery, sqlConn));
-                            //                strQuery = "UPDATE " + com + " SET [" + cmbtoField.Text + "] = NULL WHERE CONVERT(NUMERIC,[" + strFieldName + "],7,4)) < 1280";
-                            //                lst1.Items.Add("حذف تاریخ نامعتبر : " + Functions.SqlExcutCommand(strQuery, sqlConn));
-                            //                EditType();
-                            //            }
-                            //            else
-                            //            {
-                            //                strQuery = "UPDATE " + com + " SET [" + strFieldName + "] = SUBSTRING([" + strFieldName + "],0," + Variables.Sub_Char + ") " +
-                            //                            "WHERE [" + strFieldName + "] IS NOT NULL and [" + strFieldName + "] not like '12%'";
-                            //                lst1.Items.Add("ذخیره چند کاراکتر تاریخ : " + Functions.SqlExcutCommand(strQuery, sqlConn));
-                            //                strQuery = "UPDATE " + com + " SET [" + cmbtoField.Text + "] = NULL WHERE CONVERT(NUMERIC,[" + strFieldName + "],7,4)) < 1280";
-                            //                lst1.Items.Add("حذف تاریخ نامعتبر : " + Functions.SqlExcutCommand(strQuery, sqlConn));
-                            //                EditType();
-                            //            }
-                            //        }
-                            //    }
-
-                            //}
                             break;
                         #endregion
+
                         //      حذف فیلد های خالی و دارای مقدار 0    
                         #region حذف فیلدهای خالی
                         case 8:
