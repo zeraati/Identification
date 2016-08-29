@@ -354,8 +354,8 @@ namespace Identification
 
 
             //  add item
-            //lst1.Items.Add("تعداد فیلد : " + dtColumns.Rows.Count);
-            //lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(Convert.ToInt32(strCount)));
+            lst1.Items.Add("تعداد فیلد : " + dtColumns.Rows.Count);
+            lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(Convert.ToInt32(strCount)));
 
 
             //  checked field
@@ -719,7 +719,6 @@ namespace Identification
                             frmSubstring.ShowDialog();
                             break;
                         #endregion
-
 
                         #region Delete Space Or Zero Value Columns
                         case 8:
