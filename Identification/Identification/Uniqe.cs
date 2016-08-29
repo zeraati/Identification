@@ -14,10 +14,9 @@ namespace Identification
     public partial class Uniqe : Form
     {
         Functions Functions = new Functions();
-        Dictionary<int, string> dicDBName = new Dictionary<int, string>();
         SqlConnection sqlConnection = new SqlConnection();
 
-        string query;
+        string strQuery;
 
         public Uniqe(SqlConnection sqlCon)
         {
@@ -63,7 +62,7 @@ namespace Identification
                 //check = Functions.CheckField(dt, "ID");
                 if (check == 0)
                 {
-                    query = "ALTER TABLE [" + cmbDBName.Text + "].dbo.[" + cmbTBName.Text + "] ADD [ID] INT IDENTITY(0,1)";
+                    strQuery = "ALTER TABLE [" + cmbDBName.Text + "].dbo.[" + cmbTBName.Text + "] ADD [ID] INT IDENTITY(0,1)";
 
                     //if (Functions.SqlExcutCommand(query, sqlConn) == true)
                     //{
@@ -86,9 +85,9 @@ namespace Identification
                     field = field.Substring(0, strIndex).Trim();
                     if (cmbField.Text != field)
                     {
-                        query = "SELECT COUNT(*) FROM (SELECT [" + field + "],COUNT([" + cmbField.Text + "])coun";
-                        query += " FROM [" + cmbDBName.Text + "].dbo.[" + cmbTBName.Text + "] Where [" + cmbField.Text + "] is not null";
-                        query += " GROUP BY [" + field + "] HAVING COUNT([" + cmbField.Text + "])<>1)a";
+                        strQuery = "SELECT COUNT(*) FROM (SELECT [" + field + "],COUNT([" + cmbField.Text + "])coun";
+                        strQuery += " FROM [" + cmbDBName.Text + "].dbo.[" + cmbTBName.Text + "] Where [" + cmbField.Text + "] is not null";
+                        strQuery += " GROUP BY [" + field + "] HAVING COUNT([" + cmbField.Text + "])<>1)a";
                         //check= Convert.ToInt32( Functions.sqlcount(query,Variables.sever));
                         //lstReport.Items.Add(field + " = " + Functions.SqlRecordCount(query, sqlConn));
                     }

@@ -1345,7 +1345,7 @@ namespace Identification
         {
             string strQuery = "SELECT * INTO dbo.[" + strCopyTableName + "] FROM dbo.[" + strTableName + "]";
 
-            return SqlExcutCommand(strQuery, sqlConnection, " CopyTable " + strCopyTableName);
+            return SqlExcutCommand(strQuery, sqlConnection, " CopyTable [" + strCopyTableName + "]");
 
         }
         #endregion
@@ -1824,7 +1824,7 @@ namespace Identification
                                     " ) Columns;";
             return SqlDataAdapter(Query, sqlConnection);
         }
-        public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection, string strColumnName)
+        public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection, string strColumnName = "")
         {
             string Query = "SELECT  Name ," +
                            " [Null] ," +

@@ -264,12 +264,6 @@ namespace Identification
 
         }
 
-        private void جستجوToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Find frmFind = new Find();
-            frmFind.ShowDialog();
-        }
-
         private void اصلاحToolStripMenuItem_Click(object sender, EventArgs e)
         {
 

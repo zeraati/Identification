@@ -13,6 +13,7 @@ namespace Identification
     public partial class Substring : Form
     {
         Functions functions = new Functions();
+
         public Substring()
         {
             InitializeComponent();

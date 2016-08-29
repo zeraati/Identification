@@ -18,16 +18,11 @@ namespace Identification
     {
         Functions func = new Functions();
         FunctionsSQL sqldal = new FunctionsSQL();
-        Dictionary<int, string> dicDBName = new Dictionary<int, string>();
         FolderBrowserDialog fbd = new FolderBrowserDialog();
         SqlConnection sqlConn = new SqlConnection();
-        
-        string query;
-        string filename;
-        string filepath;
-        bool bit_check;
-        int Checked_Total;
-        int prog;
+
+        string strQuery, strFileName, strFilePath;
+        int intChecked_Total, intProg;
         public SQLDBbackup(SqlConnection sqlConnection)
         {
             InitializeComponent();
@@ -88,9 +83,9 @@ namespace Identification
             //string Path;
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-                filename = @"\DBName.bak";
-                filepath = fbd.SelectedPath;
-                txtFilePath.Text = (filepath + filename).Replace(@"\\", @"\");
+                strFileName = @"\DBName.bak";
+                strFilePath = fbd.SelectedPath;
+                txtFilePath.Text = (strFilePath + strFileName).Replace(@"\\", @"\");
             }
             else
             {
@@ -118,13 +113,13 @@ namespace Identification
         void fun_backup()
         {
             progressBar1.Value = 0;
-            lblPersent.Text = progressBar1.Value.ToString() +" %";
-            Checked_Total = 0;
+            lblPersent.Text = progressBar1.Value.ToString() + " %";
+            intChecked_Total = 0;
             for (int y = 0; y < chlbDB.Items.Count; y++)
             {
                 if (chlbDB.GetItemCheckState(y) == CheckState.Checked)
                 {
-                    Checked_Total++;
+                    intChecked_Total++;
                 }
             }
             int i = 0;
@@ -166,14 +161,14 @@ namespace Identification
                     {
                         if (chlbDB.GetItemCheckState(j) == CheckState.Checked)
                         {
-                            if (chbDate.CheckState == CheckState.Checked) { filename = chlbDB.Items[j].ToString() + "_" + lblDate.Text.Replace("/", "") + ".bak"; }
-                            else if (chbName.CheckState == CheckState.Checked) { filename = chlbDB.Items[j].ToString() + "_" + txtName.Text + ".bak"; }
-                            else { filename = chlbDB.Items[j].ToString() + ".bak"; }
-                            if (filename == dtfiles.Rows[k]["files"].ToString())
+                            if (chbDate.CheckState == CheckState.Checked) { strFileName = chlbDB.Items[j].ToString() + "_" + lblDate.Text.Replace("/", "") + ".bak"; }
+                            else if (chbName.CheckState == CheckState.Checked) { strFileName = chlbDB.Items[j].ToString() + "_" + txtName.Text + ".bak"; }
+                            else { strFileName = chlbDB.Items[j].ToString() + ".bak"; }
+                            if (strFileName == dtfiles.Rows[k]["files"].ToString())
                             {
                                 i++;
                                 DataRow drdb = dtDBUpdate.NewRow();
-                                drdb["DB"] = filename;
+                                drdb["DB"] = strFileName;
                                 dtDBUpdate.Rows.Add(drdb);
                                 //dataGridView1.DataSource = dtDBUpdate;
                             }
@@ -197,7 +192,7 @@ namespace Identification
                 }
                 else if (dr == DialogResult.No)
                 {
-                    prog = 0;
+                    intProg = 0;
                     DataTable dttest = new DataTable();
                     dttest.Clear();
                     dttest.Columns.Add("DB");
@@ -205,24 +200,24 @@ namespace Identification
                     {
                         if (chlbDB.GetItemCheckState(r) == CheckState.Checked)
                         {
-                            if (chbDate.CheckState == CheckState.Checked) { filename = chlbDB.Items[r].ToString() + "_" + lblDate.Text.Replace("/", "") + ".bak"; }
-                            else if (chbName.CheckState == CheckState.Checked) { filename = chlbDB.Items[r].ToString() + "_" + txtName.Text + ".bak"; }
-                            else { filename = chlbDB.Items[r].ToString() + ".bak"; }
+                            if (chbDate.CheckState == CheckState.Checked) { strFileName = chlbDB.Items[r].ToString() + "_" + lblDate.Text.Replace("/", "") + ".bak"; }
+                            else if (chbName.CheckState == CheckState.Checked) { strFileName = chlbDB.Items[r].ToString() + "_" + txtName.Text + ".bak"; }
+                            else { strFileName = chlbDB.Items[r].ToString() + ".bak"; }
                             i = 0;
                             for (int t = 0; t < dtDBUpdate.Rows.Count; t++)
                             {
-                                if (filename != dtDBUpdate.Rows[t][0].ToString())
+                                if (strFileName != dtDBUpdate.Rows[t][0].ToString())
                                 {
                                     i++;
                                 }
                             }
                             if (i == (dtDBUpdate.Rows.Count))
                             {
-                                prog++;
-                                query = "BACKUP DATABASE [" + chlbDB.Items[r].ToString() + "] TO DISK='" + (fbd.SelectedPath + @"\" + filename).Replace(@"\\", @"\") + "'";
+                                intProg++;
+                                strQuery = "BACKUP DATABASE [" + chlbDB.Items[r].ToString() + "] TO DISK='" + (fbd.SelectedPath + @"\" + strFileName).Replace(@"\\", @"\") + "'";
                                 //textBox1.Text = query;
                                 DataRow drtest = dttest.NewRow();
-                                drtest["DB"] = filename;
+                                drtest["DB"] = strFileName;
                                 dttest.Rows.Add(drtest);
                                 //if (Functions.SqlExecuteCmd(query, sqlConn) == true)
                                 //{
@@ -253,10 +248,10 @@ namespace Identification
                 if (chlbDB.GetItemCheckState(w) == CheckState.Checked)
                 {
                     i++;
-                    if (chbDate.CheckState == CheckState.Checked) { filename = chlbDB.Items[w].ToString() + "_" + lblDate.Text.Replace("/", ""); }
-                    else if (chbName.CheckState == CheckState.Checked) { filename = chlbDB.Items[w].ToString() + "_" + txtName.Text; }
-                    else { filename = filename = chlbDB.Items[w].ToString(); }
-                    query = "BACKUP DATABASE [" + chlbDB.Items[w].ToString() + "] TO DISK='" + (fbd.SelectedPath + @"\" + filename).Replace(@"\\", @"\") + ".bak'";
+                    if (chbDate.CheckState == CheckState.Checked) { strFileName = chlbDB.Items[w].ToString() + "_" + lblDate.Text.Replace("/", ""); }
+                    else if (chbName.CheckState == CheckState.Checked) { strFileName = chlbDB.Items[w].ToString() + "_" + txtName.Text; }
+                    else { strFileName = strFileName = chlbDB.Items[w].ToString(); }
+                    strQuery = "BACKUP DATABASE [" + chlbDB.Items[w].ToString() + "] TO DISK='" + (fbd.SelectedPath + @"\" + strFileName).Replace(@"\\", @"\") + ".bak'";
                     //textBox1.Text = query;
                     //if (Functions.SqlExecuteCmd(query, sqlConn) == true)
                     //{
@@ -290,14 +285,14 @@ namespace Identification
             if (chbDate.CheckState == CheckState.Checked)
             {
                 chbName.CheckState = CheckState.Unchecked;
-                filename = @"\DBName_" + lblDate.Text.Replace(@"\", "") + ".bak";
-                txtFilePath.Text = (filepath + filename).Replace(@"\\", @"\"); ;
+                strFileName = @"\DBName_" + lblDate.Text.Replace(@"\", "") + ".bak";
+                txtFilePath.Text = (strFilePath + strFileName).Replace(@"\\", @"\"); ;
                 txtName.Enabled = false;
             }
             else
             {
-                filename = @"\DBName.bak";
-                txtFilePath.Text = (filepath + filename).Replace(@"\\", @"\"); ;
+                strFileName = @"\DBName.bak";
+                txtFilePath.Text = (strFilePath + strFileName).Replace(@"\\", @"\"); ;
             }
         }
 
@@ -309,14 +304,14 @@ namespace Identification
                 txtName.Enabled = true;
                 if (txtName.Text != "")
                 {
-                    filename = @"\DBName_" + txtName.Text + ".bak";
-                    txtFilePath.Text = (filepath + filename).Replace(@"\\", @"\"); ;
+                    strFileName = @"\DBName_" + txtName.Text + ".bak";
+                    txtFilePath.Text = (strFilePath + strFileName).Replace(@"\\", @"\"); ;
                 }
             }
             else
             {
-                filename = @"\DBName.bak";
-                txtFilePath.Text = (filepath + filename).Replace(@"\\", @"\"); ;
+                strFileName = @"\DBName.bak";
+                txtFilePath.Text = (strFilePath + strFileName).Replace(@"\\", @"\"); ;
                 txtName.Enabled = false;
             }
         }
@@ -325,8 +320,8 @@ namespace Identification
         {
             if (txtName.Text != "")
             {
-                filename = @"\DBName_" + txtName.Text + ".bak";
-                txtFilePath.Text = (filepath + filename).Replace(@"\\", @"\"); ;
+                strFileName = @"\DBName_" + txtName.Text + ".bak";
+                txtFilePath.Text = (strFilePath + strFileName).Replace(@"\\", @"\"); ;
             }
         }
 

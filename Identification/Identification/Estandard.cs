@@ -20,13 +20,8 @@ namespace Identification
         SqlConnection sqlConnection = new SqlConnection();
 
         string strFunctionsFile = @"..\Functions";
-
-        Substring frmsubstring = new Substring();
-
-        //string strFieldName;
-        string type, strdate;
-
-        int TableName, intTableCheck;
+        string strType, strDate;
+        int intTableCheck;
 
 
         public Estandard(SqlConnection sqlCon)
@@ -45,8 +40,8 @@ namespace Identification
             cmbDBName.DataSource = Functions.SqlGetDBName(sqlConnection);
 
 
-            strdate = solarDate.ToString("yyyyMMdd");
-            strdate = strdate.Replace("/", "");
+            strDate = solarDate.ToString("yyyyMMdd");
+            strDate = strDate.Replace("/", "");
 
             if (cmbDBName.Text != "") cmbDBName.DropDownWidth = Functions.DropDownWidth(cmbDBName);
         }
@@ -91,6 +86,7 @@ namespace Identification
             //  displayed count record
             chbDisRec_CheckedChanged(null, null);
 
+            cmbTableNameTab1.Text = cmbTableNameColumn.Text = cmbTableName.Text;
 
             //TName = cmbTB.SelectedIndex;
 
@@ -124,7 +120,7 @@ namespace Identification
             strFinal = Functions.SqlEditTableName(cmbTableNameTab1.Text, txtNewTableName.Text, sqlConnection, true);
 
             //  conclude final
-            lstReport("New Table => " + txtNewTableName + " => " + strFinal);
+            lstReport(" TableName => [" + txtNewTableName.Text + "] => " + strFinal);
 
             // load table names of source
             if (strFinal.Contains("Done")) loadTbName();
@@ -150,7 +146,7 @@ namespace Identification
         {
             string strFinal = "";
             DialogResult DR = new DialogResult();
-            DR = MessageBox.Show("آیا می خواهید جدول" + cmbTableNameTab1.Text + "حذف شود", "!هشدار", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
+            DR = MessageBox.Show("حذف شود" + " [" + cmbTableNameTab1.Text + "] " + "آیا می خواهید جدول", "!هشدار", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
 
             if (DR == DialogResult.Yes)
             {
@@ -298,6 +294,19 @@ namespace Identification
 
             txtFildEdit.Text = cmbColumnTab2.Text + "_copy";
 
+            //  column info
+            DataTable dtColumnInfo = Functions.SqlColumns(cmbTableNameColumn.Text, sqlConnection, cmbColumnTab2.Text);
+
+            cmbTypeTab2.Text = dtColumnInfo.Rows[0][2].ToString();
+
+            chbxNull.CheckState = CheckState.Unchecked;
+            if (dtColumnInfo.Rows[0][1].ToString().ToUpper() == "NULL")
+            { chbxNull.CheckState = CheckState.Checked; }
+
+            if (dtColumnInfo.Rows[0][3].ToString() != "NULL")
+            { txtLen.Text = dtColumnInfo.Rows[0][3].ToString().Replace("(", "").Replace(")", ""); }
+
+
             if (cmbColumnTab2.Items.Count != 0) cmbColumnTab2.DropDownWidth = Functions.DropDownWidth(cmbColumnTab2);
         }
 
@@ -359,10 +368,10 @@ namespace Identification
                     strFieldName = dtColumns.Rows[j][0].ToString();
 
                     //  get data type
-                    type = dtColumns.Rows[j][2].ToString();
+                    strType = dtColumns.Rows[j][2].ToString();
 
 
-                    if (type == "image" | type == "ntext")
+                    if (strType == "image" | strType == "ntext")
                     {
                         lst1.Items.Add("فیلد " + strFieldName + " قابل شمارش نیست ");
                     }
@@ -526,12 +535,12 @@ namespace Identification
                         strFieldName = ColumnName(chlstbxColumn.Items[l].ToString());
 
                         //  update column
-                        if (txtNew.Text == "NULL" | txtNew.Text == "=NULL")
-                        { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, strFieldName, " = N'" + txtBefore.Text + "'"); }
-                        else { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],N'" + txtBefore.Text + "',N'" + txtNew.Text + "')", sqlConnection); }
+                        if (txtNew.Text.ToUpper() == "NULL" | txtNew.Text.ToUpper() == "=NULL")
+                        { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, "[" + strFieldName + "] = N'" + txtBefore.Text + "'", ""); }
+                        else { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace (" + strFieldName + "),N'" + txtBefore.Text + "',N'" + txtNew.Text + "')", sqlConnection); }
 
                         //  report
-                        if (strFinal.Contains("Done")) { lstReport("Replace =>" + strFinal); }
+                        if (strFinal.Contains("Done")) { lstReport("Replace" + strFinal); }
                     }
                 }
             }
@@ -598,10 +607,13 @@ namespace Identification
                                 //  column name
                                 strFieldName = ColumnName(chlstbxColumn.Items[j].ToString());
 
-                                //  run query & report
-                                lstReport("جایگزینی ک و ي " + strFieldName + ":" +
-                                                Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " dbo.FixKY([" + strFieldName + "])", sqlConnection, strFieldName, "IS NOT NULL")
-                                                );
+                                //  run query
+                                strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " dbo.FixKY([" + strFieldName + "])", sqlConnection, strFieldName);
+
+                                //  report
+                                if (strFinal.Contains("Done"))
+                                { lstReport("Replace(K Or Y) [" + strFieldName + "]:" + strFinal); }
+                                else lstReport("Replace(K Or Y) [" + strFieldName + "]: Is Not Replace ");
                             }
                             break;
                         #endregion
@@ -1047,7 +1059,7 @@ namespace Identification
         #region column name
         private string ColumnName(string strRow)
         {
-            return strRow.Substring(0, strRow.IndexOf("["));
+            return strRow.Substring(0, strRow.IndexOf("[") - 1);
         }
         #endregion
 

@@ -35,7 +35,6 @@ D:\Projects\Identification\Identification\Identification\bin\Debug\Identificatio
 D:\Projects\Identification\Identification\Identification\bin\Debug\Identification.pdb
 D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.DateConvert.resources
 D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Estandard.resources
-D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Find.resources
 D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Form1.resources
 D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.NullSearch.resources
 D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Properties.Resources.resources

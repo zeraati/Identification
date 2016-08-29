@@ -74,13 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="clsDateConvert.cs" />
-    <Compile Include="clsDateStandard.cs" />
-    <Compile Include="clsField.cs" />
-    <Compile Include="clsFunField.cs" />
-    <Compile Include="clsQuery.cs" />
     <Compile Include="clsSuggest.cs" />
-    <Compile Include="clsTable.cs" />
     <Compile Include="clsUpdate.cs" />
     <Compile Include="CryptorEngine.cs" />
     <Compile Include="DateConvert.cs">
@@ -94,12 +88,6 @@
     </Compile>
     <Compile Include="Estandard.Designer.cs">
       <DependentUpon>Estandard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Find.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Find.Designer.cs">
-      <DependentUpon>Find.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -147,9 +135,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Estandard.resx">
       <DependentUpon>Estandard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Find.resx">
-      <DependentUpon>Find.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

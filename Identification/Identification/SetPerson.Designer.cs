@@ -284,8 +284,7 @@
             // 
             this.جستجوToolStripMenuItem.Name = "جستجوToolStripMenuItem";
             this.جستجوToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.جستجوToolStripMenuItem.Text = "جستجو";
-            this.جستجوToolStripMenuItem.Click += new System.EventHandler(this.جستجوToolStripMenuItem_Click);
+            this.جستجوToolStripMenuItem.Text = "جستجو";            
             // 
             // ابزارهاToolStripMenuItem
             // 

@@ -17,18 +17,8 @@ namespace Identification
         #region Global
 
         Functions Functions = new Functions();
-
-        clsDateConvert clsdate = new clsDateConvert();
-        clsDateStandard clsstd = new clsDateStandard();
-
-
-        Dictionary<int, string> dicDBName = new Dictionary<int, string>();
         SqlConnection sqlConnection = new SqlConnection();
 
-
-        bool ok;
-        string Fild;
-        string command;
         #endregion
         public DateConvert(SqlConnection sqlCon)
         {
