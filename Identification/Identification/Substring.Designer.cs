@@ -31,7 +31,7 @@
             this.btnclose = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtChar = new System.Windows.Forms.TextBox();
+            this.txtLenght = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtStart = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
@@ -61,16 +61,16 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(59, 41);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 13);
+            this.label1.Size = new System.Drawing.Size(65, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "تعداد کاراکتر";
+            this.label1.Text = "طول کاراکتر";
             // 
-            // txtChar
+            // txtLenght
             // 
-            this.txtChar.Location = new System.Drawing.Point(148, 38);
-            this.txtChar.Name = "txtChar";
-            this.txtChar.Size = new System.Drawing.Size(36, 20);
-            this.txtChar.TabIndex = 1;
+            this.txtLenght.Location = new System.Drawing.Point(148, 38);
+            this.txtLenght.Name = "txtLenght";
+            this.txtLenght.Size = new System.Drawing.Size(36, 20);
+            this.txtLenght.TabIndex = 1;
             // 
             // label2
             // 
@@ -95,7 +95,7 @@
             this.ClientSize = new System.Drawing.Size(228, 111);
             this.Controls.Add(this.txtStart);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtChar);
+            this.Controls.Add(this.txtLenght);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnclose);
@@ -116,7 +116,7 @@
         private System.Windows.Forms.Button btnclose;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtChar;
+        private System.Windows.Forms.TextBox txtLenght;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtStart;
     }

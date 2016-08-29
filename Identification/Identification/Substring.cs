@@ -12,10 +12,12 @@ namespace Identification
 {
     public partial class Substring : Form
     {
+        Functions functions = new Functions();
         public Substring()
         {
             InitializeComponent();
         }
+
         private void btnclose_Click(object sender, EventArgs e)
         {
             Close();
@@ -23,9 +25,12 @@ namespace Identification
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            int i = Convert.ToInt32(txtChar.Text);
-            int St = Convert.ToInt32(txtStart.Text);
-            i++;
+            int intLenght = Convert.ToInt32(txtLenght.Text);
+            int intStart = Convert.ToInt32(txtStart.Text);
+            intLenght++;
+                        
+            this.functions.ReturnValue= intStart.ToString() + "," + intLenght.ToString();
+            
             Close();
         }
     }

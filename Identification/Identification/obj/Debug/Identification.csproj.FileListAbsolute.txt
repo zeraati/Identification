@@ -46,3 +46,4 @@ D:\Projects\Identification\Identification\Identification\obj\Debug\Identificatio
 D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.exe
 D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.pdb
 D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.csprojResolveAssemblyReference.cache
+D:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Substring.resources

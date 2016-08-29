@@ -335,6 +335,9 @@ namespace Identification
 
         //**************    functions
 
+        public string ReturnValue { get; set; }
+
+
         #region Check SQL Functions
 
         public string CheckSqlFunctions(string strFilePath, string strDataBaseName, SqlConnection sqlConnection)
@@ -1368,22 +1371,31 @@ namespace Identification
 
             if (strDBName == sqlConnection.Database)
             {
-                strQuery = "ALTER TABLE dbo.[" + strTableName + "] ADD " + strColumnName + " " + strDataType + " " + strNulable;
+                strQuery = "ALTER TABLE dbo.[" + strTableName + "] ADD [" + strColumnName + "] " + strDataType.ToUpper() + " " + strNulable;
             }
             else
             {
                 sqlConn = SqlConnectionChangeDB(strDBName, sqlConnection);
-                strQuery = "ALTER TABLE dbo.[" + strTableName + "] ADD " + strColumnName + " " + strDataType + " " + strNulable;
+                strQuery = "ALTER TABLE dbo.[" + strTableName + "] ADD [" + strColumnName + "] " + strDataType.ToUpper() + " " + strNulable;
             }
             return SqlExcutCommand(strQuery, sqlConn, "AddNewField");
         }
 
-        public string SqlAddNewColumn(string strTableName, string strColumnName, string strDataType, SqlConnection sqlConnection, int intSeed = 1, int intStart = 1)
+        public string SqlAddNewColumn(string strTableName, string strColumnName, string strDataType, SqlConnection sqlConnection, int intSeed = 1, int intStart = 1, string strDBName = "")
         {
-            string strQuery;
+            string strQuery = "";
+            SqlConnection sqlConn = new SqlConnection();
+            sqlConn = sqlConnection;
 
-            strQuery = "ALTER TABLE [" + sqlConnection.Database + "].dbo.[" + strTableName + "] ADD " + strColumnName + " " + strDataType + " IDENTITY(" + intStart + "," + intSeed + ") PRIMARY KEY ";
-
+            if (strDBName == sqlConnection.Database)
+            {
+                strQuery = "ALTER TABLE dbo.[" + strTableName + "] ADD [" + strColumnName + "] " + strDataType + " IDENTITY(" + intStart + "," + intSeed + ") PRIMARY KEY ";
+            }
+            else
+            {
+                sqlConn = SqlConnectionChangeDB(strDBName, sqlConnection);
+                strQuery = "ALTER TABLE dbo.[" + strTableName + "] ADD [" + strColumnName + "] " + strDataType + " IDENTITY(" + intStart + "," + intSeed + ") PRIMARY KEY ";
+            }
             return SqlExcutCommand(strQuery, sqlConnection, "AddNewField");
         }
 
@@ -1490,7 +1502,7 @@ namespace Identification
 
         public int SqlCountColumn(string strTableName, SqlConnection sqlConnection, string strWhere = "")
         {
-            string strQuery = "SELECT COUNT(*) FROM " + strTableName + " where " + strWhere;
+            string strQuery = "SELECT COUNT(*) FROM dbo.[" + strTableName + "] WHERE " + strWhere;
 
             SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
             int intCount;
@@ -1527,7 +1539,7 @@ namespace Identification
 
             intCount = SqlTableRecordsCount(strTableName, sqlConnection);
 
-            if (intCount == 0) { strReturn = SqlDropTable(strTableName, sqlConnection, " DropTableSpace "); }
+            if (intCount == 0) { strReturn = SqlDropTable(strTableName, sqlConnection); }
 
             return strReturn;
         }

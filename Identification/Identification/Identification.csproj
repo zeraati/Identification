@@ -173,6 +173,9 @@
     <EmbeddedResource Include="SQLDBbackup.resx">
       <DependentUpon>SQLDBbackup.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Substring.resx">
+      <DependentUpon>Substring.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Uniqe.resx">
       <DependentUpon>Uniqe.cs</DependentUpon>
     </EmbeddedResource>

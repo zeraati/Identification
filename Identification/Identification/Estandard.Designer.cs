@@ -33,6 +33,7 @@
             this.اجراییToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.گزارشازبانکموردنظرToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.پشتیبانگیریToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.تبدیلتاریخToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.بستنToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.خروجToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -45,7 +46,7 @@
             this.clb2 = new System.Windows.Forms.CheckedListBox();
             this.btnselectALL2 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
-            this.chlstbxField = new System.Windows.Forms.CheckedListBox();
+            this.chlstbxColumn = new System.Windows.Forms.CheckedListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lst1 = new System.Windows.Forms.ListBox();
             this.tpDesign = new System.Windows.Forms.TabPage();
@@ -58,25 +59,25 @@
             this.txtNewTableName = new System.Windows.Forms.TextBox();
             this.btnChangeTableName = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.cmbTB2 = new System.Windows.Forms.ComboBox();
+            this.cmbTableNameTab1 = new System.Windows.Forms.ComboBox();
             this.btnTBDelete = new System.Windows.Forms.Button();
             this.Field = new System.Windows.Forms.TabPage();
             this.chbxNull = new System.Windows.Forms.CheckBox();
-            this.cmbFieldCopy = new System.Windows.Forms.ComboBox();
-            this.cmbFieldDel = new System.Windows.Forms.ComboBox();
+            this.cmbColumnCopy = new System.Windows.Forms.ComboBox();
+            this.cmbColumnDelete = new System.Windows.Forms.ComboBox();
             this.btnDelField = new System.Windows.Forms.Button();
             this.chbUniqe = new System.Windows.Forms.CheckBox();
             this.btnCopyField = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.cmbTBField = new System.Windows.Forms.ComboBox();
+            this.cmbTableNameColumn = new System.Windows.Forms.ComboBox();
             this.txtNewField = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.cmbField = new System.Windows.Forms.ComboBox();
+            this.cmbColumnTab2 = new System.Windows.Forms.ComboBox();
             this.btnAddField = new System.Windows.Forms.Button();
             this.btnEditDataType = new System.Windows.Forms.Button();
             this.txtLen = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.cmbType = new System.Windows.Forms.ComboBox();
+            this.cmbTypeTab2 = new System.Windows.Forms.ComboBox();
             this.txtFildEdit = new System.Windows.Forms.TextBox();
             this.btnChangeFieldName = new System.Windows.Forms.Button();
             this.chbDisRec = new System.Windows.Forms.CheckBox();
@@ -88,9 +89,8 @@
             this.btnUpdate = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.cmbTB = new System.Windows.Forms.ComboBox();
+            this.cmbTableName = new System.Windows.Forms.ComboBox();
             this.cmbDBName = new System.Windows.Forms.ComboBox();
-            this.تبدیلتاریخToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -142,6 +142,14 @@
             this.پشتیبانگیریToolStripMenuItem.Text = "پشتیبان گیری";
             this.پشتیبانگیریToolStripMenuItem.Click += new System.EventHandler(this.پشتیبانگیریToolStripMenuItem_Click);
             // 
+            // تبدیلتاریخToolStripMenuItem
+            // 
+            this.تبدیلتاریخToolStripMenuItem.Name = "تبدیلتاریخToolStripMenuItem";
+            this.تبدیلتاریخToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            this.تبدیلتاریخToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.تبدیلتاریخToolStripMenuItem.Text = "تبدیل تاریخ";
+            this.تبدیلتاریخToolStripMenuItem.Click += new System.EventHandler(this.تبدیلتاریخToolStripMenuItem_Click);
+            // 
             // بستنToolStripMenuItem
             // 
             this.بستنToolStripMenuItem.Name = "بستنToolStripMenuItem";
@@ -177,7 +185,7 @@
             this.groupBox1.Controls.Add(this.btnUpdate);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.cmbTB);
+            this.groupBox1.Controls.Add(this.cmbTableName);
             this.groupBox1.Controls.Add(this.cmbDBName);
             this.groupBox1.Location = new System.Drawing.Point(10, 28);
             this.groupBox1.Name = "groupBox1";
@@ -232,7 +240,7 @@
             this.tabPage1.Controls.Add(this.clb2);
             this.tabPage1.Controls.Add(this.btnselectALL2);
             this.tabPage1.Controls.Add(this.label8);
-            this.tabPage1.Controls.Add(this.chlstbxField);
+            this.tabPage1.Controls.Add(this.chlstbxColumn);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -283,18 +291,18 @@
             this.label8.TabIndex = 74;
             this.label8.Text = "فیلدها";
             // 
-            // chlstbxField
+            // chlstbxColumn
             // 
-            this.chlstbxField.AllowDrop = true;
-            this.chlstbxField.CheckOnClick = true;
-            this.chlstbxField.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chlstbxField.FormattingEnabled = true;
-            this.chlstbxField.HorizontalScrollbar = true;
-            this.chlstbxField.Location = new System.Drawing.Point(7, 37);
-            this.chlstbxField.Name = "chlstbxField";
-            this.chlstbxField.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.chlstbxField.Size = new System.Drawing.Size(261, 196);
-            this.chlstbxField.TabIndex = 28;
+            this.chlstbxColumn.AllowDrop = true;
+            this.chlstbxColumn.CheckOnClick = true;
+            this.chlstbxColumn.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chlstbxColumn.FormattingEnabled = true;
+            this.chlstbxColumn.HorizontalScrollbar = true;
+            this.chlstbxColumn.Location = new System.Drawing.Point(7, 37);
+            this.chlstbxColumn.Name = "chlstbxColumn";
+            this.chlstbxColumn.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.chlstbxColumn.Size = new System.Drawing.Size(261, 196);
+            this.chlstbxColumn.TabIndex = 28;
             // 
             // tabPage2
             // 
@@ -365,7 +373,7 @@
             this.Table.Controls.Add(this.txtNewTableName);
             this.Table.Controls.Add(this.btnChangeTableName);
             this.Table.Controls.Add(this.label5);
-            this.Table.Controls.Add(this.cmbTB2);
+            this.Table.Controls.Add(this.cmbTableNameTab1);
             this.Table.Controls.Add(this.btnTBDelete);
             this.Table.Location = new System.Drawing.Point(4, 22);
             this.Table.Name = "Table";
@@ -419,18 +427,18 @@
             this.label5.TabIndex = 43;
             this.label5.Text = "جدول";
             // 
-            // cmbTB2
+            // cmbTableNameTab1
             // 
-            this.cmbTB2.BackColor = System.Drawing.SystemColors.Window;
-            this.cmbTB2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTB2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.cmbTB2.FormattingEnabled = true;
-            this.cmbTB2.Location = new System.Drawing.Point(85, 29);
-            this.cmbTB2.Name = "cmbTB2";
-            this.cmbTB2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.cmbTB2.Size = new System.Drawing.Size(119, 21);
-            this.cmbTB2.TabIndex = 46;
-            this.cmbTB2.SelectedIndexChanged += new System.EventHandler(this.cmbTB2_SelectedIndexChanged);
+            this.cmbTableNameTab1.BackColor = System.Drawing.SystemColors.Window;
+            this.cmbTableNameTab1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTableNameTab1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.cmbTableNameTab1.FormattingEnabled = true;
+            this.cmbTableNameTab1.Location = new System.Drawing.Point(85, 29);
+            this.cmbTableNameTab1.Name = "cmbTableNameTab1";
+            this.cmbTableNameTab1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cmbTableNameTab1.Size = new System.Drawing.Size(119, 21);
+            this.cmbTableNameTab1.TabIndex = 46;
+            this.cmbTableNameTab1.SelectedIndexChanged += new System.EventHandler(this.cmbTB2_SelectedIndexChanged);
             // 
             // btnTBDelete
             // 
@@ -447,21 +455,21 @@
             // Field
             // 
             this.Field.Controls.Add(this.chbxNull);
-            this.Field.Controls.Add(this.cmbFieldCopy);
-            this.Field.Controls.Add(this.cmbFieldDel);
+            this.Field.Controls.Add(this.cmbColumnCopy);
+            this.Field.Controls.Add(this.cmbColumnDelete);
             this.Field.Controls.Add(this.btnDelField);
             this.Field.Controls.Add(this.chbUniqe);
             this.Field.Controls.Add(this.btnCopyField);
             this.Field.Controls.Add(this.label4);
-            this.Field.Controls.Add(this.cmbTBField);
+            this.Field.Controls.Add(this.cmbTableNameColumn);
             this.Field.Controls.Add(this.txtNewField);
             this.Field.Controls.Add(this.label3);
-            this.Field.Controls.Add(this.cmbField);
+            this.Field.Controls.Add(this.cmbColumnTab2);
             this.Field.Controls.Add(this.btnAddField);
             this.Field.Controls.Add(this.btnEditDataType);
             this.Field.Controls.Add(this.txtLen);
             this.Field.Controls.Add(this.label10);
-            this.Field.Controls.Add(this.cmbType);
+            this.Field.Controls.Add(this.cmbTypeTab2);
             this.Field.Controls.Add(this.txtFildEdit);
             this.Field.Controls.Add(this.btnChangeFieldName);
             this.Field.Location = new System.Drawing.Point(4, 22);
@@ -482,26 +490,26 @@
             this.chbxNull.Text = "Null";
             this.chbxNull.UseVisualStyleBackColor = true;
             // 
-            // cmbFieldCopy
+            // cmbColumnCopy
             // 
-            this.cmbFieldCopy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFieldCopy.FormattingEnabled = true;
-            this.cmbFieldCopy.Location = new System.Drawing.Point(115, 197);
-            this.cmbFieldCopy.Name = "cmbFieldCopy";
-            this.cmbFieldCopy.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.cmbFieldCopy.Size = new System.Drawing.Size(121, 21);
-            this.cmbFieldCopy.TabIndex = 83;
+            this.cmbColumnCopy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbColumnCopy.FormattingEnabled = true;
+            this.cmbColumnCopy.Location = new System.Drawing.Point(115, 197);
+            this.cmbColumnCopy.Name = "cmbColumnCopy";
+            this.cmbColumnCopy.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cmbColumnCopy.Size = new System.Drawing.Size(121, 21);
+            this.cmbColumnCopy.TabIndex = 83;
             // 
-            // cmbFieldDel
+            // cmbColumnDelete
             // 
-            this.cmbFieldDel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFieldDel.FormattingEnabled = true;
-            this.cmbFieldDel.Location = new System.Drawing.Point(115, 168);
-            this.cmbFieldDel.Name = "cmbFieldDel";
-            this.cmbFieldDel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.cmbFieldDel.Size = new System.Drawing.Size(121, 21);
-            this.cmbFieldDel.TabIndex = 82;
-            this.cmbFieldDel.SelectedIndexChanged += new System.EventHandler(this.cmbFieldDel_SelectedIndexChanged);
+            this.cmbColumnDelete.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbColumnDelete.FormattingEnabled = true;
+            this.cmbColumnDelete.Location = new System.Drawing.Point(115, 168);
+            this.cmbColumnDelete.Name = "cmbColumnDelete";
+            this.cmbColumnDelete.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cmbColumnDelete.Size = new System.Drawing.Size(121, 21);
+            this.cmbColumnDelete.TabIndex = 82;
+            this.cmbColumnDelete.SelectedIndexChanged += new System.EventHandler(this.cmbFieldDel_SelectedIndexChanged);
             // 
             // btnDelField
             // 
@@ -543,16 +551,16 @@
             this.label4.TabIndex = 76;
             this.label4.Text = "جدول";
             // 
-            // cmbTBField
+            // cmbTableNameColumn
             // 
-            this.cmbTBField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTBField.FormattingEnabled = true;
-            this.cmbTBField.Location = new System.Drawing.Point(115, 10);
-            this.cmbTBField.Name = "cmbTBField";
-            this.cmbTBField.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.cmbTBField.Size = new System.Drawing.Size(121, 21);
-            this.cmbTBField.TabIndex = 75;
-            this.cmbTBField.SelectedIndexChanged += new System.EventHandler(this.cmbTBField_SelectedIndexChanged);
+            this.cmbTableNameColumn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTableNameColumn.FormattingEnabled = true;
+            this.cmbTableNameColumn.Location = new System.Drawing.Point(115, 10);
+            this.cmbTableNameColumn.Name = "cmbTableNameColumn";
+            this.cmbTableNameColumn.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cmbTableNameColumn.Size = new System.Drawing.Size(121, 21);
+            this.cmbTableNameColumn.TabIndex = 75;
+            this.cmbTableNameColumn.SelectedIndexChanged += new System.EventHandler(this.cmbTBField_SelectedIndexChanged);
             // 
             // txtNewField
             // 
@@ -570,16 +578,16 @@
             this.label3.TabIndex = 73;
             this.label3.Text = "نام فیلد";
             // 
-            // cmbField
+            // cmbColumnTab2
             // 
-            this.cmbField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbField.FormattingEnabled = true;
-            this.cmbField.Location = new System.Drawing.Point(115, 37);
-            this.cmbField.Name = "cmbField";
-            this.cmbField.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.cmbField.Size = new System.Drawing.Size(121, 21);
-            this.cmbField.TabIndex = 72;
-            this.cmbField.SelectedIndexChanged += new System.EventHandler(this.cmbField_SelectedIndexChanged);
+            this.cmbColumnTab2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbColumnTab2.FormattingEnabled = true;
+            this.cmbColumnTab2.Location = new System.Drawing.Point(115, 37);
+            this.cmbColumnTab2.Name = "cmbColumnTab2";
+            this.cmbColumnTab2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cmbColumnTab2.Size = new System.Drawing.Size(121, 21);
+            this.cmbColumnTab2.TabIndex = 72;
+            this.cmbColumnTab2.SelectedIndexChanged += new System.EventHandler(this.cmbField_SelectedIndexChanged);
             // 
             // btnAddField
             // 
@@ -619,11 +627,11 @@
             this.label10.TabIndex = 59;
             this.label10.Text = "اندازه";
             // 
-            // cmbType
+            // cmbTypeTab2
             // 
-            this.cmbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbType.FormattingEnabled = true;
-            this.cmbType.Items.AddRange(new object[] {
+            this.cmbTypeTab2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTypeTab2.FormattingEnabled = true;
+            this.cmbTypeTab2.Items.AddRange(new object[] {
             "bit",
             "tinyint",
             "smallint",
@@ -639,12 +647,12 @@
             "datetime",
             "real",
             "float"});
-            this.cmbType.Location = new System.Drawing.Point(115, 108);
-            this.cmbType.Name = "cmbType";
-            this.cmbType.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.cmbType.Size = new System.Drawing.Size(121, 21);
-            this.cmbType.TabIndex = 57;
-            this.cmbType.SelectedIndexChanged += new System.EventHandler(this.cmbType_SelectedIndexChanged);
+            this.cmbTypeTab2.Location = new System.Drawing.Point(115, 108);
+            this.cmbTypeTab2.Name = "cmbTypeTab2";
+            this.cmbTypeTab2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cmbTypeTab2.Size = new System.Drawing.Size(121, 21);
+            this.cmbTypeTab2.TabIndex = 57;
+            this.cmbTypeTab2.SelectedIndexChanged += new System.EventHandler(this.cmbType_SelectedIndexChanged);
             // 
             // txtFildEdit
             // 
@@ -750,17 +758,17 @@
             this.label1.TabIndex = 24;
             this.label1.Text = "نام بانک";
             // 
-            // cmbTB
+            // cmbTableName
             // 
-            this.cmbTB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTB.DropDownWidth = 100;
-            this.cmbTB.FormattingEnabled = true;
-            this.cmbTB.Location = new System.Drawing.Point(259, 32);
-            this.cmbTB.Name = "cmbTB";
-            this.cmbTB.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.cmbTB.Size = new System.Drawing.Size(203, 21);
-            this.cmbTB.TabIndex = 2;
-            this.cmbTB.SelectedIndexChanged += new System.EventHandler(this.cmbTB_SelectedIndexChanged);
+            this.cmbTableName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTableName.DropDownWidth = 100;
+            this.cmbTableName.FormattingEnabled = true;
+            this.cmbTableName.Location = new System.Drawing.Point(259, 32);
+            this.cmbTableName.Name = "cmbTableName";
+            this.cmbTableName.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cmbTableName.Size = new System.Drawing.Size(203, 21);
+            this.cmbTableName.TabIndex = 2;
+            this.cmbTableName.SelectedIndexChanged += new System.EventHandler(this.cmbTB_SelectedIndexChanged);
             // 
             // cmbDBName
             // 
@@ -775,14 +783,6 @@
             this.cmbDBName.Size = new System.Drawing.Size(223, 21);
             this.cmbDBName.TabIndex = 1;
             this.cmbDBName.SelectedIndexChanged += new System.EventHandler(this.cmbDBName_SelectedIndexChanged);
-            // 
-            // تبدیلتاریخToolStripMenuItem
-            // 
-            this.تبدیلتاریخToolStripMenuItem.Name = "تبدیلتاریخToolStripMenuItem";
-            this.تبدیلتاریخToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            this.تبدیلتاریخToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
-            this.تبدیلتاریخToolStripMenuItem.Text = "تبدیل تاریخ";
-            this.تبدیلتاریخToolStripMenuItem.Click += new System.EventHandler(this.تبدیلتاریخToolStripMenuItem_Click);
             // 
             // Estandard
             // 
@@ -835,15 +835,15 @@
         private System.Windows.Forms.TextBox txtBefore;
         private System.Windows.Forms.ListBox lst1;
         private System.Windows.Forms.CheckedListBox clb2;
-        private System.Windows.Forms.CheckedListBox chlstbxField;
+        private System.Windows.Forms.CheckedListBox chlstbxColumn;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox cmbTB;
+        private System.Windows.Forms.ComboBox cmbTableName;
         private System.Windows.Forms.ComboBox cmbDBName;
         private System.Windows.Forms.Button btnTBDelete;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox cmbTB2;
+        private System.Windows.Forms.ComboBox cmbTableNameTab1;
         private System.Windows.Forms.Button btnChangeFieldName;
         private System.Windows.Forms.TextBox txtFildEdit;
         private System.Windows.Forms.CheckBox chbDisRec;
@@ -856,7 +856,7 @@
         private System.Windows.Forms.Button btnEditDataType;
         private System.Windows.Forms.TextBox txtLen;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ComboBox cmbType;
+        private System.Windows.Forms.ComboBox cmbTypeTab2;
         private System.Windows.Forms.Button btnAddField;
         private System.Windows.Forms.Button btnChangeTableName;
         private System.Windows.Forms.ToolStripMenuItem پشتیبانگیریToolStripMenuItem;
@@ -866,13 +866,13 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtNewField;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox cmbField;
+        private System.Windows.Forms.ComboBox cmbColumnTab2;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox cmbTBField;
+        private System.Windows.Forms.ComboBox cmbTableNameColumn;
         private System.Windows.Forms.Button btnCopyField;
         private System.Windows.Forms.CheckBox chbUniqe;
-        private System.Windows.Forms.ComboBox cmbFieldCopy;
-        private System.Windows.Forms.ComboBox cmbFieldDel;
+        private System.Windows.Forms.ComboBox cmbColumnCopy;
+        private System.Windows.Forms.ComboBox cmbColumnDelete;
         private System.Windows.Forms.Button btnDelField;
         private System.Windows.Forms.ToolStripMenuItem بستنToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem خروجToolStripMenuItem;
