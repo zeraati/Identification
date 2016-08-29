@@ -354,8 +354,8 @@ namespace Identification
 
 
             //  add item
-            lst1.Items.Add("تعداد فیلد : " + dtColumns.Rows.Count);
-            lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(Convert.ToInt32(strCount)));
+            //lst1.Items.Add("تعداد فیلد : " + dtColumns.Rows.Count);
+            //lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(Convert.ToInt32(strCount)));
 
 
             //  checked field
@@ -717,7 +717,6 @@ namespace Identification
                         case 7:
                             Substring frmSubstring = new Substring();
                             frmSubstring.ShowDialog();
-                            txtTest.Text = Functions.ReturnValue;
                             break;
                         #endregion
 
@@ -1197,48 +1196,9 @@ namespace Identification
 
 
         #endregion
-
-
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-
-
-            //string strquery = "SELECT * FROM dbo.[" + cmbTB.Text + "] SELECT @@ROWCOUNT";
-            //int i = Functions.SqlRunQueryInt(strquery, sqlConnection);
-
-            //txtTest.Text = i.ToString();
-            //List<string> lstSearchColumn = new List<string>();
-            //string[,] strArray = new string[,] {
-            //                                        { "", "", "" }, 
-            //                                        { "", "", "" } 
-            //                                    };
-
-            //cmbType.SelectedIndex = 2;
-
-
-
-
-            //int intSelected = chlstbxField.SelectedIndex;
-            //string strcolumn = chlstbxField.Items[intSelected].ToString();
-            //txtTest.Text = Functions.ColumnName(chlstbxField.Items[intSelected].ToString()).Trim();
-            //int start = strcolumn.IndexOf("[") + 1;
-            //int end = strcolumn.IndexOf("]");
-
-            //strcolumn = strcolumn.Substring(start, end - start).Trim();
-            //string strNull = strcolumn.Substring(0, strcolumn.IndexOf("-") + 1).Trim();
-            //strcolumn = strcolumn.Replace(strNull, "").Trim();
-
-            //txtTest.Text = strcolumn;
-            //if (strcolumn.Contains("(")) txtTest.Text = strcolumn.Substring(0, strcolumn.IndexOf("(") - 1);
-            //txtTest.Text = strcolumn.IndexOf("-").ToString() + " , " + strcolumn.Length.ToString() + " , " + strcolumn.Substring(0, strcolumn.IndexOf("-")).Trim().Length.ToString();
-            //txtTest.Text += strcolumn.Substring(strcolumn.IndexOf("-"),(strcolumn.Length-1)-strcolumn.Substring(0, strcolumn.IndexOf("-")).Trim().Length).Trim();
-
-
-        }
-
+        
         private void dgvDesign_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            txtTest.Text = dgvDesign.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
         }
 
         private void تبدیلتاریخToolStripMenuItem_Click(object sender, EventArgs e)

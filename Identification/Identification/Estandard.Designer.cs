@@ -39,8 +39,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnUpdDesign = new System.Windows.Forms.Button();
-            this.btnTest = new System.Windows.Forms.Button();
-            this.txtTest = new System.Windows.Forms.TextBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.clb2 = new System.Windows.Forms.CheckedListBox();
@@ -172,8 +170,6 @@
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
             this.groupBox1.Controls.Add(this.btnUpdDesign);
-            this.groupBox1.Controls.Add(this.btnTest);
-            this.groupBox1.Controls.Add(this.txtTest);
             this.groupBox1.Controls.Add(this.tabControl2);
             this.groupBox1.Controls.Add(this.tabControl1);
             this.groupBox1.Controls.Add(this.chbDisRec);
@@ -204,23 +200,6 @@
             this.btnUpdDesign.Text = "UpdateDesign";
             this.btnUpdDesign.UseVisualStyleBackColor = true;
             this.btnUpdDesign.Click += new System.EventHandler(this.btnUpdDesign_Click);
-            // 
-            // btnTest
-            // 
-            this.btnTest.Location = new System.Drawing.Point(17, 10);
-            this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(75, 23);
-            this.btnTest.TabIndex = 77;
-            this.btnTest.Text = "تست";
-            this.btnTest.UseVisualStyleBackColor = true;
-            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
-            // 
-            // txtTest
-            // 
-            this.txtTest.Location = new System.Drawing.Point(98, 12);
-            this.txtTest.Name = "txtTest";
-            this.txtTest.Size = new System.Drawing.Size(265, 20);
-            this.txtTest.TabIndex = 76;
             // 
             // tabControl2
             // 
@@ -880,8 +859,6 @@
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TextBox txtTest;
-        private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.TabPage tpDesign;
         private System.Windows.Forms.DataGridView dgvDesign;
         private System.Windows.Forms.DataGridViewCheckBoxColumn dgvChBxClm;
