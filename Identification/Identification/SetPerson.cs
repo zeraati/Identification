@@ -548,7 +548,6 @@ namespace Identification
             {
                 #region Not Union
 
-                #region Case
                 foreach (int action in clbEhraz.CheckedIndices)
                 {
                     switch (action)
@@ -670,7 +669,6 @@ namespace Identification
                             break;
                     }
                 }
-                #endregion  //  End Case
 
                 #endregion
 
