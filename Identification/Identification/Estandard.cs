@@ -294,6 +294,7 @@ namespace Identification
 
             txtFildEdit.Text = cmbColumnTab2.Text + "_copy";
 
+            #region Column Info
             //  column info
             DataTable dtColumnInfo = Functions.SqlColumns(cmbTableNameColumn.Text, sqlConnection, cmbColumnTab2.Text);
 
@@ -306,6 +307,16 @@ namespace Identification
             if (dtColumnInfo.Rows[0][3].ToString() != "NULL")
             { txtLen.Text = dtColumnInfo.Rows[0][3].ToString().Replace("(", "").Replace(")", ""); }
 
+            //  column primary key
+            int intColumnKey = Functions.SqlCountColumnKey(cmbTableNameColumn.Text, cmbColumnTab2.Text, sqlConnection);
+
+            //  default value
+            chBxKey.CheckState = CheckState.Unchecked;
+            //  checkbox do checked
+            if (intColumnKey != 0)
+            { chBxKey.CheckState = CheckState.Checked; }
+
+            #endregion
 
             if (cmbColumnTab2.Items.Count != 0) cmbColumnTab2.DropDownWidth = Functions.DropDownWidth(cmbColumnTab2);
         }
@@ -500,309 +511,312 @@ namespace Identification
         #region Update
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            Cursor.Current = Cursors.WaitCursor;
-            lst1.Items.Add("--------------------------------------");
-            string strFieldName = "", strDataType;
-            string strColumnData;
-            string strQuery = "", strWhere, strFinal = "";
-            int intIncerement, intCount, intTableCount;
-
-            //  table records count
-            intTableCount = Functions.SqlTableRecordsCount(cmbTableName.Text, sqlConnection);
-
-            lst1.Items.Add("تعداد فیلد : " + chlstbxColumn.Items.Count.ToString());
-            lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(intTableCount));
-
-            #region نام فیلدی که تیک زده شده را به ما میدهد
-            for (int r = 0; r < chlstbxColumn.Items.Count; r++)
+            if (clb2.CheckedIndices.Count != 0)
             {
-                if (chlstbxColumn.GetItemCheckState(r) == CheckState.Checked)
-                {
-                    strFieldName = ColumnName(chlstbxColumn.Items[r].ToString()).Trim();
-                }
-            }
-            #endregion
+                Cursor.Current = Cursors.WaitCursor;
+                lst1.Items.Add("--------------------------------------");
+                string strFieldName = "", strDataType;
+                string strColumnData;
+                string strQuery = "", strWhere, strFinal = "";
+                int intIncerement, intCount, intTableCount;
 
-            #region Replace
-            if (cbReplace.CheckState == CheckState.Checked)
-            {
-                int l;
-                for (l = 0; l < chlstbxColumn.Items.Count; l++)
+                //  table records count
+                intTableCount = Functions.SqlTableRecordsCount(cmbTableName.Text, sqlConnection);
+
+                lst1.Items.Add("تعداد فیلد : " + chlstbxColumn.Items.Count.ToString());
+                lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(intTableCount));
+
+                #region نام فیلدی که تیک زده شده را به ما میدهد
+                for (int r = 0; r < chlstbxColumn.Items.Count; r++)
                 {
-                    if (chlstbxColumn.GetItemCheckState(l) == CheckState.Checked)
+                    if (chlstbxColumn.GetItemCheckState(r) == CheckState.Checked)
                     {
-                        //  column name
-                        strFieldName = ColumnName(chlstbxColumn.Items[l].ToString());
-
-                        //  update column
-                        if (txtNew.Text.ToUpper() == "NULL" | txtNew.Text.ToUpper() == "=NULL")
-                        { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, "[" + strFieldName + "] = N'" + txtBefore.Text + "'", ""); }
-                        else { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace (" + strFieldName + "),N'" + txtBefore.Text + "',N'" + txtNew.Text + "')", sqlConnection); }
-
-                        //  report
-                        if (strFinal.Contains("Done")) { lstReport("Replace" + strFinal); }
+                        strFieldName = ColumnName(chlstbxColumn.Items[r].ToString()).Trim();
                     }
                 }
-            }
-            #endregion
+                #endregion
 
-
-
-            for (int i = 0; i < clb2.Items.Count; i++)
-            {
-                if (clb2.GetItemCheckState(i) == CheckState.Checked)
+                #region Replace
+                if (cbReplace.CheckState == CheckState.Checked)
                 {
-                    switch (i)
+                    int l;
+                    for (l = 0; l < chlstbxColumn.Items.Count; l++)
                     {
+                        if (chlstbxColumn.GetItemCheckState(l) == CheckState.Checked)
+                        {
+                            //  column name
+                            strFieldName = ColumnName(chlstbxColumn.Items[l].ToString());
 
-                        #region Delete Not Valid
-                        case 0:
+                            //  update column
+                            if (txtNew.Text.ToUpper() == "NULL" | txtNew.Text.ToUpper() == "=NULL")
+                            { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, "[" + strFieldName + "] = N'" + txtBefore.Text + "'", ""); }
+                            else { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace (" + strFieldName + "),N'" + txtBefore.Text + "',N'" + txtNew.Text + "')", sqlConnection); }
 
-                            for (int j = 0; j < chlstbxColumn.Items.Count; j++)
-                            {
-                                if (chlstbxColumn.GetItemCheckState(j) == CheckState.Checked)
+                            //  report
+                            if (strFinal.Contains("Done")) { lstReport("Replace" + strFinal); }
+                        }
+                    }
+                }
+                #endregion
+
+
+
+                for (int i = 0; i < clb2.Items.Count; i++)
+                {
+                    if (clb2.GetItemCheckState(i) == CheckState.Checked)
+                    {
+                        switch (i)
+                        {
+
+                            #region Delete Not Valid
+                            case 0:
+
+                                for (int j = 0; j < chlstbxColumn.Items.Count; j++)
                                 {
-                                    //  column name
-                                    strFieldName = ColumnName(chlstbxColumn.Items[j].ToString()).Trim();
-
-                                    //  column data type
-                                    strDataType = ColumnDataType(chlstbxColumn.Items[j].ToString());
-
-                                    //  check string & numeric
-                                    if (strDataType.Contains("("))
+                                    if (chlstbxColumn.GetItemCheckState(j) == CheckState.Checked)
                                     {
+                                        //  column name
+                                        strFieldName = ColumnName(chlstbxColumn.Items[j].ToString()).Trim();
+
+                                        //  column data type
+                                        strDataType = ColumnDataType(chlstbxColumn.Items[j].ToString());
+
+                                        //  check string & numeric
+                                        if (strDataType.Contains("("))
+                                        {
+                                            //query
+                                            strQuery = "Update [" + cmbTableName.Text + "] Set [" + strFieldName + "] = Null Where [" + strFieldName + "] = '' or [" + strFieldName + "] = '0' or [" + strFieldName + "] = '-' or [" + strFieldName + "] = ' ' and ISNUMERIC([" + strFieldName + "])<>1";
+                                        }
+                                        else
+                                        {
+                                            //query
+                                            strQuery = "Update [" + cmbTableName.Text + "] Set [" + strFieldName + "] = Null Where [" + strFieldName + "] = 0 and ISNUMERIC([" + strFieldName + "])<>1";
+                                        }
+                                        //  run query
+                                        Functions.SqlExcutCommand(strQuery, sqlConnection);
+
                                         //query
-                                        strQuery = "Update [" + cmbTableName.Text + "] Set [" + strFieldName + "] = Null Where [" + strFieldName + "] = '' or [" + strFieldName + "] = '0' or [" + strFieldName + "] = '-' or [" + strFieldName + "] = ' ' and ISNUMERIC([" + strFieldName + "])<>1";
+                                        strQuery = "update [" + cmbTableName.Text + "] Set [" + strFieldName + "] =LTRIM(RTRIM([" + strFieldName + "]))";
+
+                                        //  run query
+                                        lst1.Items.Add("حذف مقادیر تهی و نا معتبر" + strFieldName + ": " + Functions.SqlExcutCommand(strQuery, sqlConnection));
+                                        strQuery = "";
                                     }
-                                    else
-                                    {
-                                        //query
-                                        strQuery = "Update [" + cmbTableName.Text + "] Set [" + strFieldName + "] = Null Where [" + strFieldName + "] = 0 and ISNUMERIC([" + strFieldName + "])<>1";
-                                    }
-                                    //  run query
-                                    Functions.SqlExcutCommand(strQuery, sqlConnection);
-
-                                    //query
-                                    strQuery = "update [" + cmbTableName.Text + "] Set [" + strFieldName + "] =LTRIM(RTRIM([" + strFieldName + "]))";
-
-                                    //  run query
-                                    lst1.Items.Add("حذف مقادیر تهی و نا معتبر" + strFieldName + ": " + Functions.SqlExcutCommand(strQuery, sqlConnection));
-                                    strQuery = "";
                                 }
-                            }
-                            break;
-                        #endregion
-
-                        #region Edit Data Type Column
-                        case 1:
-                            EditDataType();
-                            loadColumn();
-                            break;
-                        #endregion
-
-                        #region Replace Character ک و ی
-                        case 2:
-                            for (int j = 0; j < chlstbxColumn.Items.Count; j++)
-                            {
-                                //  column name
-                                strFieldName = ColumnName(chlstbxColumn.Items[j].ToString());
-
-                                //  run query
-                                strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " dbo.FixKY([" + strFieldName + "])", sqlConnection, strFieldName);
-
-                                //  report
-                                if (strFinal.Contains("Done"))
-                                { lstReport("Replace(K Or Y) [" + strFieldName + "]:" + strFinal); }
-                                else lstReport("Replace(K Or Y) [" + strFieldName + "]: Is Not Replace ");
-                            }
-                            break;
-                        #endregion
-
-                        #region Standard CodeMelli
-                        case 3:
-
-                            StandardCodeMelli(strFieldName);
-
-                            break;
-                        #endregion
-
-                        #region Standard ShenasCode
-                        case 4:
-
-                            strColumnData = "dbo.[CM-Fix]([" + strFieldName + "])";
-
-                            #region Delete Character Not Numeric
-
-                            //  update character not numeric
-                            strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, strColumnData, sqlConnection);
-
-                            //  report
-                            lstReport("Delete Character Not Numeric => " + strFieldName + strFinal);
-
+                                break;
                             #endregion
 
-                            #region ShenasCode With Len > 7 To CodeMelli
-                            //  query
-                            strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli", "RIGHT('00'+ " + strColumnData + ",10)," + strFieldName + "= NULL ", sqlConnection, strFieldName, "LEN(" + strColumnData + ")>7 and CodeMelli is null", "");
-
-                            //  report
-                            lstReport("ShenasCode With Len > 7 To CodeMelli => " + strFieldName + ": " + strFinal);
-
-                            if (strFinal.Contains("Done"))
-                            { StandardCodeMelli("CodeMelli"); }
-
+                            #region Edit Data Type Column
+                            case 1:
+                                EditDataType();
+                                loadColumn();
+                                break;
                             #endregion
 
-                            #region Delete ShenasCode Not Valid
-
-                            //  where query
-                            strWhere = strFieldName + "='0' or " + strFieldName + "=' ' or LEN(" + strFieldName + ")>7";
-
-                            //  update
-                            strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, strWhere, "");
-
-                            //  report
-                            lstReport("Delete ShenasCode Not Valid => " + strFieldName + ": " + strFinal);
-
-                            #endregion
-                            break;
-                        #endregion
-
-                        #region Standard Date
-                        case 5:
-                            for (int l = 0; l < chlstbxColumn.Items.Count; l++)
-                            {
-                                if (chlstbxColumn.GetItemCheckState(l) == CheckState.Checked)
-                                {
-                                    //  column name
-                                    strFieldName = ColumnName(chlstbxColumn.Items[l].ToString());
-
-                                    #region Standard Formated Date
-                                    //  sql update query
-                                    Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'-','/')", sqlConnection);
-                                    Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'_','/')", sqlConnection);
-                                    Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'.','/')", sqlConnection);
-                                    Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],',','/')", sqlConnection);
-
-                                    //  run query                                    
-                                    lst1.Items.Add(" Ltrim & Rtrim " +
-                                                    Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "ltrim(rtrim([" + strFieldName + "]))", sqlConnection)
-                                                    );
-                                    //  run query
-                                    lst1.Items.Add(" Standard Date " +
-                                                    Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "dbo.[FE_Date]([" + strFieldName + "]) where [" + strFieldName + "] IS NOT NULL", sqlConnection)
-                                                    );
-                                    #endregion
-
-                                    #region Delete Not Valid Date
-                                    //  run query
-                                    lst1.Items.Add(" Delete Not Valid Date " +
-                                                    Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " NULL where dbo.[CM-Fix]([" + strFieldName + "])= 0 ", sqlConnection)
-                                                    );
-                                    #endregion
-
-                                }
-                            }
-                            break;
-                        #endregion
-
-                        #region Date Convert
-                        case 6:
-                            DateConvert frm = new DateConvert(sqlConnection);
-                            frm.ShowDialog();
-                            break;
-                        #endregion
-
-                        #region Save Characters Substring
-                        case 7:
-                            Substring frmSubstring = new Substring();
-                            frmSubstring.ShowDialog();
-                            break;
-                        #endregion
-
-                        #region Delete Space Or Zero Value Columns
-                        case 8:
-                            intTableCheck = 0;
-                            for (int j = 0; j < chlstbxColumn.Items.Count; j++)
-                            {
-                                if (chlstbxColumn.GetItemCheckState(j) == CheckState.Checked)
+                            #region Replace Character ک و ی
+                            case 2:
+                                for (int j = 0; j < chlstbxColumn.Items.Count; j++)
                                 {
                                     //  column name
                                     strFieldName = ColumnName(chlstbxColumn.Items[j].ToString());
 
                                     //  run query
-                                    strFinal = Functions.SqlDropColumnSpace(cmbTableName.Text, strFieldName, sqlConnection);
+                                    strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " dbo.FixKY([" + strFieldName + "])", sqlConnection, strFieldName);
 
                                     //  report
                                     if (strFinal.Contains("Done"))
-                                    { lstReport(strFinal); }
-
+                                    { lstReport("Replace(K Or Y) [" + strFieldName + "]:" + strFinal); }
+                                    else lstReport("Replace(K Or Y) [" + strFieldName + "]: Is Not Replace ");
                                 }
-                            }
+                                break;
+                            #endregion
 
-                            //  load columns
-                            loadColumn();
+                            #region Standard CodeMelli
+                            case 3:
 
-                            break;
-                        #endregion
+                                StandardCodeMelli(strFieldName);
 
-                        #region Delete Space Rows
-                        case 9:
+                                break;
+                            #endregion
 
-                            //  defualt value
-                            strWhere = "";
-                            intIncerement = 0;
+                            #region Standard ShenasCode
+                            case 4:
 
-                            //  string where
-                            foreach (int Index in chlstbxColumn.CheckedIndices)
-                            {
-                                if (intIncerement == 0) { strWhere = "[" + ColumnName(chlstbxColumn.Items[Index].ToString()) + "] IS NULL "; intIncerement++; }
-                                else { strWhere += " AND " + "[" + ColumnName(chlstbxColumn.Items[Index].ToString()) + "] IS NULL "; }
-                            }
+                                strColumnData = "dbo.[CM-Fix]([" + strFieldName + "])";
 
-                            //  count rows where is null
-                            intCount = Functions.SqlCountColumn(cmbTableName.Text, sqlConnection, strWhere);
+                                #region Delete Character Not Numeric
 
-                            if (intCount != 0)
-                            {
-                                //  run query
-                                strFinal = Functions.SqlDropRows(cmbTableName.Text, sqlConnection, strWhere);
+                                //  update character not numeric
+                                strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, strColumnData, sqlConnection);
 
                                 //  report
+                                lstReport("Delete Character Not Numeric => " + strFieldName + strFinal);
+
+                                #endregion
+
+                                #region ShenasCode With Len > 7 To CodeMelli
+                                //  query
+                                strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli", "RIGHT('00'+ " + strColumnData + ",10)," + strFieldName + "= NULL ", sqlConnection, strFieldName, "LEN(" + strColumnData + ")>7 and CodeMelli is null", "");
+
+                                //  report
+                                lstReport("ShenasCode With Len > 7 To CodeMelli => " + strFieldName + ": " + strFinal);
+
                                 if (strFinal.Contains("Done"))
-                                { lstReport("Count = " + intCount.ToString() + " , " + strFinal); }
-                            }
-                            else
-                            { lstReport(" Rows Is Not Null "); }
+                                { StandardCodeMelli("CodeMelli"); }
 
-                            break;
-                        #endregion
+                                #endregion
 
-                        #region حذف جدول خالی
-                        case 10:
-                            if (intTableCheck == 0)
-                            {
-                                //  run query
-                                strFinal = Functions.SqlDropTableSpace(cmbTableName.Text, sqlConnection);
+                                #region Delete ShenasCode Not Valid
+
+                                //  where query
+                                strWhere = strFieldName + "='0' or " + strFieldName + "=' ' or LEN(" + strFieldName + ")>7";
+
+                                //  update
+                                strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, strWhere, "");
 
                                 //  report
-                                if (strFinal.Contains("Done")) { lstReport(strFinal); }
-                            }
+                                lstReport("Delete ShenasCode Not Valid => " + strFieldName + ": " + strFinal);
 
-                            //  set cmbTBName source    // load table names
-                            loadTbName();
+                                #endregion
+                                break;
+                            #endregion
 
-                            break;
-                        #endregion
+                            #region Standard Date
+                            case 5:
+                                for (int l = 0; l < chlstbxColumn.Items.Count; l++)
+                                {
+                                    if (chlstbxColumn.GetItemCheckState(l) == CheckState.Checked)
+                                    {
+                                        //  column name
+                                        strFieldName = ColumnName(chlstbxColumn.Items[l].ToString());
+
+                                        #region Standard Formated Date
+                                        //  sql update query
+                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'-','/')", sqlConnection);
+                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'_','/')", sqlConnection);
+                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'.','/')", sqlConnection);
+                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],',','/')", sqlConnection);
+
+                                        //  run query                                    
+                                        lst1.Items.Add(" Ltrim & Rtrim " +
+                                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "ltrim(rtrim([" + strFieldName + "]))", sqlConnection)
+                                                        );
+                                        //  run query
+                                        lst1.Items.Add(" Standard Date " +
+                                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "dbo.[FE_Date]([" + strFieldName + "]) where [" + strFieldName + "] IS NOT NULL", sqlConnection)
+                                                        );
+                                        #endregion
+
+                                        #region Delete Not Valid Date
+                                        //  run query
+                                        lst1.Items.Add(" Delete Not Valid Date " +
+                                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " NULL where dbo.[CM-Fix]([" + strFieldName + "])= 0 ", sqlConnection)
+                                                        );
+                                        #endregion
+
+                                    }
+                                }
+                                break;
+                            #endregion
+
+                            #region Date Convert
+                            case 6:
+                                DateConvert frm = new DateConvert(sqlConnection);
+                                frm.ShowDialog();
+                                break;
+                            #endregion
+
+                            #region Save Characters Substring
+                            case 7:
+                                Substring frmSubstring = new Substring();
+                                frmSubstring.ShowDialog();
+                                break;
+                            #endregion
+
+                            #region Delete Space Or Zero Value Columns
+                            case 8:
+                                intTableCheck = 0;
+                                for (int j = 0; j < chlstbxColumn.Items.Count; j++)
+                                {
+                                    if (chlstbxColumn.GetItemCheckState(j) == CheckState.Checked)
+                                    {
+                                        //  column name
+                                        strFieldName = ColumnName(chlstbxColumn.Items[j].ToString());
+
+                                        //  run query
+                                        strFinal = Functions.SqlDropColumnSpace(cmbTableName.Text, strFieldName, sqlConnection);
+
+                                        //  report
+                                        if (strFinal.Contains("Done"))
+                                        { lstReport(strFinal); }
+
+                                    }
+                                }
+
+                                //  load columns
+                                loadColumn();
+
+                                break;
+                            #endregion
+
+                            #region Delete Space Rows
+                            case 9:
+
+                                //  defualt value
+                                strWhere = "";
+                                intIncerement = 0;
+
+                                //  string where
+                                foreach (int Index in chlstbxColumn.CheckedIndices)
+                                {
+                                    if (intIncerement == 0) { strWhere = "[" + ColumnName(chlstbxColumn.Items[Index].ToString()) + "] IS NULL "; intIncerement++; }
+                                    else { strWhere += " AND " + "[" + ColumnName(chlstbxColumn.Items[Index].ToString()) + "] IS NULL "; }
+                                }
+
+                                //  count rows where is null
+                                intCount = Functions.SqlCountColumn(cmbTableName.Text, sqlConnection, strWhere);
+
+                                if (intCount != 0)
+                                {
+                                    //  run query
+                                    strFinal = Functions.SqlDropRows(cmbTableName.Text, sqlConnection, strWhere);
+
+                                    //  report
+                                    if (strFinal.Contains("Done"))
+                                    { lstReport("Count = " + intCount.ToString() + " , " + strFinal); }
+                                }
+                                else
+                                { lstReport(" Rows Is Not Null "); }
+
+                                break;
+                            #endregion
+
+                            #region حذف جدول خالی
+                            case 10:
+                                if (intTableCheck == 0)
+                                {
+                                    //  run query
+                                    strFinal = Functions.SqlDropTableSpace(cmbTableName.Text, sqlConnection);
+
+                                    //  report
+                                    if (strFinal.Contains("Done")) { lstReport(strFinal); }
+                                }
+
+                                //  set cmbTBName source    // load table names
+                                loadTbName();
+
+                                break;
+                                #endregion
+                        }
                     }
                 }
+                lst1.SelectedIndex = lst1.Items.Count - 1;
+
+                //  select tabcontrol
+                tabControl2.SelectedTab = tabControl2.TabPages[1];
+
+                Cursor.Current = Cursors.Default;
             }
-            lst1.SelectedIndex = lst1.Items.Count - 1;
-
-            //  select tabcontrol
-            tabControl2.SelectedTab = tabControl2.TabPages[1];
-
-            Cursor.Current = Cursors.Default;
         }
 
         #endregion
@@ -1195,7 +1209,7 @@ namespace Identification
 
 
         #endregion
-        
+
         private void dgvDesign_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
         }

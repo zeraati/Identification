@@ -338,7 +338,7 @@ namespace Identification
         public string ReturnValue { get; set; }
 
 
-        #region Check SQL Functions
+        #region CheckSQLFunctions
 
         public string CheckSqlFunctions(string strFilePath, string strDataBaseName, SqlConnection sqlConnection)
         {
@@ -1491,28 +1491,23 @@ namespace Identification
         {
             string strQuery = "SELECT COUNT([" + strColumnName + "]) FROM dbo.[" + strTableName + "]";
 
-            SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
-            int intCount;
-            cmd.Connection.Open();
-            cmd.CommandTimeout = 3600;
-            intCount = Convert.ToInt32(cmd.ExecuteScalar());
-            cmd.Connection.Close();
-            return intCount;
+            return SqlExecuteScalar(strQuery, sqlConnection);
         }
 
         public int SqlCountColumn(string strTableName, SqlConnection sqlConnection, string strWhere = "")
         {
             string strQuery = "SELECT COUNT(*) FROM dbo.[" + strTableName + "] WHERE " + strWhere;
 
-            SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
-            int intCount;
-            cmd.Connection.Close();
-            cmd.Connection.Open();
-            cmd.CommandTimeout = 3600;
-            intCount = Convert.ToInt32(cmd.ExecuteScalar());
-            cmd.Connection.Close();
-            return intCount;
+            return SqlExecuteScalar(strQuery, sqlConnection);
         }
+
+        public int SqlCountColumnKey(string strTableName, string strColumnName, SqlConnection sqlConnection)
+        {
+            string strQuery = "SELECT COUNT(*) FROM (SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_NAME=N'" + strTableName + "' AND COLUMN_NAME=N'" + strColumnName + "') K";
+
+            return SqlExecuteScalar(strQuery, sqlConnection, "Column Key");
+        }
+
         #endregion
 
         #region SqlDropColumnSpace
@@ -1556,9 +1551,7 @@ namespace Identification
             return SqlExcutCommand(strQuery, sqlConnection, " DropRows ");
         }
         #endregion
-
-
-        //*****     Eslah Shavad     
+ 
 
         #region SqlEditField
         /// <summary>
@@ -1613,7 +1606,6 @@ namespace Identification
 
         #endregion
 
-        //*****
 
         #region SqlConnection
         public SqlConnection SqlConnect(string server = ".", string user = "", string pass = "", string dbName = "")
@@ -1638,11 +1630,28 @@ namespace Identification
         #endregion
 
 
+        #region SqlExecuteScalar
+
+        public int SqlExecuteScalar(string strQuery, SqlConnection sqlConnection, string strState = "")
+        {
+            SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
+            int intCount;
+            cmd.Connection.Close();
+            cmd.Connection.Open();
+            cmd.CommandTimeout = 3600;
+            intCount = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.Connection.Close();
+            return intCount;
+        }
+
+        #endregion
+
+
         #region SqlExcutCommand
-        public string SqlExcutCommand(string Query, SqlConnection sqlConnection, string strState = "")
+        public string SqlExcutCommand(string strQuery, SqlConnection sqlConnection, string strState = "")
         {
 
-            SqlCommand cmd = new SqlCommand(Query, sqlConnection);
+            SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
             try
             {
                 // conection timeoute
@@ -1666,7 +1675,7 @@ namespace Identification
 
 
         #region SqlExcutCommandWithGO
-        public List<string> SqlExcutCommandWithGO(SqlConnection sqlConnection, string Query, string strState = "")
+        public List<string> SqlExcutCommandWithGO(SqlConnection sqlConnection, string strQuery, string strState = "")
         {
             //  for substring
             int intStart, intLenght;
@@ -1676,7 +1685,7 @@ namespace Identification
 
 
             // index of all GO in query
-            List<int> lstIndexGo = IndexOfAll(Query, "GO");
+            List<int> lstIndexGo = IndexOfAll(strQuery, "GO");
 
 
             //  create evry query
@@ -1685,22 +1694,22 @@ namespace Identification
 
                 //  first GO
                 if (i == 0)
-                { intLenght = lstIndexGo[0] - 1; lstQry.Add(Query.Substring(0, intLenght)); }
+                { intLenght = lstIndexGo[0] - 1; lstQry.Add(strQuery.Substring(0, intLenght)); }
 
 
                 //  midel Go    // GO between first & last 
                 if (lstIndexGo.Count - 1 > i)
                 {
                     intStart = lstIndexGo[i] + 2; intLenght = (lstIndexGo[i + 1] - 1) - (lstIndexGo[i] + 2);
-                    lstQry.Add(Query.Substring(intStart, intLenght));
+                    lstQry.Add(strQuery.Substring(intStart, intLenght));
                 }
 
 
                 //  last GO
                 if (lstIndexGo.Count - 1 == i)
                 {
-                    intStart = lstIndexGo[i] + 2; intLenght = Query.Length - intStart;
-                    lstQry.Add(Query.Substring(intStart, intLenght));
+                    intStart = lstIndexGo[i] + 2; intLenght = strQuery.Length - intStart;
+                    lstQry.Add(strQuery.Substring(intStart, intLenght));
                 }
 
             }
@@ -1824,6 +1833,7 @@ namespace Identification
                                     " ) Columns;";
             return SqlDataAdapter(Query, sqlConnection);
         }
+
         public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection, string strColumnName = "")
         {
             string Query = "SELECT  Name ," +
@@ -1843,7 +1853,6 @@ namespace Identification
             string Query = " SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'";
             return SqlDataAdapter(Query, sqlConnection);
         }
-
 
         #endregion
 

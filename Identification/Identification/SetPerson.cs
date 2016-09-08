@@ -17,11 +17,9 @@ namespace Identification
 
         #region Global
         Functions Functions = new Functions();
-
-        Dictionary<int, string> dicDBName = new Dictionary<int, string>();
         SqlConnection sqlConnection = new SqlConnection();
 
-        string query, query2, strJoin, strWhere, strSelect, strUpdate, TotalCount;
+        string query, query2, strJoin, strWhere, strSelect, strUpdate;
         string strCell1, strCell2, strLbl2, strMain, strSecond, strSlt;
         string strField, strDescription;
         #endregion
@@ -35,8 +33,8 @@ namespace Identification
 
         private void SetPerson_Load(object sender, EventArgs e)
         {
-
-            this.Text = "احراز هویت اشخاص" + "  -  نام سرور = " + sqlConnection.DataSource;
+            //  Sql Server Connection Info
+            this.Text = "Identification" + "  -  Server Name = " + sqlConnection.DataSource + " - DataBase Name = " + sqlConnection.Database;
 
             //  disable button
             btnChange.Enabled = btnShow.Enabled = false;
@@ -45,7 +43,7 @@ namespace Identification
             cmbMainDB.DataSource = Functions.SqlGetDBName(sqlConnection);
             cmbSecndDB.DataSource = Functions.SqlGetDBName(sqlConnection);
 
-            //  defult value
+            //  default value
             cmbMainDB.Text = cmbSecndDB.Text = "Ehraz";
         }
 
@@ -99,30 +97,23 @@ namespace Identification
         }
 
 
-
-
         private void btnCheck_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor; this.Enabled = false;
             int intCount = 0, intCheck = 0;
 
-            string strPathFile = @"..\Functions";
-            string strTextFile = "", strFinal;
-            string[] files = Directory.GetFiles(strPathFile);
+            string strFunctionsFile = @"..\Functions";
+            string strFinal, strReport;
+
 
             lstReport.Items.Clear();
 
-            foreach (string file in files)
-            {
-                //  read function files
-                if (Functions.SqlCountColumn("master.sys.objects", sqlConnection, "type_desc='SQL_SCALAR_FUNCTION' AND name='" + Path.GetFileNameWithoutExtension(file) + "'") == 0)
-                {
-                    //  read text query from path file
-                    strTextFile = File.ReadAllText(file, UTF8Encoding.UTF8);
-                    //  run query
-                    Functions.SqlExcutCommand(strTextFile, sqlConnection);
-                }
-            }
+            //  check sql functions
+            strReport = Functions.CheckSqlFunctions(strFunctionsFile, cmbMainDB.Text, sqlConnection);
+
+            //  report from functions
+            if (strReport != "")
+            { lstReport.Items.Add(strReport); }
 
             intCheck = 0;
 
@@ -154,6 +145,7 @@ namespace Identification
 
                 //  report count
                 lstReport.Items.Add("تعداد کل رکورد ها : " + Functions.StrNum(intCount));
+
                 #endregion
 
                 //*****         END
@@ -283,22 +275,20 @@ namespace Identification
         #endregion
 
 
-
         private void btnDisplay_Click(object sender, EventArgs e)
         {
 
-            //btnCheck_Click(null, null);
             main();
-            //lstReport.Items.Add(strDescription);
 
             sqlConnection = Functions.SqlConnectionChangeDB(cmbMainDB.Text, sqlConnection);
 
             dgvSearch.DataSource = Functions.SqlDataAdapter(query2, sqlConnection);
 
-
             lstReport.Items.Add("رکورد نتیجه: " + Functions.StrNum(dgvSearch.RowCount - 1));
             lstReport.SelectedIndex = lstReport.Items.Count - 1;
+
             Cursor.Current = Cursors.Default;
+
         }
 
 
@@ -448,9 +438,8 @@ namespace Identification
         //*****     Functions   *******
         public void main()
         {
-            string strMaster, a, b;
+            string a, b;
 
-            strMaster = " master.dbo.ReplaceAB(";
             lstReport.Items.Add("*****************");
 
             strDescription = "";
@@ -508,7 +497,7 @@ namespace Identification
 
 
             strSelect = "SELECT " + strSlt + " FROM ";
-            strJoin = comMain + " JOIN " + com2 + " ON " + strMaster + " " + a + ".[" + cmbMainClmnJoin.Text + "])=" + strMaster + " " + b + ".[" + cmbSecndClmnJoin.Text + "])";
+            strJoin = comMain + " JOIN " + com2 + " ON Replace(" + a + ".[" + cmbMainClmnJoin.Text + "],' ','')=Replace(" + b + ".[" + cmbSecndClmnJoin.Text + "],' ','')";
 
             //**********************
             if (cmbFamilyLike.Text != "" | cmbNameLike.Text != "" | cmbFatherLike.Text != "")
@@ -630,9 +619,9 @@ namespace Identification
                         case 6:
                             if (strWhere != "")
                             {
-                                strWhere += " and " + strMaster + a + ".HomeCity)=" + strMaster + b + ".HomeCity)";
+                                strWhere += " and Replace("+ a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
                             }
-                            else strWhere += " Where " + strMaster + a + ".HomeCity)=" + strMaster + b + ".HomeCity)";
+                            else strWhere += " Where Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
                             if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
                             strDescription += " شهر محل تولد ";
                             lstReport.Items.Add(" شهر محل تولد ");
@@ -642,9 +631,9 @@ namespace Identification
                         case 7:
                             if (strWhere != "")
                             {
-                                strWhere += " and " + strMaster + a + ".SodorCity)=" + strMaster + b + ".SodorCity)";
+                                strWhere += " and Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')";
                             }
-                            else strWhere += " Where " + strMaster + a + ".SodorCity)=" + strMaster + b + ".SodorCity)";
+                            else strWhere += " Where Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')";
                             if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
                             strDescription += " شهر محل تولد ";
                             lstReport.Items.Add(" شهر محل تولد ");

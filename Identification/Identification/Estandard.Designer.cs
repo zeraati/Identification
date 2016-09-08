@@ -89,6 +89,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cmbTableName = new System.Windows.Forms.ComboBox();
             this.cmbDBName = new System.Windows.Forms.ComboBox();
+            this.chBxKey = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -433,6 +434,7 @@
             // 
             // Field
             // 
+            this.Field.Controls.Add(this.chBxKey);
             this.Field.Controls.Add(this.chbxNull);
             this.Field.Controls.Add(this.cmbColumnCopy);
             this.Field.Controls.Add(this.cmbColumnDelete);
@@ -503,7 +505,7 @@
             // chbUniqe
             // 
             this.chbUniqe.AutoSize = true;
-            this.chbUniqe.Location = new System.Drawing.Point(13, 141);
+            this.chbUniqe.Location = new System.Drawing.Point(14, 141);
             this.chbUniqe.Name = "chbUniqe";
             this.chbUniqe.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.chbUniqe.Size = new System.Drawing.Size(45, 17);
@@ -763,6 +765,17 @@
             this.cmbDBName.TabIndex = 1;
             this.cmbDBName.SelectedIndexChanged += new System.EventHandler(this.cmbDBName_SelectedIndexChanged);
             // 
+            // chBxKey
+            // 
+            this.chBxKey.AutoSize = true;
+            this.chBxKey.Location = new System.Drawing.Point(14, 168);
+            this.chBxKey.Name = "chBxKey";
+            this.chBxKey.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.chBxKey.Size = new System.Drawing.Size(70, 17);
+            this.chBxKey.TabIndex = 85;
+            this.chBxKey.Text = "کلیداصلی";
+            this.chBxKey.UseVisualStyleBackColor = true;
+            // 
             // Estandard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -864,5 +877,6 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn dgvChBxClm;
         private System.Windows.Forms.Button btnUpdDesign;
         private System.Windows.Forms.ToolStripMenuItem تبدیلتاریخToolStripMenuItem;
+        private System.Windows.Forms.CheckBox chBxKey;
     }
 }

@@ -42,7 +42,8 @@ namespace Identification
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             //cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
-
+            
+            //  change database
             if (cmbDBNames.Text != "") sqlConnection = Functions.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection);
         }
 
@@ -132,9 +133,12 @@ namespace Identification
         private void cmbServer_SelectedIndexChanged(object sender, EventArgs e)
         {
             List<string> list = new List<string>();
+
+            //  read login file
             FileStream fileStream = new FileStream(strPathLoginFolder, FileMode.Open, FileAccess.Read);
 
-
+            #region Server Info Substring
+            
             using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
             {
                 string line;
@@ -150,6 +154,12 @@ namespace Identification
                     }
                 }
             }
+
+            #endregion
+
+            #region User & Pass to textbox
+
+            
             if (cmbServer.Text == ".")
             {
                 txtUser.Text = "";
@@ -160,12 +170,16 @@ namespace Identification
                 txtUser.Text = strUser;
                 txtPass.Text = strPass;
             }
+
+            #endregion
+
         }
 
         private void بازکردنفرماستانداردسازیToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (EnableFrm == true)
             {
+                //  form estandard & show
                 Estandard frmEst = new Estandard(sqlConnection);
                 frmEst.ShowDialog();
             }
@@ -185,6 +199,7 @@ namespace Identification
         {
             if (EnableFrm == true)
             {
+                //  form identification & show
                 SetPerson SPFrm = new SetPerson(sqlConnection);
                 SPFrm.ShowDialog();
             }
@@ -204,6 +219,7 @@ namespace Identification
 
         private void پشتیبانگیریToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //  form backup from sql
             SQLDBbackup sqlbackup = new SQLDBbackup(sqlConnection);
             sqlbackup.ShowDialog();
         }
