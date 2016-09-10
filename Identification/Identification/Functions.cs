@@ -196,13 +196,12 @@ namespace Identification
             return retInt;
         }
 
-        string rtn;
-        string strChar;
-        string strCmb;
-        string strMaster = " master.dbo.ReplaceAB(";
+
         public string clbEhrazChecked(string Type, string Persent, string cmbLike, string strWhere, string a, string b)
         {
-
+            string rtn;
+            string strChar;
+            string strCmb;
             strCmb = cmbLike;
             while (strCmb.IndexOf(",") != -1)
             {
@@ -211,12 +210,10 @@ namespace Identification
                 {
                     //      خالی - سید - میر - اله
                     if (strWhere != "")
-                    {
-                        // " AND replace(a.Name,N'" + cmbLike + "','')=replace(b.Name,N'" + cmbLike + "','')AND (a.Name LIKE N'%" + cmbLike + "%' or b.Name LIKE N'%" + cmbLike + "%') AND b.Name<>a.Name";
+                    {                     
                         if (strChar == "خالی") strWhere += " OR (" + a + "." + Type + " is null or " + b + "." + Type + " is null OR " + a + "." + Type + " ='' or " + b + "." + Type + " ='') ";
                         if (strChar != "خالی") strWhere += WhereReplace1(strChar, Type, a, b);
                     }
-                    //" Where replace(a.Name,N'" + cmbLike + "','')=replace(b.Name,N'" + cmbLike + "','') AND b.Name<>a.Name";
                     else
                     {
                         if (strChar == "خالی") strWhere += " WHERE ((" + a + "." + Type + " is null or " + b + "." + Type + " is null OR " + a + "." + Type + " ='' or " + b + "." + Type + " ='') AND " + b + ".[STID_vld] IS NULL) ";
@@ -262,6 +259,9 @@ namespace Identification
 
         public string SelectAll(string Type, string Persent, string cmbLike, string strSelect, string a, string b)
         {
+            string rtn;
+            string strChar;
+            string strCmb;
             string SelectAll = "";
             strCmb = cmbLike;
             while (strCmb.IndexOf(",") != -1)
@@ -371,7 +371,7 @@ namespace Identification
                 }
 
                 //  create function is not sql
-                if (bol == false) { SqlExcutCommand(File.ReadAllText(file), sqlConnection); strRetrun = "Create Function Is Not Sql"; }
+                if (bol == false) { SqlExcutCommand(File.ReadAllText(file), sqlConnection); strRetrun = "Create Function Is Sql"; }
             }
             return strRetrun;
         }
@@ -1289,6 +1289,7 @@ namespace Identification
         }
         #endregion
 
+
         #region Sql Edit DataType Column
         public string SqlEditDataTypeColumn(string strTableName, string strColumnName, string strNewDataType, string strNulable, SqlConnection sqlConnection, string strDBName = "")
         {
@@ -1310,6 +1311,7 @@ namespace Identification
 
         #endregion
 
+
         #region SqlRunQuery
 
         public string SqlRunQuery(string strQuery, SqlConnection sqlConnection)
@@ -1324,6 +1326,7 @@ namespace Identification
         }
 
         #endregion
+
 
         #region SqlEditTableName
         public string SqlEditTableName(string strTableName, string strNewTableName, SqlConnection sqlConnection, bool bolExtended = false)
@@ -1340,6 +1343,7 @@ namespace Identification
         }
         #endregion
 
+
         #region SqlCopyTable
         public string SqlCopyTable(string strTableName, string strCopyTableName, SqlConnection sqlConnection)
         {
@@ -1349,6 +1353,7 @@ namespace Identification
 
         }
         #endregion
+
 
         #region SqlDropTable
         public string SqlDropTable(string strTableName, SqlConnection sqlConnection, string strState = "")
@@ -1360,6 +1365,7 @@ namespace Identification
             return strTableName + " => " + strResult;
         }
         #endregion
+
 
         #region SqlAddNewColumn
 
@@ -1401,6 +1407,7 @@ namespace Identification
 
         #endregion
 
+
         #region SqlRename
         public string SqlRename(string strType, string strOldName, string strNewName, SqlConnection sqlConnection, string strTable = "")
         {
@@ -1418,6 +1425,7 @@ namespace Identification
             return SqlExcutCommand(strQuery, sqlConnection, "");
         }
         #endregion
+
 
         #region SqlCopyColumn
         public string SqlCopyColumn(string strTableName, string strColumnName, SqlConnection sqlConnection)
@@ -1437,6 +1445,7 @@ namespace Identification
 
         }
         #endregion
+
 
         #region SqlUpdateColumn
 
@@ -1464,6 +1473,7 @@ namespace Identification
 
         #endregion
 
+
         #region SqlCreateReport
 
         public string SqlCreateReport(SqlConnection sqlConnection)
@@ -1485,6 +1495,7 @@ namespace Identification
         }
 
         #endregion
+
 
         #region SqlCountColumn
         public int SqlCountColumn(string strTableName, string strColumnName, SqlConnection sqlConnection)
@@ -1510,6 +1521,7 @@ namespace Identification
 
         #endregion
 
+
         #region SqlDropColumnSpace
         public string SqlDropColumnSpace(string strTableName, string strColumnName, SqlConnection sqlConnection)
         {
@@ -1526,6 +1538,7 @@ namespace Identification
 
         #endregion
 
+
         #region SqlDropTableSpace
         public string SqlDropTableSpace(string strTableName, SqlConnection sqlConnection)
         {
@@ -1540,6 +1553,7 @@ namespace Identification
         }
         #endregion
 
+
         #region SqlDropRows
         public string SqlDropRows(string strTableName, SqlConnection sqlConnection, string strWhere = "")
         {
@@ -1551,7 +1565,7 @@ namespace Identification
             return SqlExcutCommand(strQuery, sqlConnection, " DropRows ");
         }
         #endregion
- 
+
 
         #region SqlEditField
         /// <summary>
@@ -1731,16 +1745,19 @@ namespace Identification
         /// </summary>
         /// <returns>DataTable</returns>
 
-        public List<string> SqlGetDBName(SqlConnection sqlConnection)
+        public List<string> SqlGetDBName(SqlConnection sqlConnection, string strLabel = "")
         {
             List<string> lstReturn = new List<string>();
-            string strQuery = "SELECT name FROM sys.databases WHERE database_id>0 order by name";
+            string strQuery = "SELECT name FROM sys.databases ";
+
+            if (strLabel != "")
+            { strQuery = "SELECT name [" + strLabel + "] FROM sys.databases "; }
+
             DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection);
 
             for (int i = 0; i < dtAdapter.Rows.Count; i++)
-            {
-                lstReturn.Add(dtAdapter.Rows[i][0].ToString());
-            }
+            { lstReturn.Add(dtAdapter.Rows[i][0].ToString()); }
+
             return lstReturn;
         }
 
@@ -1795,9 +1812,13 @@ namespace Identification
 
         #region SqlTableName
 
-        public List<string> SqlTableName(SqlConnection sqlConnection)
+        public List<string> SqlTableName(SqlConnection sqlConnection, string strLabel = "")
         {
             string strQuery = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'";
+
+            if (strLabel != "")
+            { strQuery = "SELECT TABLE_NAME [" + strLabel + "] FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'"; }
+
             List<string> lstReturn = new List<string>();
             DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection);
 
@@ -1848,10 +1869,13 @@ namespace Identification
             return SqlDataAdapter(Query, sqlConnection);
         }
 
-        public DataTable SqlColumnNames(string strTableName, SqlConnection sqlConnection)
+        public DataTable SqlColumnNames(string strTableName, SqlConnection sqlConnection, string strLable = "")
         {
-            string Query = " SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'";
-            return SqlDataAdapter(Query, sqlConnection);
+            string strQuery = " SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'";
+            if (strLable != "")
+            { strQuery = " SELECT COLUMN_NAME [" + strLable + "] FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'"; }
+
+            return SqlDataAdapter(strQuery, sqlConnection);
         }
 
         #endregion
@@ -1859,9 +1883,14 @@ namespace Identification
 
         #region SqlTableRecordsCount
 
-        public int SqlTableRecordsCount(string strTableName, SqlConnection sqlConnection)
+        public int SqlTableRecordsCount(string strTableName, SqlConnection sqlConnection, string strLabel = "")
         {
+
             string strQuery = "SELECT COUNT(*) FROM dbo.[" + strTableName + "]";
+
+            if (strLabel != "")
+            { strQuery = "SELECT COUNT(*) [" + strLabel + "] FROM dbo.[" + strTableName + "]"; }
+
             SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
             int count;
             cmd.Connection.Close();
@@ -1872,15 +1901,21 @@ namespace Identification
             return count;
         }
 
-        public string SqlRecordCount(string strTableName, string strFieldName, SqlConnection SqlConnection)
+        public string SqlRecordCount(string strTableName, string strFieldName, SqlConnection sqlConnection, string strLabel = "")
         {
             string strQuery = "SELECT COUNT(" + strFieldName + ") FROM dbo.[" + strTableName + "]";
-            SqlCommand cmd = new SqlCommand(strQuery, SqlConnection);
-            string count;
+
+            if (strLabel != "")
+            { strQuery = "SELECT COUNT(" + strFieldName + ") [" + strLabel + "] FROM dbo.[" + strTableName + "]"; }
+
+            SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
+            string count = "";
+
             cmd.Connection.Close();
             cmd.Connection.Open();
             cmd.CommandTimeout = 3600;
             count = cmd.ExecuteScalar().ToString();
+
             cmd.Connection.Close();
             return count;
         }

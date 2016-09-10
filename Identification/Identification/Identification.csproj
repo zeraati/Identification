@@ -164,6 +164,7 @@
     <EmbeddedResource Include="Uniqe.resx">
       <DependentUpon>Uniqe.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Login.pos" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -195,6 +196,24 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Functions\A2Extra.txt" />
+    <Content Include="Functions\Check2Str.txt" />
+    <Content Include="Functions\Check2StrM.txt" />
+    <Content Include="Functions\Ch_Codemelli.txt" />
+    <Content Include="Functions\CM-Check.txt" />
+    <Content Include="Functions\CM-Fix.txt" />
+    <Content Include="Functions\DT-Fix.txt" />
+    <Content Include="Functions\FE_Date.txt" />
+    <Content Include="Functions\FixKY.txt" />
+    <Content Include="Functions\F_Date.txt" />
+    <Content Include="Functions\G2J.txt" />
+    <Content Include="Functions\RemoveDuplicateSpace.txt" />
+    <Content Include="Functions\RemoveZeroWidth.txt" />
+    <Content Include="Functions\UDF_Gregorian_To_Persian.txt" />
+    <Content Include="Functions\UDF_Julian_To_Gregorian.txt" />
+    <Content Include="Functions\UDF_Persian_To_Julian.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Data.SqlClient;
+using System.Configuration;
+
 namespace Identification
 {
     public partial class Form1 : Form
@@ -19,9 +21,8 @@ namespace Identification
         Boolean answer, EnableFrm;
         SqlConnection sqlConnection = new SqlConnection();
 
-        string strPathLoginFolder = @"..\Login.pos";        
         string strUser, strPass, str, Alltext;
-
+        string strPathLoginFolder = @"../Login.pos";
 
         public Form1()
         {
@@ -42,7 +43,7 @@ namespace Identification
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             //cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
-            
+
             //  change database
             if (cmbDBNames.Text != "") sqlConnection = Functions.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection);
         }
@@ -138,7 +139,7 @@ namespace Identification
             FileStream fileStream = new FileStream(strPathLoginFolder, FileMode.Open, FileAccess.Read);
 
             #region Server Info Substring
-            
+
             using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
             {
                 string line;
@@ -159,7 +160,7 @@ namespace Identification
 
             #region User & Pass to textbox
 
-            
+
             if (cmbServer.Text == ".")
             {
                 txtUser.Text = "";

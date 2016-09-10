@@ -94,6 +94,9 @@
             this.lstMainClmns = new System.Windows.Forms.ListBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSearch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
@@ -284,7 +287,7 @@
             // 
             this.جستجوToolStripMenuItem.Name = "جستجوToolStripMenuItem";
             this.جستجوToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.جستجوToolStripMenuItem.Text = "جستجو";            
+            this.جستجوToolStripMenuItem.Text = "جستجو";
             // 
             // ابزارهاToolStripMenuItem
             // 
@@ -551,7 +554,7 @@
             "سید",
             "میر",
             "اله-الله"});
-            this.cmbNameLike.Location = new System.Drawing.Point(125, 416);
+            this.cmbNameLike.Location = new System.Drawing.Point(141, 416);
             this.cmbNameLike.Name = "cmbNameLike";
             this.cmbNameLike.Size = new System.Drawing.Size(192, 21);
             this.cmbNameLike.TabIndex = 68;
@@ -568,7 +571,7 @@
             "سيد",
             "مير",
             "اله-الله"});
-            this.cmbFamilyLike.Location = new System.Drawing.Point(125, 443);
+            this.cmbFamilyLike.Location = new System.Drawing.Point(141, 443);
             this.cmbFamilyLike.Name = "cmbFamilyLike";
             this.cmbFamilyLike.Size = new System.Drawing.Size(192, 21);
             this.cmbFamilyLike.TabIndex = 69;
@@ -585,7 +588,7 @@
             "سيد",
             "مير",
             "اله-الله"});
-            this.cmbFatherLike.Location = new System.Drawing.Point(125, 470);
+            this.cmbFatherLike.Location = new System.Drawing.Point(141, 470);
             this.cmbFatherLike.Name = "cmbFatherLike";
             this.cmbFatherLike.Size = new System.Drawing.Size(192, 21);
             this.cmbFatherLike.TabIndex = 70;
@@ -686,7 +689,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(407, 238);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "انتخاب فیلد";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // txtLbl1
@@ -734,7 +737,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(407, 238);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "نمایش کل";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // lstSecndClmns
@@ -763,7 +766,7 @@
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(407, 238);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.Text = "عملیات";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // listBox1
@@ -774,6 +777,33 @@
             this.listBox1.Size = new System.Drawing.Size(354, 186);
             this.listBox1.TabIndex = 0;
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(123, 420);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(15, 13);
+            this.label15.TabIndex = 76;
+            this.label15.Text = "یا";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(123, 446);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(15, 13);
+            this.label16.TabIndex = 77;
+            this.label16.Text = "یا";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(123, 474);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(15, 13);
+            this.label17.TabIndex = 78;
+            this.label17.Text = "یا";
+            // 
             // SetPerson
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -781,6 +811,9 @@
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(966, 579);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.label15);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
@@ -906,5 +939,8 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ListBox lstSecndClmns;
         private System.Windows.Forms.ListBox lstMainClmns;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
     }
 }

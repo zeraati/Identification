@@ -19,7 +19,7 @@ namespace Identification
         Functions Functions = new Functions();
         SqlConnection sqlConnection = new SqlConnection();
 
-        string strFunctionsFile = @"..\Functions";
+        string strFunctionsFile = @"../Functions";
         string strType, strDate;
         int intTableCheck;
 
@@ -39,6 +39,8 @@ namespace Identification
             //  load dbname
             cmbDBName.DataSource = Functions.SqlGetDBName(sqlConnection);
 
+            //  defualt value
+            cmbDBName.Text = "master";
 
             strDate = solarDate.ToString("yyyyMMdd");
             strDate = strDate.Replace("/", "");
@@ -297,24 +299,25 @@ namespace Identification
             #region Column Info
             //  column info
             DataTable dtColumnInfo = Functions.SqlColumns(cmbTableNameColumn.Text, sqlConnection, cmbColumnTab2.Text);
+            if (dtColumnInfo.Rows.Count != 0)
+            {
+                cmbTypeTab2.Text = dtColumnInfo.Rows[0][2].ToString();
+                chbxNull.CheckState = CheckState.Unchecked;
+                if (dtColumnInfo.Rows[0][1].ToString().ToUpper() == "NULL")
+                { chbxNull.CheckState = CheckState.Checked; }
 
-            cmbTypeTab2.Text = dtColumnInfo.Rows[0][2].ToString();
+                if (dtColumnInfo.Rows[0][3].ToString() != "NULL")
+                { txtLen.Text = dtColumnInfo.Rows[0][3].ToString().Replace("(", "").Replace(")", ""); }
 
-            chbxNull.CheckState = CheckState.Unchecked;
-            if (dtColumnInfo.Rows[0][1].ToString().ToUpper() == "NULL")
-            { chbxNull.CheckState = CheckState.Checked; }
+                //  column primary key
+                int intColumnKey = Functions.SqlCountColumnKey(cmbTableNameColumn.Text, cmbColumnTab2.Text, sqlConnection);
 
-            if (dtColumnInfo.Rows[0][3].ToString() != "NULL")
-            { txtLen.Text = dtColumnInfo.Rows[0][3].ToString().Replace("(", "").Replace(")", ""); }
-
-            //  column primary key
-            int intColumnKey = Functions.SqlCountColumnKey(cmbTableNameColumn.Text, cmbColumnTab2.Text, sqlConnection);
-
-            //  default value
-            chBxKey.CheckState = CheckState.Unchecked;
-            //  checkbox do checked
-            if (intColumnKey != 0)
-            { chBxKey.CheckState = CheckState.Checked; }
+                //  default value
+                chBxKey.CheckState = CheckState.Unchecked;
+                //  checkbox do checked
+                if (intColumnKey != 0)
+                { chBxKey.CheckState = CheckState.Checked; }
+            }
 
             #endregion
 
@@ -365,6 +368,7 @@ namespace Identification
 
 
             //  add item
+            lst1.Items.Add("***************************************");
             lst1.Items.Add("تعداد فیلد : " + dtColumns.Rows.Count);
             lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(Convert.ToInt32(strCount)));
 

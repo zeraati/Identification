@@ -102,7 +102,7 @@ namespace Identification
             Cursor.Current = Cursors.WaitCursor; this.Enabled = false;
             int intCount = 0, intCheck = 0;
 
-            string strFunctionsFile = @"..\Functions";
+            string strFunctionsFile = @"../Functions";
             string strFinal, strReport;
 
 
@@ -213,29 +213,51 @@ namespace Identification
                 #endregion
             }
 
-            #region New DataGridView
-            DataTable dtddgv = new DataTable();
-            dtddgv = Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection);
-            dgv.DataSource = dtddgv;
-            for (int j = 0; j < dtddgv.Rows.Count; j++)
+            #region DataGridView
+            DataTable dtDgv = new DataTable();
+
+            //  column names
+            dtDgv = Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection, "فیلد جدول اصلی");
+
+            //  send dtDgv to dgv
+            dgv.DataSource = dtDgv;
+
+            for (int j = 0; j < dtDgv.Rows.Count; j++)
             {
+                //  column radif identity(0,1)
                 dgv.Rows[j].Cells[1].Value = j.ToString();
+                //  check item is false
                 dgv.Rows[j].Cells[0].Value = false;
             }
 
-            //**********    advanced search column
-
-            //**********
-
-            dtddgv = Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection);
+            dtDgv = Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection);
             //clmSecond.Items.Clear();
-            clmSecond.HeaderText = "فیلد فرعی";
-            for (int i = 0; i < dtddgv.Rows.Count; i++)
-            {
-                //clmSecond.Items.Add(dtddgv.Rows[i][0].ToString());
-            }
+            clmSecond.HeaderText = "فیلد جدول فرعی";
             #endregion
 
+
+            #region Defualt Value
+
+            //  column names to list
+            List<string> lstColumnNames = Functions.DataTableToList(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection));
+
+            for (int i = 0; i < dgv.Rows.Count; i++)
+            {
+                for (int j = 0; j < lstColumnNames.Count; j++)
+                {
+                    string str1 = dgv.Rows[i].Cells[4].Value.ToString();
+                    string str2 = lstColumnNames[j].ToString();
+
+                    if (dgv.Rows[i].Cells[4].Value.ToString() == lstColumnNames[j].ToString())
+                    {
+                        //  defualt value in combobox
+                        dgv.Rows[i].Cells[2].Value = lstColumnNames[j].ToString();
+                        break;
+                    }
+                }
+            }
+
+            #endregion
 
             btnChange.Enabled = btnShow.Enabled = true;
             Cursor.Current = Cursors.Default; this.Enabled = true;
@@ -278,12 +300,16 @@ namespace Identification
         private void btnDisplay_Click(object sender, EventArgs e)
         {
 
+            //  create query
             main();
 
+            //  change database name
             sqlConnection = Functions.SqlConnectionChangeDB(cmbMainDB.Text, sqlConnection);
 
+            //  datagridview run query2
             dgvSearch.DataSource = Functions.SqlDataAdapter(query2, sqlConnection);
 
+            //  report counter
             lstReport.Items.Add("رکورد نتیجه: " + Functions.StrNum(dgvSearch.RowCount - 1));
             lstReport.SelectedIndex = lstReport.Items.Count - 1;
 
@@ -372,7 +398,7 @@ namespace Identification
         {
 
 
-            string strMaster = " master.dbo.ReplaceAB(", a = "", b = "";
+            string a = "", b = "";
             textBox1.Text = "";
             listBox1.Items.Clear();
             strSlt = "";
@@ -407,7 +433,7 @@ namespace Identification
                         #endregion
 
                         if (strSlt == "") { if (strSecond == "") strSlt = strMain; else strSlt = strMain + "," + strSecond; }
-                        else { if (strSecond == "")strSlt += "," + strMain; else strSlt += "," + strMain + "," + strSecond; }
+                        else { if (strSecond == "") strSlt += "," + strMain; else strSlt += "," + strMain + "," + strSecond; }
                     }
 
                 }
@@ -440,25 +466,35 @@ namespace Identification
         {
             string a, b;
 
-            lstReport.Items.Add("*****************");
+            lstReport.Items.Add("****************************");
 
+            //  description insert to sql
             strDescription = "";
+
             strWhere = "";
 
+            //  a is tablename main & b is tablename second
             a = txtLbl1.Text; b = txtLbl2.Text;
 
+            //  create update query
             strUpdate = "Update [" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] SET [" + cmbMainClmnUniq.Text + "_vld]=" + a + "." + cmbMainClmnUniq.Text + " , [Desription]=N'";
 
             lstReport.Items.Add("احراز هویت بر اساس ");
 
+            //  checked counter
             int clbEhrazCnt = clbEhraz.CheckedItems.Count;
 
-            strWhere = strSelect = strJoin = "";
+            //  clear variables
+            strWhere = strSelect = strJoin = strSlt = textBox1.Text = "";
+
             Cursor.Current = Cursors.WaitCursor;
-            textBox1.Text = "";
-            strSlt = "";
+
+            //  Naming Table
             string comMain = "[" + cmbMainDB.Text + "].dbo.[" + cmbMainTbl.Text + "] " + a;
             string com2 = "[" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] " + b;
+
+            //  column info from table main & table second
+            #region column info
 
             if (b != "" & a != "")
             {
@@ -487,7 +523,7 @@ namespace Identification
 
 
                         if (strSlt == "") { if (strSecond == "") strSlt = strMain; else strSlt = strMain + "," + strSecond; }
-                        else { if (strSecond == "")strSlt += "," + strMain; else strSlt += "," + strMain + "," + strSecond; }
+                        else { if (strSecond == "") strSlt += "," + strMain; else strSlt += "," + strMain + "," + strSecond; }
 
                         #endregion
                     }
@@ -495,9 +531,13 @@ namespace Identification
             }
             else MessageBox.Show("خطا");
 
+            #endregion
+
+
+            #region Create Select Query & string Where & Join
 
             strSelect = "SELECT " + strSlt + " FROM ";
-            strJoin = comMain + " JOIN " + com2 + " ON Replace(" + a + ".[" + cmbMainClmnJoin.Text + "],' ','')=Replace(" + b + ".[" + cmbSecndClmnJoin.Text + "],' ','')";
+            strJoin = comMain + " JOIN " + com2 + " ON " + DeleteFreeSpace(a + ".[" + cmbMainClmnJoin.Text + "]") + " = " + DeleteFreeSpace(b + ".[" + cmbSecndClmnJoin.Text + "]");
 
             //**********************
             if (cmbFamilyLike.Text != "" | cmbNameLike.Text != "" | cmbFatherLike.Text != "")
@@ -510,7 +550,7 @@ namespace Identification
                     {
                         case 0:
 
-                            if (cmbPersentName.Text == "100" & cmbNameLike.Text != "") // cmbNameLike
+                            if (cmbPersentName.Text == "100" & cmbNameLike.Text != "")
                             {
                                 //      خالی - سید - میر - اله
                                 strSlt = Functions.SelectAll("Name", cmbPersentName.Text, cmbNameLike.Text, strSelect + strJoin, a, b);
@@ -519,7 +559,7 @@ namespace Identification
                             }
                             break;
                         case 1:
-                            if (cmbPersentFamily.Text == "100" & cmbFamilyLike.Text != "") // cmbFamilyLike
+                            if (cmbPersentFamily.Text == "100" & cmbFamilyLike.Text != "")
                             {
                                 //      خالی - سید - میر - اله
                                 strSlt = Functions.SelectAll("Family", cmbPersentFamily.Text, cmbFamilyLike.Text, strSelect + strJoin, a, b);
@@ -529,7 +569,7 @@ namespace Identification
                             }
                             break;
                         case 2:
-                            if (cmbPersentFather.Text == "100" & cmbFatherLike.Text != "") // cmbFatherLike
+                            if (cmbPersentFather.Text == "100" & cmbFatherLike.Text != "")
                             {
                                 //      خالی - سید - میر - اله
                                 strSlt = Functions.SelectAll("Father", cmbPersentFather.Text, cmbFatherLike.Text, strSelect + strJoin, a, b);
@@ -537,7 +577,6 @@ namespace Identification
                                 if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
                             }
                             break;
-
                     }
                 }
                 #endregion
@@ -552,6 +591,7 @@ namespace Identification
                 {
                     switch (action)
                     {
+                        #region Name -> varchar
                         case 0:
                             if (cmbPersentName.Text == "100" & cmbNameLike.Text == "")
                             {
@@ -559,8 +599,15 @@ namespace Identification
                                 strDescription += " نام 100 درصد "; lstReport.Items.Add("نام 100 درصد ");
                                 if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
                             }
+                            else
+                            {
+
+                            }
                             clbEhrazCnt--;
                             break;
+                        #endregion
+
+                        #region Family -> varchar
                         case 1:
                             if (cmbPersentFamily.Text == "100" & cmbFamilyLike.Text == "")
                             {
@@ -571,6 +618,9 @@ namespace Identification
                             }
                             clbEhrazCnt--;
                             break;
+                        #endregion
+
+                        #region Father -> varchar
                         case 2:
                             if (cmbPersentFather.Text == "100" & cmbFatherLike.Text == "")
                             {
@@ -580,6 +630,9 @@ namespace Identification
                             }
                             clbEhrazCnt--;
                             break;
+                        #endregion
+
+                        #region ShenasCode -> int
                         case 3:
                             if (strWhere != "")
                             {
@@ -591,6 +644,9 @@ namespace Identification
                             lstReport.Items.Add(" شناسنامه ");
                             clbEhrazCnt--;
                             break;
+                        #endregion
+
+                        #region PBirthDate -> smallint                        
                         case 4:
                             if (strWhere != "")
                             {
@@ -603,6 +659,9 @@ namespace Identification
                             lstReport.Items.Add(" سال تولد ");
                             clbEhrazCnt--;
                             break;
+                        #endregion
+
+                        #region CodeMelli -> char(10)
                         case 5:
                             if (strWhere != "")
                             {
@@ -614,11 +673,13 @@ namespace Identification
                             lstReport.Items.Add(" کد ملی ");
                             clbEhrazCnt--;
                             break;
-                        //شهر محل تولد
+                        #endregion
+
+                        #region HomeCity -> varchar
                         case 6:
                             if (strWhere != "")
                             {
-                                strWhere += " and Replace("+ a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
+                                strWhere += " and Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
                             }
                             else strWhere += " Where Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
                             if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
@@ -626,7 +687,9 @@ namespace Identification
                             lstReport.Items.Add(" شهر محل تولد ");
                             clbEhrazCnt--;
                             break;
-                        //شهر محل صدور
+                        #endregion
+
+                        #region SodorCity -> varchar
                         case 7:
                             if (strWhere != "")
                             {
@@ -638,12 +701,15 @@ namespace Identification
                             lstReport.Items.Add(" شهر محل تولد ");
                             clbEhrazCnt--;
                             break;
+                        #endregion
                         // استان محل تولد
                         case 8:
                             break;
                         // استان محل صدور
                         case 9:
                             break;
+
+                        #region Code Modiriat                        
                         case 12:
                             if (strWhere != "")
                             {
@@ -656,6 +722,9 @@ namespace Identification
                             lstReport.Items.Add("کد مرکز مدیریت");
                             clbEhrazCnt--;
                             break;
+                        #endregion
+
+                        #region Code Khadamat                        
                         case 13:
                             if (strWhere != "")
                             {
@@ -667,6 +736,8 @@ namespace Identification
                             lstReport.Items.Add("کد مرکز خدمات");
                             clbEhrazCnt--;
                             break;
+                            #endregion
+
                     }
                 }
 
@@ -680,10 +751,11 @@ namespace Identification
 
                 query2 = strSelect + strJoin + strWhere;
 
+                //  save query2 to file command.txt
                 File.WriteAllText(@"../Command.txt", query2);
             }
 
-
+            #endregion
         }
 
 
@@ -706,6 +778,10 @@ namespace Identification
             }
             return intReturn;
         }
+
+
+        private string DeleteFreeSpace(string strItem)
+        { return "Replace(" + strItem + ", ' ', '')"; }
 
         //*******************************************
     }
