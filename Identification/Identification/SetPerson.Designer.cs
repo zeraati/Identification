@@ -64,7 +64,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.btnShow = new System.Windows.Forms.Button();
             this.dgvSearch = new System.Windows.Forms.DataGridView();
-            this.btnUpdate = new System.Windows.Forms.DataGridViewButtonColumn();
             this.cmbMainClmnJoin = new System.Windows.Forms.ComboBox();
             this.cmbSecndClmnJoin = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -82,6 +81,7 @@
             this.clmSN = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmSecond = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.txtSecound = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmEqual = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.button2 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -97,6 +97,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
+            this.btnUpdate = new System.Windows.Forms.DataGridViewButtonColumn();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSearch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
@@ -133,7 +134,7 @@
             // 
             this.lstReport.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.lstReport.FormattingEnabled = true;
-            this.lstReport.Location = new System.Drawing.Point(159, 140);
+            this.lstReport.Location = new System.Drawing.Point(147, 140);
             this.lstReport.Name = "lstReport";
             this.lstReport.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lstReport.Size = new System.Drawing.Size(332, 264);
@@ -145,17 +146,16 @@
             this.cmbPersentFamily.FormattingEnabled = true;
             this.cmbPersentFamily.Items.AddRange(new object[] {
             "100",
-            "50",
-            "60",
-            "70",
-            "80",
-            "85",
+            "95",
             "90",
-            "95"});
+            "85",
+            "80",
+            "70",
+            "60",
+            "50"});
             this.cmbPersentFamily.Location = new System.Drawing.Point(79, 443);
             this.cmbPersentFamily.Name = "cmbPersentFamily";
             this.cmbPersentFamily.Size = new System.Drawing.Size(40, 21);
-            this.cmbPersentFamily.Sorted = true;
             this.cmbPersentFamily.TabIndex = 16;
             this.cmbPersentFamily.Text = "100";
             // 
@@ -164,17 +164,16 @@
             this.cmbPersentFather.FormattingEnabled = true;
             this.cmbPersentFather.Items.AddRange(new object[] {
             "100",
-            "50",
-            "60",
-            "70",
-            "80",
-            "85",
+            "95",
             "90",
-            "95"});
+            "85",
+            "80",
+            "70",
+            "60",
+            "50"});
             this.cmbPersentFather.Location = new System.Drawing.Point(79, 472);
             this.cmbPersentFather.Name = "cmbPersentFather";
             this.cmbPersentFather.Size = new System.Drawing.Size(40, 21);
-            this.cmbPersentFather.Sorted = true;
             this.cmbPersentFather.TabIndex = 19;
             this.cmbPersentFather.Text = "100";
             // 
@@ -183,19 +182,19 @@
             this.cmbPersentName.FormattingEnabled = true;
             this.cmbPersentName.Items.AddRange(new object[] {
             "100",
-            "50",
-            "60",
-            "70",
-            "80",
-            "85",
+            "95",
             "90",
-            "95"});
+            "85",
+            "80",
+            "70",
+            "60",
+            "50"});
             this.cmbPersentName.Location = new System.Drawing.Point(79, 417);
             this.cmbPersentName.Name = "cmbPersentName";
             this.cmbPersentName.Size = new System.Drawing.Size(40, 21);
-            this.cmbPersentName.Sorted = true;
             this.cmbPersentName.TabIndex = 13;
             this.cmbPersentName.Text = "100";
+            this.cmbPersentName.SelectedIndexChanged += new System.EventHandler(this.cmbPersentName_SelectedIndexChanged);
             // 
             // Label3
             // 
@@ -246,7 +245,7 @@
             this.ابزارهاToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(949, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(966, 24);
             this.menuStrip1.TabIndex = 29;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -429,7 +428,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(372, 17);
+            this.label10.Location = new System.Drawing.Point(401, 17);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(32, 13);
             this.label10.TabIndex = 41;
@@ -438,7 +437,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(163, 17);
+            this.label11.Location = new System.Drawing.Point(181, 17);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(35, 13);
             this.label11.TabIndex = 42;
@@ -467,15 +466,6 @@
             this.dgvSearch.RowHeadersVisible = false;
             this.dgvSearch.Size = new System.Drawing.Size(925, 240);
             this.dgvSearch.TabIndex = 54;
-            // 
-            // btnUpdate
-            // 
-            this.btnUpdate.HeaderText = "آپدیت";
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.ReadOnly = true;
-            this.btnUpdate.Text = "آپدیت";
-            this.btnUpdate.UseColumnTextForButtonValue = true;
-            this.btnUpdate.Visible = false;
             // 
             // cmbMainClmnJoin
             // 
@@ -620,12 +610,13 @@
             this.chb,
             this.clmSN,
             this.clmSecond,
-            this.txtSecound});
-            this.dgv.Location = new System.Drawing.Point(14, 55);
+            this.txtSecound,
+            this.ClmEqual});
+            this.dgv.Location = new System.Drawing.Point(6, 55);
             this.dgv.Name = "dgv";
             this.dgv.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.dgv.RowHeadersVisible = false;
-            this.dgv.Size = new System.Drawing.Size(381, 166);
+            this.dgv.Size = new System.Drawing.Size(430, 177);
             this.dgv.TabIndex = 73;
             // 
             // chb
@@ -642,7 +633,7 @@
             this.clmSN.HeaderText = "ردیف";
             this.clmSN.Name = "clmSN";
             this.clmSN.ReadOnly = true;
-            this.clmSN.Width = 40;
+            this.clmSN.Width = 30;
             // 
             // clmSecond
             // 
@@ -653,6 +644,15 @@
             // 
             this.txtSecound.HeaderText = "نامگذاری";
             this.txtSecound.Name = "txtSecound";
+            // 
+            // ClmEqual
+            // 
+            this.ClmEqual.HeaderText = "عملیات";
+            this.ClmEqual.Items.AddRange(new object[] {
+            "<>",
+            "="});
+            this.ClmEqual.Name = "ClmEqual";
+            this.ClmEqual.Width = 40;
             // 
             // button2
             // 
@@ -669,12 +669,12 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(512, 140);
+            this.tabControl1.Location = new System.Drawing.Point(485, 140);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tabControl1.RightToLeftLayout = true;
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(415, 264);
+            this.tabControl1.Size = new System.Drawing.Size(450, 264);
             this.tabControl1.TabIndex = 75;
             // 
             // tabPage1
@@ -687,14 +687,14 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(407, 238);
+            this.tabPage1.Size = new System.Drawing.Size(442, 238);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "انتخاب فیلد";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // txtLbl1
             // 
-            this.txtLbl1.Location = new System.Drawing.Point(12, 17);
+            this.txtLbl1.Location = new System.Drawing.Point(20, 17);
             this.txtLbl1.Name = "txtLbl1";
             this.txtLbl1.Size = new System.Drawing.Size(100, 20);
             this.txtLbl1.TabIndex = 77;
@@ -703,7 +703,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(116, 20);
+            this.label14.Location = new System.Drawing.Point(127, 20);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(96, 13);
             this.label14.TabIndex = 76;
@@ -712,7 +712,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(308, 20);
+            this.label13.Location = new System.Drawing.Point(333, 20);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(99, 13);
             this.label13.TabIndex = 75;
@@ -720,7 +720,7 @@
             // 
             // txtLbl2
             // 
-            this.txtLbl2.Location = new System.Drawing.Point(213, 16);
+            this.txtLbl2.Location = new System.Drawing.Point(237, 16);
             this.txtLbl2.Name = "txtLbl2";
             this.txtLbl2.Size = new System.Drawing.Size(90, 20);
             this.txtLbl2.TabIndex = 74;
@@ -735,7 +735,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(407, 238);
+            this.tabPage2.Size = new System.Drawing.Size(442, 238);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "نمایش کل";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -744,18 +744,18 @@
             // 
             this.lstSecndClmns.FormattingEnabled = true;
             this.lstSecndClmns.HorizontalScrollbar = true;
-            this.lstSecndClmns.Location = new System.Drawing.Point(8, 39);
+            this.lstSecndClmns.Location = new System.Drawing.Point(12, 39);
             this.lstSecndClmns.Name = "lstSecndClmns";
-            this.lstSecndClmns.Size = new System.Drawing.Size(189, 186);
+            this.lstSecndClmns.Size = new System.Drawing.Size(201, 186);
             this.lstSecndClmns.TabIndex = 44;
             // 
             // lstMainClmns
             // 
             this.lstMainClmns.FormattingEnabled = true;
             this.lstMainClmns.HorizontalScrollbar = true;
-            this.lstMainClmns.Location = new System.Drawing.Point(212, 39);
+            this.lstMainClmns.Location = new System.Drawing.Point(229, 39);
             this.lstMainClmns.Name = "lstMainClmns";
-            this.lstMainClmns.Size = new System.Drawing.Size(189, 186);
+            this.lstMainClmns.Size = new System.Drawing.Size(201, 186);
             this.lstMainClmns.TabIndex = 43;
             // 
             // tabPage3
@@ -764,7 +764,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(407, 238);
+            this.tabPage3.Size = new System.Drawing.Size(442, 238);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "عملیات";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -772,9 +772,9 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(48, 21);
+            this.listBox1.Location = new System.Drawing.Point(6, 8);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(354, 186);
+            this.listBox1.Size = new System.Drawing.Size(430, 225);
             this.listBox1.TabIndex = 0;
             // 
             // label15
@@ -804,13 +804,21 @@
             this.label17.TabIndex = 78;
             this.label17.Text = "یا";
             // 
+            // btnUpdate
+            // 
+            this.btnUpdate.HeaderText = "آپدیت";
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.ReadOnly = true;
+            this.btnUpdate.Text = "آپدیت";
+            this.btnUpdate.UseColumnTextForButtonValue = true;
+            // 
             // SetPerson
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(966, 579);
+            this.ClientSize = new System.Drawing.Size(983, 579);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
@@ -915,7 +923,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ToolStripMenuItem جستجوToolStripMenuItem;
         private System.Windows.Forms.CheckBox chbPBirthNull;
-        private System.Windows.Forms.DataGridViewButtonColumn btnUpdate;
         private PresentationControls.CheckBoxComboBox cmbNameLike;
         private PresentationControls.CheckBoxComboBox cmbFamilyLike;
         private PresentationControls.CheckBoxComboBox cmbFatherLike;
@@ -923,10 +930,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btnChange;
         private System.Windows.Forms.DataGridView dgv;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn chb;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmSN;
-        private System.Windows.Forms.DataGridViewComboBoxColumn clmSecond;
-        private System.Windows.Forms.DataGridViewTextBoxColumn txtSecound;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
@@ -942,5 +945,11 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn chb;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmSN;
+        private System.Windows.Forms.DataGridViewComboBoxColumn clmSecond;
+        private System.Windows.Forms.DataGridViewTextBoxColumn txtSecound;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ClmEqual;
+        private System.Windows.Forms.DataGridViewButtonColumn btnUpdate;
     }
 }

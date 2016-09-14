@@ -24,7 +24,7 @@ namespace Identification
         public void LoadColumnInfo(string strTableName, CheckedListBox ChkLstBx, SqlConnection sqlConnection)
         {
             ChkLstBx.Items.Clear();
-            List<string> lstColumns = DataTypeToList(SqlColumns(strTableName, sqlConnection));
+            List<string> lstColumns = DataTypeToList(SqlColumns(strTableName, sqlConnection, ""));
             for (int i = 0; i < lstColumns.Count; i++)
             {
                 ChkLstBx.Items.Add(lstColumns[i]);
@@ -197,7 +197,10 @@ namespace Identification
         }
 
 
-        public string clbEhrazChecked(string Type, string Persent, string cmbLike, string strWhere, string a, string b)
+
+
+
+        public string clbEhrazChecked(string strType, ComboBox Persent, string cmbLike, string strWhere, string a, string b)
         {
             string rtn;
             string strChar;
@@ -206,84 +209,82 @@ namespace Identification
             while (strCmb.IndexOf(",") != -1)
             {
                 strChar = strCmb.Substring(0, cmbLike.IndexOf(",")).Trim();
-                if (Persent == "100" & strChar != "") // cmbLike
-                {
-                    //      خالی - سید - میر - اله
-                    if (strWhere != "")
-                    {                     
-                        if (strChar == "خالی") strWhere += " OR (" + a + "." + Type + " is null or " + b + "." + Type + " is null OR " + a + "." + Type + " ='' or " + b + "." + Type + " ='') ";
-                        if (strChar != "خالی") strWhere += WhereReplace1(strChar, Type, a, b);
-                    }
-                    else
-                    {
-                        if (strChar == "خالی") strWhere += " WHERE ((" + a + "." + Type + " is null or " + b + "." + Type + " is null OR " + a + "." + Type + " ='' or " + b + "." + Type + " ='') AND " + b + ".[STID_vld] IS NULL) ";
-                        if (strChar != "خالی") strWhere += WhereReplace2(strChar, Type, a, b);
-                    }
-                }
-                else if (Persent != "100" & strChar != "") // Persent Name
-                {
 
-                }
+                //      خالی - سید - میر - اله
+                //  persenr 100 %
+                if (Persent.Text == "100" & strChar != "")
+                { strWhere = functionWhere(strWhere, Persent, strCmb, strType, a, b); }
+                //  persenr < 100 %
+                if (Persent.Text != "100" & strChar != "")
+                { strWhere = functionWhere(strWhere, Persent, strCmb, strType, a, b); }
+
                 strCmb = strCmb.Replace(strChar + ",", "");
             }
             if (strCmb.IndexOf(",") == -1 & cmbLike != "")
-            {
-                if (strWhere != "")
-                {
-                    // " AND replace(a.Name,N'" + cmbLike + "','')=replace(b.Name,N'" + cmbLike + "','')AND (a.Name LIKE N'%" + cmbLike + "%' or b.Name LIKE N'%" + cmbLike + "%') AND b.Name<>a.Name";
-                    if (strCmb == "خالی") strWhere += " OR ((" + a + "." + Type + " is null or " + b + "." + Type + " is null OR " + a + "." + Type + " ='' or " + b + "." + Type + " ='')  AND " + b + ".[STID_vld] IS NULL) ";
-                    if (strCmb != "خالی") strWhere += WhereReplace1(strCmb, Type, a, b);
-                }
-                //" Where replace(a.Name,N'" + cmbLike + "','')=replace(b.Name,N'" + cmbLike + "','') AND b.Name<>a.Name";
-                else
-                {
-                    if (strCmb == "خالی") strWhere = " WHERE ((" + a + "." + Type + " is null or " + b + "." + Type + " is null OR " + a + "." + Type + " ='' or " + b + "." + Type + " ='')  AND " + b + ".[STID_vld] IS NULL)";
-                    if (strCmb != "خالی") strWhere = WhereReplace2(strCmb, Type, a, b);
-                }
-            }
+            { strWhere = functionWhere(strWhere, Persent, strCmb, strType, a, b); }
+
             if (strCmb.IndexOf(",") == -1 & cmbLike == "")
             {
                 if (strWhere != "")
-                {
-                    strWhere += " AND " + a + "." + Type + " = " + b + "." + Type;
-                }
+                { strWhere += " AND " + a + "." + strType + " = " + b + "." + strType; }
                 else
-                {
-                    strWhere = "WHERE " + a + "." + Type + " = " + b + "." + Type;
-                }
+                { strWhere = "WHERE " + a + "." + strType + " = " + b + "." + strType; }
             }
+
             return rtn = strWhere;
         }
 
-        string Where;
-
-        public string SelectAll(string Type, string Persent, string cmbLike, string strSelect, string a, string b)
+        private string functionWhere(string strWhere, ComboBox cmbPersent, string strCmb, string strType, string a, string b)
         {
-            string rtn;
-            string strChar;
-            string strCmb;
-            string SelectAll = "";
+            if (cmbPersent.Text == "100")
+            {
+
+
+                if (strWhere != "")
+                {
+                    if (strCmb == "خالی") strWhere += " OR ((" + a + "." + strType + " is null or " + b + "." + strType + " is null OR " + a + "." + strType + " ='' or " + b + "." + strType + " ='')  AND " + b + ".[STID_vld] IS NULL) ";
+                    if (strCmb != "خالی") strWhere += WhereReplace(strCmb, strWhere, strType, a, b);
+                }
+                else
+                {
+                    if (strCmb == "خالی") strWhere = " WHERE ((" + a + "." + strType + " is null or " + b + "." + strType + " is null OR " + a + "." + strType + " ='' or " + b + "." + strType + " ='')  AND " + b + ".[STID_vld] IS NULL)";
+                    if (strCmb != "خالی") strWhere = WhereReplace(strCmb, strWhere, strType, a, b);
+                }
+            }
+            else
+            {
+
+            }
+
+            return strWhere;
+        }
+
+        public string SelectUnion(string strType, string Persent, string cmbLike, string strColumnUniq, string strSelect, string a, string b)
+        {
+            string rtn, strChar, strCmb, strWhere = "", SelectAll = "";
+
             strCmb = cmbLike;
+
             while (strCmb.IndexOf(",") != -1)
             {
                 strChar = strCmb.Substring(0, cmbLike.IndexOf(","));
 
-                if (Persent == "100" & strChar != "") // cmbLike
+                if (Persent == "100" & strChar != "")
                 {
                     //      خالی - سید - میر - اله
-                    if (strChar == "خالی") Where += " WHERE ((" + a + "." + Type + " is null or " + b + "." + Type + " is null OR " + a + "." + Type + " ='' or " + b + "." + Type + " ='') AND " + b + ".[STID_vld] IS NULL) ";
-                    if (strChar != "خالی") Where += WhereReplace2(strChar, Type, a, b);
+                    if (strChar == "خالی") strWhere += " WHERE ((" + a + "." + strType + " is null or " + b + "." + strType + " is null OR " + a + "." + strType + " ='' or " + b + "." + strType + " ='') AND " + b + ".[" + strColumnUniq + "] IS NULL) ";
+                    if (strChar != "خالی") strWhere += WhereReplace(strChar, strWhere, strType, a, b);
                 }
                 if (SelectAll == "")
                 {
-                    SelectAll = strSelect + Where;
+                    SelectAll = strSelect + strWhere;
                 }
                 else
                 {
-                    SelectAll += " UNION " + strSelect + Where;
+                    SelectAll += " UNION " + strSelect + strWhere;
                 }
                 strCmb = strCmb.Replace(strChar + ",", "");
-                Where = "";
+                strWhere = "";
             }
             strChar = strCmb;
             if (strCmb.IndexOf(",") == -1 & cmbLike != "")
@@ -291,21 +292,63 @@ namespace Identification
                 if (Persent == "100" & strChar != "") // cmbLike
                 {
                     //      خالی - سید - میر - اله
-                    if (strChar == "خالی") Where += " WHERE ((" + a + "." + Type + " is null or " + b + "." + Type + " is null OR " + a + "." + Type + " ='' or " + b + "." + Type + " ='') AND " + b + ".[STID_vld] IS NULL) ";
-                    if (strChar != "خالی") Where += WhereReplace2(strChar, Type, a, b);
+                    if (strChar == "خالی") strWhere += " WHERE ((" + a + "." + strType + " is null or " + b + "." + strType + " is null OR " + a + "." + strType + " ='' or " + b + "." + strType + " ='') AND " + b + ".[" + strColumnUniq + "] IS NULL) ";
+                    if (strChar != "خالی") strWhere += WhereReplace(strChar, strWhere, strType, a, b);
                 }
                 if (SelectAll == "")
                 {
-                    SelectAll = strSelect + Where;
+                    SelectAll = strSelect + strWhere;
                 }
                 else
                 {
-                    SelectAll += " UNION " + strSelect + Where;
+                    SelectAll += " UNION " + strSelect + strWhere;
                 }
-                Where = "";
+                strWhere = "";
             }
             return rtn = SelectAll;
         }
+
+
+        #region replace
+        //*****************     replace 'اله' & 'الله'  ****************************
+
+        public dynamic WhereReplace(string strText, string strWhere, string strType, string strLblA, string strLblB)
+        {
+            string strTxt = strText.Trim();
+            string str;
+            if (strWhere == "")
+            {
+                if (strText.Trim() == "اله-الله")
+                {
+                    str = " Where REPLACE(REPLACE(" + strLblA + "." + strType + ", N'الله', ''), N'اله', '') = REPLACE(REPLACE(" + strLblB + "." + strType + ", N'الله', ''), N'اله', '') AND (" + strLblA + "." + strType + " LIKE N'%اله%' or " + strLblB + "." + strType + " LIKE N'%اله%' or " + strLblA + "." + strType + " LIKE N'%الله%' or " + strLblB + "." + strType + " LIKE N'%الله%') AND " + strLblB + "." + strType + "<>" + strLblA + "." + strType;
+                }
+                else str = " Where replace(" + strLblA + "." + strType + ",N'" + strTxt + "','')=replace(" + strLblB + "." + strType + ",N'" + strTxt + "','') AND (" + strLblA + "." + strType + " LIKE N'%" + strTxt + "%' or " + strLblB + "." + strType + " LIKE N'%" + strTxt + "%') AND " + strLblB + "." + strType + "<>" + strLblA + "." + strType;
+            }
+            else
+            {
+
+                if (strText.Trim() == "اله-الله")
+                {
+                    str = " OR(REPLACE(REPLACE(" + strLblA + "." + strType + ", N'الله', ''), N'اله', '') = REPLACE(REPLACE(" + strLblB + "." + strType + ", N'الله', ''), N'اله', '') AND (" + strLblA + "." + strType + " LIKE N'%اله%' or " + strLblB + "." + strType + " LIKE N'%اله%' or " + strLblA + "." + strType + " LIKE N'%الله%' or " + strLblB + "." + strType + " LIKE N'%الله%') AND " + strLblB + "." + strType + "<>" + strLblA + "." + strType + ")";
+                }
+                else str = " OR( replace(" + strLblA + "." + strType + ",N'" + strTxt + "','')=replace(" + strLblB + "." + strType + ",N'" + strTxt + "','') AND (" + strLblA + "." + strType + " LIKE N'%" + strTxt + "%' or " + strLblB + "." + strType + " LIKE N'%" + strTxt + "%') AND " + strLblB + "." + strType + "<>" + strLblA + "." + strType + ")";
+            }
+            return str;
+        }
+
+
+        //**********************************************************************
+        #endregion
+
+
+
+
+
+
+
+
+
+
 
         public string StrNum(int Number) { string ret = string.Format("{0:n0}", Number); return ret; }
 
@@ -328,10 +371,7 @@ namespace Identification
             return maxWidth;
         }
 
-
-
         #region functions
-
 
         //**************    functions
 
@@ -1841,7 +1881,7 @@ namespace Identification
         /// <param name="sqlConnection">SqlConnection</param>
         /// <param name="strTableName">TableName</param>
         /// <returns>data table</returns>
-        public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection)
+        public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection, string strDbName = "")
         {
             string Query = "SELECT  Name ," +
                            " [Null] ," +
@@ -1852,10 +1892,13 @@ namespace Identification
                                         " CASE  WHEN CHARACTER_MAXIMUM_LENGTH IS NULL THEN '' ELSE ' ('+CAST(CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(50))+')' END AS [Len]" +
                                         " FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'" +
                                     " ) Columns;";
+            //  change database name
+            if (strDbName != "") sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection);
+
             return SqlDataAdapter(Query, sqlConnection);
         }
 
-        public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection, string strColumnName = "")
+        public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection, string strDbName = "", string strColumnName = "")
         {
             string Query = "SELECT  Name ," +
                            " [Null] ," +
@@ -1866,14 +1909,21 @@ namespace Identification
                                         " CASE  WHEN CHARACTER_MAXIMUM_LENGTH IS NULL THEN '' ELSE ' ('+CAST(CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(50))+')' END AS [Len]" +
                                         " FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "' AND COLUMN_NAME=N'" + strColumnName + "'" +
             " ) Columns;";
+
+            //  change database name
+            if (strDbName != "") sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection);
+
             return SqlDataAdapter(Query, sqlConnection);
         }
 
-        public DataTable SqlColumnNames(string strTableName, SqlConnection sqlConnection, string strLable = "")
+        public DataTable SqlColumnNames(string strTableName, SqlConnection sqlConnection, string strDbName = "", string strLable = "")
         {
             string strQuery = " SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'";
             if (strLable != "")
             { strQuery = " SELECT COLUMN_NAME [" + strLable + "] FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'"; }
+
+            //  change database name
+            if (strDbName != "") sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection);
 
             return SqlDataAdapter(strQuery, sqlConnection);
         }
@@ -1883,11 +1933,15 @@ namespace Identification
 
         #region SqlTableRecordsCount
 
-        public int SqlTableRecordsCount(string strTableName, SqlConnection sqlConnection, string strLabel = "")
+        public int SqlTableRecordsCount(string strTableName, SqlConnection sqlConnection, string DbName = "", string strLabel = "")
         {
 
             string strQuery = "SELECT COUNT(*) FROM dbo.[" + strTableName + "]";
 
+            //  change database name
+            if (DbName != "") sqlConnection = SqlConnectionChangeDB(DbName, sqlConnection);
+
+            //  naming
             if (strLabel != "")
             { strQuery = "SELECT COUNT(*) [" + strLabel + "] FROM dbo.[" + strTableName + "]"; }
 
@@ -1901,10 +1955,14 @@ namespace Identification
             return count;
         }
 
-        public string SqlRecordCount(string strTableName, string strFieldName, SqlConnection sqlConnection, string strLabel = "")
+        public string SqlRecordCount(string strTableName, string strFieldName, SqlConnection sqlConnection, string DbName = "", string strLabel = "")
         {
             string strQuery = "SELECT COUNT(" + strFieldName + ") FROM dbo.[" + strTableName + "]";
 
+            //  change database name
+            if (DbName != "") sqlConnection = SqlConnectionChangeDB(DbName, sqlConnection);
+
+            //  naming
             if (strLabel != "")
             { strQuery = "SELECT COUNT(" + strFieldName + ") [" + strLabel + "] FROM dbo.[" + strTableName + "]"; }
 
@@ -2006,9 +2064,15 @@ namespace Identification
 
 
         #region SqlJoin
-        public DataTable SqlJoin(string strFirstTable, string strSecendTable, string strJointColumn, SqlConnection sqlConnection)
+        public DataTable SqlJoin(string strFirstTable, string strSecendTable, string strJoinColumn1, string strJoinColumn2, SqlConnection sqlConnection, string strFirstDbName = "", string strSecondDbName = "")
         {
-            string strQuery = "SELECT * FROM [" + strFirstTable + "] a LEFT JOIN [" + strSecendTable + "] b ON b.[" + strJointColumn + "] = a.[" + strJointColumn + "]";
+            string strQuery = "SELECT * FROM [" + strFirstTable + "] a LEFT JOIN [" + strSecendTable + "] b ON a.[" + strJoinColumn1 + "] = b.[" + strJoinColumn2 + "]";
+
+            if (strFirstDbName != "" & strSecondDbName != "")
+            {
+                strQuery = "SELECT * FROM [" + strFirstDbName + "].dbo.[" + strFirstTable + "] a LEFT JOIN [" + strSecondDbName + "].dbo.[" + strSecendTable + "] b" +
+                            " ON a.[" + strJoinColumn1 + "] = b.[" + strJoinColumn2 + "]";
+            }
 
             return SqlDataAdapter(strQuery, sqlConnection, "SqlJoin");
         }
@@ -2136,35 +2200,7 @@ namespace Identification
 
         //****************************************************************
 
-        #region replace
-        //*****************     replace 'اله' & 'الله'  ****************************
 
-        public dynamic WhereReplace1(string Text, string Type, string a, string b)
-        {
-            string txt = Text.Trim();
-            string str;
-            if (Text.Trim() == "اله-الله")
-            {
-                str = " OR(REPLACE(REPLACE(" + a + "." + Type + ", N'الله', ''), N'اله', '') = REPLACE(REPLACE(" + b + "." + Type + ", N'الله', ''), N'اله', '') AND (" + a + "." + Type + " LIKE N'%اله%' or " + b + "." + Type + " LIKE N'%اله%' or " + a + "." + Type + " LIKE N'%الله%' or " + b + "." + Type + " LIKE N'%الله%') AND " + b + "." + Type + "<>" + a + "." + Type + ")";
-            }
-            else str = " OR( replace(" + a + "." + Type + ",N'" + txt + "','')=replace(" + b + "." + Type + ",N'" + txt + "','') AND (" + a + "." + Type + " LIKE N'%" + txt + "%' or " + b + "." + Type + " LIKE N'%" + txt + "%') AND " + b + "." + Type + "<>" + a + "." + Type + ")";
-            return str;
-        }
-
-        public dynamic WhereReplace2(string Text, string Type, string a, string b)
-        {
-            string txt = Text.Trim();
-            string str;
-            if (Text.Trim() == "اله-الله")
-            {
-                str = " Where REPLACE(REPLACE(" + a + "." + Type + ", N'الله', ''), N'اله', '') = REPLACE(REPLACE(" + b + "." + Type + ", N'الله', ''), N'اله', '') AND (" + a + "." + Type + " LIKE N'%اله%' or " + b + "." + Type + " LIKE N'%اله%' or " + a + "." + Type + " LIKE N'%الله%' or " + b + "." + Type + " LIKE N'%الله%') AND " + b + "." + Type + "<>" + a + "." + Type;
-            }
-            else str = " Where replace(" + a + "." + Type + ",N'" + txt + "','')=replace(" + b + "." + Type + ",N'" + txt + "','') AND (" + a + "." + Type + " LIKE N'%" + txt + "%' or " + b + "." + Type + " LIKE N'%" + txt + "%') AND " + b + "." + Type + "<>" + a + "." + Type;
-            return str;
-        }
-
-        //**********************************************************************
-        #endregion
 
 
     }

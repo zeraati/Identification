@@ -358,7 +358,7 @@ namespace Identification
             Cursor.Current = Cursors.WaitCursor;
             //lst1.Items.Clear();
 
-            DataTable dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection);
+            DataTable dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection, cmbDBName.Text);
 
             string strCount, strFieldName;
 
@@ -470,7 +470,7 @@ namespace Identification
             //*******************************
 
             //  load columns info            
-            dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection);
+            dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection,cmbDBName.Text);
 
             //  load column names
             dgvDesign.DataSource = Functions.SqlColumnNames(cmbTableName.Text, sqlConnection);

@@ -129,19 +129,19 @@ namespace Identification
                 #region Data Bases Info
 
                 //  table main record count
-                intCount = Functions.SqlTableRecordsCount(cmbMainTbl.Text, sqlConnection);
+                intCount = Functions.SqlTableRecordsCount(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text);
 
                 //  report count
                 lstReport.Items.Add("تعداد رکورد جدول از بانک اصلی : " + Functions.StrNum(intCount));
 
                 //  table second count
-                intCount = Functions.SqlTableRecordsCount(cmbSecndTbl.Text, sqlConnection);
+                intCount = Functions.SqlTableRecordsCount(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text);
 
                 //  report count
                 lstReport.Items.Add("تعداد رکورد جدول از بانک فرعی : " + Functions.StrNum(intCount));
 
                 //  cmb main join cmb second
-                intCount = Functions.SqlJoin(cmbMainTbl.Text, cmbSecndTbl.Text, cmbMainClmnUniq.Text, sqlConnection).Rows.Count;
+                intCount = Functions.SqlJoin(cmbMainTbl.Text, cmbSecndTbl.Text, cmbMainClmnJoin.Text, cmbSecndClmnJoin.Text, sqlConnection, cmbMainDB.Text, cmbSecndDB.Text).Rows.Count;
 
                 //  report count
                 lstReport.Items.Add("تعداد کل رکورد ها : " + Functions.StrNum(intCount));
@@ -151,11 +151,11 @@ namespace Identification
                 //*****         END
 
                 //  datagridview combobox column source
-                Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection));
+                Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text));
 
                 //  list column names                
-                lstMainClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbMainTbl.Text, sqlConnection));
-                lstSecndClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection));
+                lstMainClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text));
+                lstSecndClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text));
 
 
                 #region Create New Field
@@ -163,7 +163,7 @@ namespace Identification
                 //  new field
                 strField = cmbMainClmnUniq.Text + "_vld";
                 //  check new field
-                intCheck = CheckField(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection), strField);
+                intCheck = CheckField(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text), strField);
 
                 if (intCheck == 0)
                 {
@@ -171,14 +171,14 @@ namespace Identification
                     if (dr == DialogResult.Yes)
                     {
                         //  add new field
-                        strFinal = Functions.SqlAddNewColumn(cmbSecndTbl.Text, strField, "INT", "NULL", sqlConnection);
+                        strFinal = Functions.SqlAddNewColumn(cmbSecndTbl.Text, strField, "INT", "NULL", sqlConnection, cmbSecndDB.Text);
 
                         if (strFinal.Contains("Done"))
                         {
                             lstReport.Items.Add(strField + "با موفقیت انجام شد");
 
                             //  datagridview combobox column source
-                            Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection));
+                            Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text, ""));
                         }
                         else lstReport.Items.Add("با مشکل مواجه شد " + strField);
 
@@ -187,7 +187,7 @@ namespace Identification
                         intCheck = 0;
 
                         //  check field "Desription"
-                        intCheck = CheckField(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection), "Desription");
+                        intCheck = CheckField(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text, ""), "Desription");
 
                         if (intCheck == 0)
                         {
@@ -199,7 +199,7 @@ namespace Identification
                                 lstReport.Items.Add("با موفقیت انجام شد Desription");
 
                                 //  datagridview combobox column source
-                                Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection));
+                                Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text));
                             }
                             else lstReport.Items.Add("با مشکل مواجه شد");
                         }
@@ -217,7 +217,7 @@ namespace Identification
             DataTable dtDgv = new DataTable();
 
             //  column names
-            dtDgv = Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection, "فیلد جدول اصلی");
+            dtDgv = Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text, "فیلد جدول اصلی");
 
             //  send dtDgv to dgv
             dgv.DataSource = dtDgv;
@@ -230,7 +230,7 @@ namespace Identification
                 dgv.Rows[j].Cells[0].Value = false;
             }
 
-            dtDgv = Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection);
+            dtDgv = Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text);
             //clmSecond.Items.Clear();
             clmSecond.HeaderText = "فیلد جدول فرعی";
             #endregion
@@ -239,16 +239,16 @@ namespace Identification
             #region Defualt Value
 
             //  column names to list
-            List<string> lstColumnNames = Functions.DataTableToList(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection));
+            List<string> lstColumnNames = Functions.DataTableToList(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text));
 
             for (int i = 0; i < dgv.Rows.Count; i++)
             {
                 for (int j = 0; j < lstColumnNames.Count; j++)
                 {
-                    string str1 = dgv.Rows[i].Cells[4].Value.ToString();
+                    string str1 = dgv.Rows[i].Cells[5].Value.ToString();
                     string str2 = lstColumnNames[j].ToString();
 
-                    if (dgv.Rows[i].Cells[4].Value.ToString() == lstColumnNames[j].ToString())
+                    if (dgv.Rows[i].Cells[5].Value.ToString() == lstColumnNames[j].ToString())
                     {
                         //  defualt value in combobox
                         dgv.Rows[i].Cells[2].Value = lstColumnNames[j].ToString();
@@ -295,6 +295,8 @@ namespace Identification
 
         //**********************************************************
         #endregion
+
+
 
 
         private void btnDisplay_Click(object sender, EventArgs e)
@@ -358,12 +360,26 @@ namespace Identification
 
 
 
+        private void cmbPersentName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int intBack = 0, intNext = 0;
+
+            textBox1.Text = cmbPersentName.Text + " درصد ";
+
+            if (cmbPersentName.SelectedIndex != 0)
+            {
+                intBack = cmbPersentName.SelectedIndex - 1;
+                intNext = cmbPersentName.SelectedIndex;
+                textBox1.Text = " بین " + cmbPersentName.Items[intNext].ToString() + " تا " + cmbPersentName.Items[intBack].ToString() + " درصد ";
+            }
 
 
 
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
+
             //this.Enabled = false;
             //dgvMainClmns.DataSource = Functions.SqlColumns(sqlConn, cmbMainTbl.Text);
             //fun.LoadColumn(cmbMainDB.Text, cmbMainTbl.Text, dgvClmField, Variables.server);
@@ -381,17 +397,6 @@ namespace Identification
                 text += lst + Environment.NewLine;
             }
             File.WriteAllText(@"../Report.txt", text);
-        }
-
-        private void dgvMainClmns_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            //Boolean chk;
-            //chk = Convert.ToBoolean(dgvMainClmns.Rows[e.RowIndex].Cells[0].Value);
-            //if (chk == true)
-            //{
-            //    dgvMainClmns.Rows[e.RowIndex].Cells[0].Value = false;
-            //}
-            //else dgvMainClmns.Rows[e.RowIndex].Cells[0].Value = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -414,7 +419,7 @@ namespace Identification
                     {
                         #region اطلاعات فیلد از جدول اصلی
 
-                        strCell1 = dgv.Rows[l].Cells[4].Value.ToString();
+                        strCell1 = dgv.Rows[l].Cells[5].Value.ToString();
                         strMain = "[" + a + "].[" + strCell1 + "] " + a + "_" + strCell1;
                         #endregion
 
@@ -444,24 +449,56 @@ namespace Identification
         }
 
         private void cmbNameLike_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbNameLike.Text != "") clbEhraz.SetItemChecked(0, true);
-        }
+        { if (cmbNameLike.Text != "") clbEhraz.SetItemChecked(0, true); }
 
         private void cmbFamilyLike_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbFamilyLike.Text != "") clbEhraz.SetItemChecked(1, true);
-        }
+        { if (cmbFamilyLike.Text != "") clbEhraz.SetItemChecked(1, true); }
 
         private void cmbFatherLike_SelectedIndexChanged(object sender, EventArgs e)
+        { if (cmbFatherLike.Text != "") clbEhraz.SetItemChecked(2, true); }
+
+
+        //*****************************           
+
+        #region Functions
+        //***           functions
+
+        private List<string> cmbtoList(string strCmb)
         {
-            if (cmbFatherLike.Text != "") clbEhraz.SetItemChecked(2, true);
+            List<string> lst = new List<string>();
+
+            //  input string
+            string strIn = strCmb.Trim(), strChar;
+
+            while (strIn.IndexOf(",") != -1)
+            {
+                strChar = strIn.Substring(0, strIn.IndexOf(",")).Trim();
+
+                //  replace 'خالی' to null
+                if (strChar.Trim() == "خالی")
+                { lst.Add("NULL"); }
+
+                else if (strChar.Trim() == "اله-الله") { lst.Add("N'الله'"); lst.Add("N'اله'"); }
+                else lst.Add("N'" + strChar.Trim() + "'");
+
+
+                strIn = strIn.Replace(strChar.Trim() + ",", "");
+            }
+            if (strIn.IndexOf(",") == -1)
+            {
+                //  replace 'خالی' to null
+                if (strIn.Trim() == "خالی")
+                { lst.Add("NULL"); }
+
+                else if (strIn.Trim() == "اله-الله") { lst.Add("N'الله'"); lst.Add("N'اله'"); }
+                else lst.Add("N'" + strIn.Trim() + "'");
+
+            }
+
+
+            return lst;
         }
 
-
-
-        //*****************************
-        //*****     Functions   *******
         public void main()
         {
             string a, b;
@@ -505,7 +542,7 @@ namespace Identification
                     {
                         #region اطلاعات فیلد از جدول اصلی
 
-                        strCell1 = dgv.Rows[l].Cells[4].Value.ToString();
+                        strCell1 = dgv.Rows[l].Cells[5].Value.ToString();
                         strMain = "[" + a + "].[" + strCell1 + "] " + a + "_" + strCell1;
                         #endregion
 
@@ -540,6 +577,151 @@ namespace Identification
             strJoin = comMain + " JOIN " + com2 + " ON " + DeleteFreeSpace(a + ".[" + cmbMainClmnJoin.Text + "]") + " = " + DeleteFreeSpace(b + ".[" + cmbSecndClmnJoin.Text + "]");
 
             //**********************
+
+            //  checked from checklistbox
+            foreach (int Checked in clbEhraz.CheckedIndices)
+            {
+                switch (Checked)
+                {
+                    #region Name -> varchar
+                    case 0:
+
+                        //  create where for query
+                        strWhere = Selection("Name", cmbPersentName, cmbNameLike.Text, strWhere, a, b);
+
+                        //  persnet
+                        strDescription += PersentDescription("نام", cmbPersentName);
+                        lstReport.Items.Add(PersentDescription("نام", cmbPersentName));
+
+                        break;
+                    #endregion
+
+                    #region Family -> varchar
+                    case 1:
+
+                        //  create where for query
+                        strWhere = Selection("Family", cmbPersentFamily, cmbFamilyLike.Text, strWhere, a, b);
+
+                        //  persnet
+                        strDescription += PersentDescription(" نام خانوادگی", cmbPersentFamily);
+                        lstReport.Items.Add(PersentDescription(" نام خانوادگی", cmbPersentFamily));
+
+                        break;
+                    #endregion
+
+                    #region Father -> varchar
+                    case 2:
+
+                        //  create where for query
+                        strWhere = Selection("Father", cmbPersentFather, cmbFatherLike.Text, strWhere, a, b);
+
+                        //  persnet
+                        strDescription += PersentDescription("نام پدر", cmbPersentFather);
+                        lstReport.Items.Add(PersentDescription("نام پدر", cmbPersentFather));
+
+                        break;
+                    #endregion
+
+                    #region ShenasCode -> int
+                    case 3:
+
+                        //  create where for query
+                        if (strWhere != "")
+                        { strWhere += " AND " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null"; }
+                        else strWhere += " Where " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null";
+
+                        strDescription += " شناسنامه ";
+                        lstReport.Items.Add(" شناسنامه ");
+
+                        break;
+                    #endregion
+
+                    #region PBirthDate -> smallint                        
+                    case 4:
+                        if (strWhere != "")
+                        { strWhere += " AND " + b + ".PBirthDate=" + a + ".PBirthDate AND " + b + ".PBirthDate is not null "; }
+                        else strWhere += " Where " + b + ".PBirthDate=" + a + ".PBirthDate AND " + b + ".PBirthDate is not null ";
+
+                        strDescription += " سال تولد ";
+                        lstReport.Items.Add(" سال تولد ");
+                        break;
+                    #endregion
+
+                    #region CodeMelli -> char(10)
+                    case 5:
+                        if (strWhere != "")
+                        { strWhere += " AND " + a + ".CodeMelli=" + b + ".CodeMelli AND " + b + ".CodeMelli is not null "; }
+                        else strWhere += " Where " + a + ".CodeMelli=" + b + ".CodeMelli AND " + b + ".CodeMelli is not null ";
+
+                        strDescription += " کد ملی ";
+                        lstReport.Items.Add(" کد ملی ");
+
+                        break;
+                    #endregion
+
+                    #region HomeCity -> varchar
+                    case 6:
+                        if (strWhere != "")
+                        { strWhere += " and Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')"; }
+                        else strWhere += " Where Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
+
+                        strDescription += " شهر محل تولد ";
+                        lstReport.Items.Add(" شهر محل تولد ");
+
+                        break;
+                    #endregion
+
+                    #region SodorCity -> varchar
+                    case 7:
+                        if (strWhere != "")
+                        { strWhere += " and Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')"; }
+                        else strWhere += " Where Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')";
+
+                        strDescription += " شهر محل تولد ";
+                        lstReport.Items.Add(" شهر محل تولد ");
+
+                        break;
+                    #endregion
+
+                    #region SodorOstan -> varchar
+                    case 8:
+                        break;
+                    #endregion
+
+                    #region HomeOstan -> varchar
+                    case 9:
+                        break;
+                    #endregion
+
+                    #region Code Modiriat                        
+                    case 12:
+                        if (strWhere != "")
+                        { strWhere += " AND " + b + ".STID=" + a + ".STID AND " + b + ".STID is not null "; }
+                        else strWhere += " Where " + b + ".STID=" + a + ".STID AND " + b + ".STID is not null ";
+
+                        strDescription += " کد مرکز مدیریت ";
+                        lstReport.Items.Add("کد مرکز مدیریت");
+
+                        break;
+                    #endregion
+
+                    #region Code Khadamat                        
+                    case 13:
+                        if (strWhere != "")
+                        { strWhere += " AND " + b + ".MKID=" + a + ".MKID AND " + b + ".MKID is not null "; }
+                        else strWhere += " Where " + b + ".MKID=" + a + ".MKID AND " + b + ".MKID is not null ";
+
+                        strDescription += " کد مرکز خدمات ";
+                        lstReport.Items.Add("کد مرکز خدمات");
+
+                        break;
+                        #endregion
+
+                }
+
+            }
+
+
             if (cmbFamilyLike.Text != "" | cmbNameLike.Text != "" | cmbFatherLike.Text != "")
             {
                 #region Union
@@ -553,7 +735,7 @@ namespace Identification
                             if (cmbPersentName.Text == "100" & cmbNameLike.Text != "")
                             {
                                 //      خالی - سید - میر - اله
-                                strSlt = Functions.SelectAll("Name", cmbPersentName.Text, cmbNameLike.Text, strSelect + strJoin, a, b);
+                                strSlt = Functions.SelectUnion("Name", cmbPersentName.Text, cmbNameLike.Text, cmbMainClmnUniq.Text + "_vld", strSelect + strJoin, a, b);
                                 strDescription += " نام 100 درصد و " + cmbNameLike.Text;
                                 lstReport.Items.Add(" نام 100 درصد و " + cmbNameLike.Text);
                             }
@@ -562,7 +744,7 @@ namespace Identification
                             if (cmbPersentFamily.Text == "100" & cmbFamilyLike.Text != "")
                             {
                                 //      خالی - سید - میر - اله
-                                strSlt = Functions.SelectAll("Family", cmbPersentFamily.Text, cmbFamilyLike.Text, strSelect + strJoin, a, b);
+                                strSlt = Functions.SelectUnion("Family", cmbPersentFamily.Text, cmbFamilyLike.Text, cmbMainClmnUniq.Text + "_vld", strSelect + strJoin, a, b);
                                 strDescription += " نام خانوادگی 100 درصد و " + cmbFamilyLike.Text;
                                 lstReport.Items.Add(" نام خانوادگی 100 درصد و " + cmbFamilyLike.Text);
                                 if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
@@ -572,8 +754,9 @@ namespace Identification
                             if (cmbPersentFather.Text == "100" & cmbFatherLike.Text != "")
                             {
                                 //      خالی - سید - میر - اله
-                                strSlt = Functions.SelectAll("Father", cmbPersentFather.Text, cmbFatherLike.Text, strSelect + strJoin, a, b);
-                                strDescription += " نام پدر 100 درصد و " + cmbFatherLike.Text; lstReport.Items.Add(" نام پدر 100 درصد و " + cmbFatherLike.Text);
+                                strSlt = Functions.SelectUnion("Father", cmbPersentFather.Text, cmbFatherLike.Text, cmbMainClmnUniq.Text + "_vld", strSelect + strJoin, a, b);
+                                strDescription += " نام پدر 100 درصد و " + cmbFatherLike.Text;
+                                lstReport.Items.Add(" نام پدر 100 درصد و " + cmbFatherLike.Text);
                                 if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
                             }
                             break;
@@ -585,162 +768,22 @@ namespace Identification
             }
             else
             {
+
                 #region Not Union
+                /*
 
-                foreach (int action in clbEhraz.CheckedIndices)
-                {
-                    switch (action)
-                    {
-                        #region Name -> varchar
-                        case 0:
-                            if (cmbPersentName.Text == "100" & cmbNameLike.Text == "")
-                            {
-                                strWhere = Functions.clbEhrazChecked("Name", cmbPersentName.Text, cmbNameLike.Text, strWhere, a, b);
-                                strDescription += " نام 100 درصد "; lstReport.Items.Add("نام 100 درصد ");
-                                if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            }
-                            else
-                            {
 
-                            }
-                            clbEhrazCnt--;
-                            break;
-                        #endregion
 
-                        #region Family -> varchar
-                        case 1:
-                            if (cmbPersentFamily.Text == "100" & cmbFamilyLike.Text == "")
-                            {
-                                strWhere = Functions.clbEhrazChecked("Family", cmbPersentFamily.Text, cmbFamilyLike.Text, strWhere, a, b);
-                                strDescription += " نام خانوادگی 100 درصد ";
-                                lstReport.Items.Add("نام خانوادگی 100 درصد");
-                                if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            }
-                            clbEhrazCnt--;
-                            break;
-                        #endregion
 
-                        #region Father -> varchar
-                        case 2:
-                            if (cmbPersentFather.Text == "100" & cmbFatherLike.Text == "")
-                            {
-                                strWhere = Functions.clbEhrazChecked("Father", cmbPersentFather.Text, cmbFatherLike.Text, strWhere, a, b);
-                                strDescription += " نام پدر 100 درصد "; lstReport.Items.Add("نام پدر 100 درصد");
-                                if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            }
-                            clbEhrazCnt--;
-                            break;
-                        #endregion
 
-                        #region ShenasCode -> int
-                        case 3:
-                            if (strWhere != "")
-                            {
-                                strWhere += " AND " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null";
-                            }
-                            else strWhere += " Where " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null";
-                            if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            strDescription += " شناسنامه ";
-                            lstReport.Items.Add(" شناسنامه ");
-                            clbEhrazCnt--;
-                            break;
-                        #endregion
 
-                        #region PBirthDate -> smallint                        
-                        case 4:
-                            if (strWhere != "")
-                            {
-                                strWhere += " AND " + b + ".PBirthDate=" + a + ".PBirthDate AND " + b + ".PBirthDate is not null ";
-                            }
-                            else strWhere += " Where " + b + ".PBirthDate=" + a + ".PBirthDate AND " + b + ".PBirthDate is not null ";
 
-                            if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            strDescription += " سال تولد ";
-                            lstReport.Items.Add(" سال تولد ");
-                            clbEhrazCnt--;
-                            break;
-                        #endregion
 
-                        #region CodeMelli -> char(10)
-                        case 5:
-                            if (strWhere != "")
-                            {
-                                strWhere += " AND " + a + ".CodeMelli=" + b + ".CodeMelli AND " + b + ".CodeMelli is not null ";
-                            }
-                            else strWhere += " Where " + a + ".CodeMelli=" + b + ".CodeMelli AND " + b + ".CodeMelli is not null ";
-                            if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            strDescription += " کد ملی ";
-                            lstReport.Items.Add(" کد ملی ");
-                            clbEhrazCnt--;
-                            break;
-                        #endregion
 
-                        #region HomeCity -> varchar
-                        case 6:
-                            if (strWhere != "")
-                            {
-                                strWhere += " and Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
-                            }
-                            else strWhere += " Where Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
-                            if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            strDescription += " شهر محل تولد ";
-                            lstReport.Items.Add(" شهر محل تولد ");
-                            clbEhrazCnt--;
-                            break;
-                        #endregion
-
-                        #region SodorCity -> varchar
-                        case 7:
-                            if (strWhere != "")
-                            {
-                                strWhere += " and Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')";
-                            }
-                            else strWhere += " Where Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')";
-                            if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            strDescription += " شهر محل تولد ";
-                            lstReport.Items.Add(" شهر محل تولد ");
-                            clbEhrazCnt--;
-                            break;
-                        #endregion
-                        // استان محل تولد
-                        case 8:
-                            break;
-                        // استان محل صدور
-                        case 9:
-                            break;
-
-                        #region Code Modiriat                        
-                        case 12:
-                            if (strWhere != "")
-                            {
-                                strWhere += " AND " + b + ".STID=" + a + ".STID AND " + b + ".STID is not null ";
-                            }
-                            else strWhere += " Where " + b + ".STID=" + a + ".STID AND " + b + ".STID is not null ";
-
-                            if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            strDescription += " کد مرکز مدیریت ";
-                            lstReport.Items.Add("کد مرکز مدیریت");
-                            clbEhrazCnt--;
-                            break;
-                        #endregion
-
-                        #region Code Khadamat                        
-                        case 13:
-                            if (strWhere != "")
-                            {
-                                strWhere += " AND " + b + ".MKID=" + a + ".MKID AND " + b + ".MKID is not null ";
-                            }
-                            else strWhere += " Where " + b + ".MKID=" + a + ".MKID AND " + b + ".MKID is not null ";
-                            if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            strDescription += " کد مرکز خدمات ";
-                            lstReport.Items.Add("کد مرکز خدمات");
-                            clbEhrazCnt--;
-                            break;
-                            #endregion
 
                     }
                 }
-
+                */
                 #endregion
 
                 if (strWhere != "")
@@ -749,6 +792,7 @@ namespace Identification
                 }
                 else strWhere += " Where " + b + ".[" + cmbMainClmnUniq.Text + "_vld] IS NULL ";
 
+                //  create query finaly
                 query2 = strSelect + strJoin + strWhere;
 
                 //  save query2 to file command.txt
@@ -758,13 +802,129 @@ namespace Identification
             #endregion
         }
 
+        private string loopWord(List<string> lstLike, string strType, string strLblA, string strLblB, string strColumnUniq, string strWhere)
+        {
 
+            for (int i = 0; i < lstLike.Count; i++)
+            {
+                if (lstLike[i] == "NULL")
+                {
+                    if (strWhere == "")
+                    { strWhere = " WHERE " + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " "; }
+                    else
+                    {
+                        strWhere = strWhere + " OR (" + strLblA + ".[" + strType + "] IS " + lstLike[i] + " = " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " )";
+                    }
+                }
+                else
+                {
+                    if (strWhere == "")
+                    {
+                        strWhere = " WHERE Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'') = Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",'')";
+                    }
+                    else
+                    {
+                        strWhere = strWhere + " OR Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'') = Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",'')";
+                    }
+                }
+            }
 
+            return strWhere;
+        }
 
+        private string Selection(string strType, ComboBox cmbPersent, string strLike, string strWhere, string strLblA, string strLblB)
+        {
+            string strReturn = "";
 
+            if (strWhere == "")
+            {
+                if (cmbPersent.Text == "100")
+                {
+                    if (strLike == "")
+                    {
+                        //  100 persent , cmblike = ""
+                        strReturn = " Where REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') ";
+                    }
+                    else
+                    {
+                        strReturn = loopWord(cmbtoList(strLike), strType, strLblA, strLblB, cmbMainClmnUniq.Text, strWhere);
+                    }
+                }
+                //  < 100 persent
+                else
+                {
+                    if (strLike == "")
+                    {
+                        //  < 100 persent , cmblike = ""
+                        string strl = cmbPersent.Items[cmbPersent.SelectedIndex].ToString();
 
+                        strReturn = " Where dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
+                                      " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString();
+                    }
+                    else
+                    {
+                    }
+                }
+            }
+            else
+            {
+                if (cmbPersent.Text == "100")
+                {
+                    if (strLike == "")
+                    {
+                        //  100 persent  , cmblike = ""
+                        strReturn = strWhere + " AND REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','')";
+                    }
+                    else
+                    {
 
-        //***           function new
+                    }
+                }
+                //  < 100 persent
+                else
+                {
+                    if (strLike == "")
+                    {
+                        //  < 100 persent , cmblike = ""
+                        strReturn = strWhere + " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
+                                               " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString();
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+            return strReturn;
+        }
+
+        private string DeleteWord()
+        {
+            string strReturn = "";
+
+            return strReturn;
+        }
+
+        private string PersentDescription(string strType, ComboBox cmbPersent, string strDeleteWord = "")
+        {
+            string strReturn = "";
+            int intBack = 0, intNext = 0;
+
+            //  persent 100%
+            strReturn = strType + cmbPersent.Text + " درصد ";
+            //  if strDeleteWord not null
+            if (strDeleteWord != "") strReturn = strType + cmbPersent.Text + " درصد " + " , " + strDeleteWord;
+
+            if (cmbPersent.SelectedIndex != 0)
+            {
+                intBack = cmbPersent.SelectedIndex - 1;
+                intNext = cmbPersent.SelectedIndex;
+                strReturn = strType + " بین " + cmbPersent.Items[intNext].ToString() + " تا " + cmbPersent.Items[intBack].ToString() + " درصد ";
+                if (strDeleteWord != "") strReturn = strType + " بین " + cmbPersent.Items[intNext].ToString() + " تا " + cmbPersent.Items[intBack].ToString() + " درصد " + " , " + strDeleteWord;
+
+            }
+            return strReturn;
+        }
 
         private int CheckField(DataTable dtInput, string strSearchField)
         {
@@ -779,11 +939,11 @@ namespace Identification
             return intReturn;
         }
 
-
         private string DeleteFreeSpace(string strItem)
         { return "Replace(" + strItem + ", ' ', '')"; }
 
         //*******************************************
+        #endregion
     }
 }
 
