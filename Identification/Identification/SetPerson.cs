@@ -284,9 +284,7 @@ namespace Identification
         }
 
         private void بررسیToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
+        { btnCheck_Click(null, null); }
 
         private void تغییراتصالبهبانکگToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -399,6 +397,11 @@ namespace Identification
             File.WriteAllText(@"../Report.txt", text);
         }
 
+        private void dgvSearch_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -463,6 +466,7 @@ namespace Identification
         #region Functions
         //***           functions
 
+        #region ComboBox to List<string>
         private List<string> cmbtoList(string strCmb)
         {
             List<string> lst = new List<string>();
@@ -498,6 +502,8 @@ namespace Identification
 
             return lst;
         }
+        #endregion
+
 
         public void main()
         {
@@ -589,9 +595,9 @@ namespace Identification
                         //  create where for query
                         strWhere = Selection("Name", cmbPersentName, cmbNameLike.Text, strWhere, a, b);
 
-                        //  persnet
-                        strDescription += PersentDescription("نام", cmbPersentName);
-                        lstReport.Items.Add(PersentDescription("نام", cmbPersentName));
+                        //  report
+                        strDescription += PersentDescription("نام", cmbPersentName, cmbNameLike.Text);
+                        lstReport.Items.Add(PersentDescription("نام", cmbPersentName, cmbNameLike.Text));
 
                         break;
                     #endregion
@@ -602,9 +608,9 @@ namespace Identification
                         //  create where for query
                         strWhere = Selection("Family", cmbPersentFamily, cmbFamilyLike.Text, strWhere, a, b);
 
-                        //  persnet
-                        strDescription += PersentDescription(" نام خانوادگی", cmbPersentFamily);
-                        lstReport.Items.Add(PersentDescription(" نام خانوادگی", cmbPersentFamily));
+                        //  report
+                        strDescription += PersentDescription(" نام خانوادگی", cmbPersentFamily, cmbFamilyLike.Text);
+                        lstReport.Items.Add(PersentDescription(" نام خانوادگی", cmbPersentFamily, cmbFamilyLike.Text));
 
                         break;
                     #endregion
@@ -615,9 +621,9 @@ namespace Identification
                         //  create where for query
                         strWhere = Selection("Father", cmbPersentFather, cmbFatherLike.Text, strWhere, a, b);
 
-                        //  persnet
-                        strDescription += PersentDescription("نام پدر", cmbPersentFather);
-                        lstReport.Items.Add(PersentDescription("نام پدر", cmbPersentFather));
+                        //  report
+                        strDescription += PersentDescription("نام پدر", cmbPersentFather, cmbFatherLike.Text);
+                        lstReport.Items.Add(PersentDescription("نام پدر", cmbPersentFather, cmbFatherLike.Text));
 
                         break;
                     #endregion
@@ -722,87 +728,25 @@ namespace Identification
             }
 
 
-            if (cmbFamilyLike.Text != "" | cmbNameLike.Text != "" | cmbFatherLike.Text != "")
+            if (strWhere != "")
             {
-                #region Union
-
-                foreach (int action in clbEhraz.CheckedIndices)
-                {
-                    switch (action)
-                    {
-                        case 0:
-
-                            if (cmbPersentName.Text == "100" & cmbNameLike.Text != "")
-                            {
-                                //      خالی - سید - میر - اله
-                                strSlt = Functions.SelectUnion("Name", cmbPersentName.Text, cmbNameLike.Text, cmbMainClmnUniq.Text + "_vld", strSelect + strJoin, a, b);
-                                strDescription += " نام 100 درصد و " + cmbNameLike.Text;
-                                lstReport.Items.Add(" نام 100 درصد و " + cmbNameLike.Text);
-                            }
-                            break;
-                        case 1:
-                            if (cmbPersentFamily.Text == "100" & cmbFamilyLike.Text != "")
-                            {
-                                //      خالی - سید - میر - اله
-                                strSlt = Functions.SelectUnion("Family", cmbPersentFamily.Text, cmbFamilyLike.Text, cmbMainClmnUniq.Text + "_vld", strSelect + strJoin, a, b);
-                                strDescription += " نام خانوادگی 100 درصد و " + cmbFamilyLike.Text;
-                                lstReport.Items.Add(" نام خانوادگی 100 درصد و " + cmbFamilyLike.Text);
-                                if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            }
-                            break;
-                        case 2:
-                            if (cmbPersentFather.Text == "100" & cmbFatherLike.Text != "")
-                            {
-                                //      خالی - سید - میر - اله
-                                strSlt = Functions.SelectUnion("Father", cmbPersentFather.Text, cmbFatherLike.Text, cmbMainClmnUniq.Text + "_vld", strSelect + strJoin, a, b);
-                                strDescription += " نام پدر 100 درصد و " + cmbFatherLike.Text;
-                                lstReport.Items.Add(" نام پدر 100 درصد و " + cmbFatherLike.Text);
-                                if (clbEhrazCnt > 0) { query += " AND "; query2 += " AND "; }
-                            }
-                            break;
-                    }
-                }
-                #endregion
-
-                query2 = strSlt;
+                strWhere += " AND " + b + ".[" + cmbMainClmnUniq.Text + "_vld] IS NULL ";
             }
-            else
-            {
+            else strWhere += " Where " + b + ".[" + cmbMainClmnUniq.Text + "_vld] IS NULL ";
 
-                #region Not Union
-                /*
+            //  create query finaly
+            query2 = strSelect + strJoin + strWhere;
 
+            //  save query2 to file command.txt
+            File.WriteAllText(@"../Command.txt", query2);
 
-
-
-
-
-
-
-
-
-                    }
-                }
-                */
-                #endregion
-
-                if (strWhere != "")
-                {
-                    strWhere += " AND " + b + ".[" + cmbMainClmnUniq.Text + "_vld] IS NULL ";
-                }
-                else strWhere += " Where " + b + ".[" + cmbMainClmnUniq.Text + "_vld] IS NULL ";
-
-                //  create query finaly
-                query2 = strSelect + strJoin + strWhere;
-
-                //  save query2 to file command.txt
-                File.WriteAllText(@"../Command.txt", query2);
-            }
 
             #endregion
         }
 
-        private string loopWord(List<string> lstLike, string strType, string strLblA, string strLblB, string strColumnUniq, string strWhere)
+
+        //  
+        private string loopWord(List<string> lstLike, string strType, string strLblA, string strLblB, string strColumnUniq, string strWhere, string strGetPercentage = "")
         {
 
             for (int i = 0; i < lstLike.Count; i++)
@@ -810,101 +754,67 @@ namespace Identification
                 if (lstLike[i] == "NULL")
                 {
                     if (strWhere == "")
-                    { strWhere = " WHERE " + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " "; }
+                    {
+                        strWhere = " WHERE (" + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " ";
+                    }
                     else
                     {
-                        strWhere = strWhere + " OR (" + strLblA + ".[" + strType + "] IS " + lstLike[i] + " = " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " )";
+                        strWhere = strWhere + " AND ((" + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " )";
                     }
                 }
                 else
                 {
                     if (strWhere == "")
                     {
-                        strWhere = " WHERE Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'') = Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",'')";
+                        strWhere = " WHERE (Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'') = Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",'')";
+                        if (strGetPercentage != "100") strWhere = " WHERE dbo.GetPercentageOfTwoStringMatching(Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'')) = dbo.GetPercentageOfTwoStringMatching(Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",''))";
                     }
                     else
                     {
-                        strWhere = strWhere + " OR Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'') = Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",'')";
+                        strWhere = strWhere + " OR (Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'') = Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",''))";
+                        if (strGetPercentage != "100") strWhere = strWhere + " AND (dbo.GetPercentageOfTwoStringMatching(Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'')) = dbo.GetPercentageOfTwoStringMatching(Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",'')))";
                     }
                 }
             }
 
-            return strWhere;
+            return strWhere + ")";
         }
 
         private string Selection(string strType, ComboBox cmbPersent, string strLike, string strWhere, string strLblA, string strLblB)
         {
             string strReturn = "";
+            string strPersent = "";
 
-            if (strWhere == "")
+
+            if (strLike == "" & cmbPersent.Text == "100")
+
             {
-                if (cmbPersent.Text == "100")
-                {
-                    if (strLike == "")
-                    {
-                        //  100 persent , cmblike = ""
-                        strReturn = " Where REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') ";
-                    }
-                    else
-                    {
-                        strReturn = loopWord(cmbtoList(strLike), strType, strLblA, strLblB, cmbMainClmnUniq.Text, strWhere);
-                    }
-                }
-                //  < 100 persent
-                else
-                {
-                    if (strLike == "")
-                    {
-                        //  < 100 persent , cmblike = ""
-                        string strl = cmbPersent.Items[cmbPersent.SelectedIndex].ToString();
-
-                        strReturn = " Where dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
-                                      " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString();
-                    }
-                    else
-                    {
-                    }
-                }
+                //  100 persent , cmblike = ""
+                strReturn = " Where REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') ";
+                if (strWhere != "") strReturn = strWhere + " AND REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') ";
             }
             else
             {
-                if (cmbPersent.Text == "100")
+                if (strLike == "" & cmbPersent.Text != "100")
                 {
-                    if (strLike == "")
-                    {
-                        //  100 persent  , cmblike = ""
-                        strReturn = strWhere + " AND REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','')";
-                    }
-                    else
-                    {
+                    //  < 100 persent , cmblike = ""
+                    strPersent = cmbPersent.Items[cmbPersent.SelectedIndex].ToString();
 
+                    strReturn = "Where (dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
+                                  " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString() + ")";
+                    if (strWhere != "")
+                    {
+                        strReturn = strWhere + "AND (dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
+                                  " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString() + ")";
                     }
                 }
-                //  < 100 persent
-                else
-                {
-                    if (strLike == "")
-                    {
-                        //  < 100 persent , cmblike = ""
-                        strReturn = strWhere + " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
-                                               " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString();
-                    }
-                    else
-                    {
-
-                    }
-                }
+                else strReturn = loopWord(cmbtoList(strLike), strType, strLblA, strLblB, cmbMainClmnUniq.Text, strWhere, cmbPersent.Text);
             }
-            return strReturn;
-        }
-
-        private string DeleteWord()
-        {
-            string strReturn = "";
 
             return strReturn;
         }
 
+        //  report to description
         private string PersentDescription(string strType, ComboBox cmbPersent, string strDeleteWord = "")
         {
             string strReturn = "";
@@ -912,6 +822,7 @@ namespace Identification
 
             //  persent 100%
             strReturn = strType + cmbPersent.Text + " درصد ";
+
             //  if strDeleteWord not null
             if (strDeleteWord != "") strReturn = strType + cmbPersent.Text + " درصد " + " , " + strDeleteWord;
 
