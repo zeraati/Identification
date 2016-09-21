@@ -56,7 +56,7 @@ namespace Identification
             cmbMainTbl.DataSource = Functions.SqlTableName(sqlConnection);
 
             //  default value            
-            cmbMainTbl.Text = "TBL_Student_95-02-21";
+            cmbMainTbl.Text = "TBL_Student_95-02-21_copy";
         }
 
         private void cmbDBName2_SelectedIndexChanged(object sender, EventArgs e)
@@ -68,7 +68,7 @@ namespace Identification
             cmbSecndTbl.DataSource = Functions.SqlTableName(sqlConnection);
 
             //  default value
-            cmbSecndTbl.Text = "TBL_MKsarparast_95-02-21";
+            cmbSecndTbl.Text = "TBL_MKsarparast_95-02-21_copy";
         }
 
         private void cmbTBNameMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -408,7 +408,6 @@ namespace Identification
 
             string a = "", b = "";
             textBox1.Text = "";
-            listBox1.Items.Clear();
             strSlt = "";
             string comMain = "[" + cmbMainDB.Text + "].dbo.[" + cmbMainTbl.Text + "] " + a;
             string com2 = "[" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] " + b;
@@ -465,44 +464,6 @@ namespace Identification
 
         #region Functions
         //***           functions
-
-        #region ComboBox to List<string>
-        private List<string> cmbtoList(string strCmb)
-        {
-            List<string> lst = new List<string>();
-
-            //  input string
-            string strIn = strCmb.Trim(), strChar;
-
-            while (strIn.IndexOf(",") != -1)
-            {
-                strChar = strIn.Substring(0, strIn.IndexOf(",")).Trim();
-
-                //  replace 'خالی' to null
-                if (strChar.Trim() == "خالی")
-                { lst.Add("NULL"); }
-
-                else if (strChar.Trim() == "اله-الله") { lst.Add("N'الله'"); lst.Add("N'اله'"); }
-                else lst.Add("N'" + strChar.Trim() + "'");
-
-
-                strIn = strIn.Replace(strChar.Trim() + ",", "");
-            }
-            if (strIn.IndexOf(",") == -1)
-            {
-                //  replace 'خالی' to null
-                if (strIn.Trim() == "خالی")
-                { lst.Add("NULL"); }
-
-                else if (strIn.Trim() == "اله-الله") { lst.Add("N'الله'"); lst.Add("N'اله'"); }
-                else lst.Add("N'" + strIn.Trim() + "'");
-
-            }
-
-
-            return lst;
-        }
-        #endregion
 
 
         public void main()
@@ -745,8 +706,44 @@ namespace Identification
         }
 
 
+        #region ComboBox to List<string>
+        private List<string> stringtoList(string strCmb)
+        {
+            List<string> lst = new List<string>();
+
+            //  input string
+            string strIn = strCmb.Trim(), strChar;
+
+            while (strIn.IndexOf(",") != -1)
+            {
+                strChar = strIn.Substring(0, strIn.IndexOf(",")).Trim();
+
+                //  replace 'خالی' to null
+                if (strChar.Trim() == "خالی")
+                { lst.Add("NULL"); }
+
+                else if (strChar.Trim() == "اله-الله") { lst.Add("اله-الله"); }
+                else lst.Add(strChar.Trim());
+
+
+                strIn = strIn.Replace(strChar.Trim() + ",", "");
+            }
+            if (strIn.IndexOf(",") == -1)
+            {
+                //  replace 'خالی' to null
+                if (strIn.Trim() == "خالی")
+                { lst.Add("NULL"); }
+
+                else if (strIn.Trim() == "اله-الله") { lst.Add("اله-الله"); }
+                else lst.Add(strIn.Trim());
+            }
+
+            return lst;
+        }
+        #endregion
+
         //  
-        private string loopWord(List<string> lstLike, string strType, string strLblA, string strLblB, string strColumnUniq, string strWhere, string strGetPercentage = "")
+        private string loopWord(List<string> lstLike, string strType, string strLblA, string strLblB, string strColumnUniq, string strWhere)
         {
 
             for (int i = 0; i < lstLike.Count; i++)
@@ -755,61 +752,107 @@ namespace Identification
                 {
                     if (strWhere == "")
                     {
-                        strWhere = " WHERE (" + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " ";
+                        strWhere = " WHERE " + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " ";
                     }
                     else
                     {
-                        strWhere = strWhere + " AND ((" + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " )";
+                        strWhere = strWhere + " OR ((" + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " )";
+                    }
+                }
+                else if (lstLike[i] == "اله-الله")
+                {
+                    if (strWhere == "")
+                    {
+                        strWhere = " WHERE (REPLACE(REPLACE(" + strLblA + ".[" + strType + "], N'الله', ''), N'اله', '') = REPLACE(REPLACE(" + strLblB + ".[" + strType + "], N'الله', ''), N'اله', '') AND " +
+                                   "(" + strLblA + ".[" + strType + "] LIKE N'%اله%' OR " + strLblB + ".[" + strType + "] LIKE N'%اله%' or " + strLblA + ".[" + strType + "] LIKE N'%الله%' or " + strLblB + ".[" + strType + "] LIKE N'%الله%') AND " + strLblA + ".[" + strType + "]<> " + strLblB + ".[" + strType + "])";
+                    }
+                    else
+                    {
+                        strWhere = strWhere +
+                                   " OR (REPLACE(REPLACE(" + strLblA + ".[" + strType + "], N'الله', ''), N'اله', '') = REPLACE(REPLACE(" + strLblB + ".[" + strType + "], N'الله', ''), N'اله', '') AND " +
+                                   "(" + strLblA + ".[" + strType + "] LIKE N'%اله%' OR " + strLblB + ".[" + strType + "] LIKE N'%اله%' or " + strLblA + ".[" + strType + "] LIKE N'%الله%' or " + strLblB + ".[" + strType + "] LIKE N'%الله%') AND " + strLblA + ".[" + strType + "]<> " + strLblB + ".[" + strType + "])";
                     }
                 }
                 else
                 {
                     if (strWhere == "")
                     {
-                        strWhere = " WHERE (Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'') = Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",'')";
-                        if (strGetPercentage != "100") strWhere = " WHERE dbo.GetPercentageOfTwoStringMatching(Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'')) = dbo.GetPercentageOfTwoStringMatching(Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",''))";
+                        strWhere = " WHERE (Replace(" + strLblA + ".[" + strType + "] ,'" + lstLike[i] + "','') = Replace(" + strLblB + ".[" + strType + "],'" + lstLike[i] + "','')" +
+                                    " AND (" + strLblA + ".[" + strType + "] LIKE N'%" + lstLike[i] + "%' OR " + strLblB + ".[" + strType + "] LIKE N'%" + lstLike[i] + "%') AND " + strLblA + ".[" + strType + "]<>" + strLblB + ".[" + strType + "])";
                     }
                     else
                     {
-                        strWhere = strWhere + " OR (Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'') = Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",''))";
-                        if (strGetPercentage != "100") strWhere = strWhere + " AND (dbo.GetPercentageOfTwoStringMatching(Replace(" + strLblA + ".[" + strType + "] ," + lstLike[i] + ",'')) = dbo.GetPercentageOfTwoStringMatching(Replace(" + strLblB + ".[" + strType + "], " + lstLike[i] + ",'')))";
+                        strWhere = strWhere + " OR (Replace(" + strLblA + ".[" + strType + "] ,'" + lstLike[i] + "','') = Replace(" + strLblB + ".[" + strType + "],'" + lstLike[i] + "','')" +
+                                    " AND (" + strLblA + ".[" + strType + "] LIKE N'%" + lstLike[i] + "%' OR " + strLblB + ".[" + strType + "] LIKE N'%" + lstLike[i] + "%') AND " + strLblA + ".[" + strType + "]<>" + strLblB + ".[" + strType + "])";
                     }
                 }
             }
 
-            return strWhere + ")";
+            return strWhere;
         }
+
 
         private string Selection(string strType, ComboBox cmbPersent, string strLike, string strWhere, string strLblA, string strLblB)
         {
             string strReturn = "";
-            string strPersent = "";
 
-
-            if (strLike == "" & cmbPersent.Text == "100")
-
+            if (strLike == "")
             {
-                //  100 persent , cmblike = ""
-                strReturn = " Where REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') ";
-                if (strWhere != "") strReturn = strWhere + " AND REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') ";
+                //  ==  100%
+                if (cmbPersent.Text == "100")
+                {
+                    //  check strWhere
+                    strReturn = " Where REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') ";
+                    if (strWhere != "")
+                    { strReturn = strWhere + " AND REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') "; }
+
+                }
+                //  < 100%
+                else
+                {
+                    //  check strWhere
+                    strReturn = "Where (dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
+                                  " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString() + ")";
+
+                    if (strWhere != "") strReturn = strWhere + "AND (dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
+                                        " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString() + ")";
+                }
             }
             else
             {
-                if (strLike == "" & cmbPersent.Text != "100")
-                {
-                    //  < 100 persent , cmblike = ""
-                    strPersent = cmbPersent.Items[cmbPersent.SelectedIndex].ToString();
-
-                    strReturn = "Where (dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
-                                  " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString() + ")";
-                    if (strWhere != "")
-                    {
-                        strReturn = strWhere + "AND (dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
-                                  " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<" + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString() + ")";
-                    }
-                }
-                else strReturn = loopWord(cmbtoList(strLike), strType, strLblA, strLblB, cmbMainClmnUniq.Text, strWhere, cmbPersent.Text);
+                strReturn = loopWord(stringtoList(strLike), strType, strLblA, strLblB, cmbMainClmnUniq.Text, strWhere);
             }
+
+
+            //  100%
+            //if (cmbPersent.Text == "100")
+            //{
+            //    if (strLike == "")
+            //    {
+            //        strReturn = " Where REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') ";
+            //        if (strWhere != "") strReturn = strWhere + " AND REPLACE(" + strLblA + ".[" + strType + "],' ','') = REPLACE(" + strLblB + ".[" + strType + "],' ','') ";
+            //    }
+            //    else
+            //    {
+            //        strReturn = loopWord(stringtoList(strLike), strType, strLblA, strLblB, cmbMainClmnUniq.Text, strWhere, cmbPersent.Text);
+            //    }
+            //}
+            ////  <100%
+            //else
+            //{
+            //    if (strLike == "")
+            //    {
+            //        strPersent = cmbPersent.Items[cmbPersent.SelectedIndex].ToString();
+
+
+            //    }
+            //    else
+            //    {
+
+            //    }
+            //}
+            // else 
+
 
             return strReturn;
         }

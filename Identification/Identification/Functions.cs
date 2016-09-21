@@ -898,7 +898,6 @@ namespace Identification
         #endregion
 
 
-
         #region GetQueryFileName
 
         public DataTable GetQueryFileName(string strQueryPath, string strType)
@@ -1107,19 +1106,7 @@ namespace Identification
 
         #endregion
 
-        //**********    new
 
-
-
-
-
-
-
-
-
-
-
-        //****************************************************************
         #endregion
 
 

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            PresentationControls.CheckBoxProperties checkBoxProperties3 = new PresentationControls.CheckBoxProperties();
             PresentationControls.CheckBoxProperties checkBoxProperties4 = new PresentationControls.CheckBoxProperties();
             PresentationControls.CheckBoxProperties checkBoxProperties1 = new PresentationControls.CheckBoxProperties();
+            PresentationControls.CheckBoxProperties checkBoxProperties2 = new PresentationControls.CheckBoxProperties();
             this.clbEhraz = new System.Windows.Forms.CheckedListBox();
             this.lstReport = new System.Windows.Forms.ListBox();
             this.cmbPersentFamily = new System.Windows.Forms.ComboBox();
@@ -93,8 +93,6 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lstSecndClmns = new System.Windows.Forms.ListBox();
             this.lstMainClmns = new System.Windows.Forms.ListBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
@@ -104,7 +102,6 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // clbEhraz
@@ -263,7 +260,7 @@
             // اضافهکردنآیتمToolStripMenuItem
             // 
             this.اضافهکردنآیتمToolStripMenuItem.Name = "اضافهکردنآیتمToolStripMenuItem";
-            this.اضافهکردنآیتمToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.اضافهکردنآیتمToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.اضافهکردنآیتمToolStripMenuItem.Text = "اضافه کردن آیتم";
             this.اضافهکردنآیتمToolStripMenuItem.Visible = false;
             this.اضافهکردنآیتمToolStripMenuItem.Click += new System.EventHandler(this.اضافهکردنآیتمToolStripMenuItem_Click);
@@ -271,21 +268,21 @@
             // tsmiClose
             // 
             this.tsmiClose.Name = "tsmiClose";
-            this.tsmiClose.Size = new System.Drawing.Size(152, 22);
+            this.tsmiClose.Size = new System.Drawing.Size(146, 22);
             this.tsmiClose.Text = "بستن";
             this.tsmiClose.Click += new System.EventHandler(this.tsmiClose_Click);
             // 
             // tsmiExit
             // 
             this.tsmiExit.Name = "tsmiExit";
-            this.tsmiExit.Size = new System.Drawing.Size(152, 22);
+            this.tsmiExit.Size = new System.Drawing.Size(146, 22);
             this.tsmiExit.Text = "خروج";
             this.tsmiExit.Click += new System.EventHandler(this.tsmiExit_Click);
             // 
             // جستجوToolStripMenuItem
             // 
             this.جستجوToolStripMenuItem.Name = "جستجوToolStripMenuItem";
-            this.جستجوToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.جستجوToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.جستجوToolStripMenuItem.Text = "جستجو";
             // 
             // ابزارهاToolStripMenuItem
@@ -547,8 +544,8 @@
             // 
             // cmbNameLike
             // 
-            checkBoxProperties3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmbNameLike.CheckBoxProperties = checkBoxProperties3;
+            checkBoxProperties4.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.cmbNameLike.CheckBoxProperties = checkBoxProperties4;
             this.cmbNameLike.DisplayMemberSingleItem = "";
             this.cmbNameLike.FormattingEnabled = true;
             this.cmbNameLike.Items.AddRange(new object[] {
@@ -564,8 +561,8 @@
             // 
             // cmbFamilyLike
             // 
-            checkBoxProperties4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmbFamilyLike.CheckBoxProperties = checkBoxProperties4;
+            checkBoxProperties1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.cmbFamilyLike.CheckBoxProperties = checkBoxProperties1;
             this.cmbFamilyLike.DisplayMemberSingleItem = "";
             this.cmbFamilyLike.FormattingEnabled = true;
             this.cmbFamilyLike.Items.AddRange(new object[] {
@@ -581,8 +578,8 @@
             // 
             // cmbFatherLike
             // 
-            checkBoxProperties1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmbFatherLike.CheckBoxProperties = checkBoxProperties1;
+            checkBoxProperties2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.cmbFatherLike.CheckBoxProperties = checkBoxProperties2;
             this.cmbFatherLike.DisplayMemberSingleItem = "";
             this.cmbFatherLike.FormattingEnabled = true;
             this.cmbFatherLike.Items.AddRange(new object[] {
@@ -680,7 +677,6 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(485, 140);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -747,7 +743,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(442, 238);
+            this.tabPage2.Size = new System.Drawing.Size(442, 186);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "نمایش کل";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -758,7 +754,7 @@
             this.lstSecndClmns.HorizontalScrollbar = true;
             this.lstSecndClmns.Location = new System.Drawing.Point(12, 39);
             this.lstSecndClmns.Name = "lstSecndClmns";
-            this.lstSecndClmns.Size = new System.Drawing.Size(201, 186);
+            this.lstSecndClmns.Size = new System.Drawing.Size(201, 134);
             this.lstSecndClmns.TabIndex = 44;
             // 
             // lstMainClmns
@@ -767,27 +763,8 @@
             this.lstMainClmns.HorizontalScrollbar = true;
             this.lstMainClmns.Location = new System.Drawing.Point(229, 39);
             this.lstMainClmns.Name = "lstMainClmns";
-            this.lstMainClmns.Size = new System.Drawing.Size(201, 186);
+            this.lstMainClmns.Size = new System.Drawing.Size(201, 134);
             this.lstMainClmns.TabIndex = 43;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.listBox1);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(442, 238);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "عملیات";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 8);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(430, 225);
-            this.listBox1.TabIndex = 0;
             // 
             // label15
             // 
@@ -880,7 +857,6 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -939,8 +915,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TextBox txtLbl2;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.TextBox txtLbl1;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
