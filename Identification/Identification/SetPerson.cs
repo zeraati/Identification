@@ -24,6 +24,24 @@ namespace Identification
         string strField, strDescription;
         #endregion
 
+        #region Enable & Disable from item clbEhraz
+        string[] strArray =
+            {
+                "Name",         "نام",
+                "Family",       "نام خانوادگی",
+                "Father",       "نام پدر",
+                "ShenasCode",   "شماره شناسنامه",
+                "PBirthDate",   "سال تولد",
+                "CodeMelli",    "کد ملی",
+                "HomeCity",     "شهر محل تولد",
+                "SodorCity",    "شهر محل صدور",
+                "HomeOstan",    "استان محل تولد",
+                "SodorOstan",   "استان محل صدور",
+                "STID",         "کد مرکز مدیریت",
+                "MKID",         "کد مرکز خدمات"
+            };
+        #endregion        
+
         public SetPerson(SqlConnection sqlCon)
         {
             InitializeComponent();
@@ -41,6 +59,9 @@ namespace Identification
             //  load database name source
             cmbMainDB.DataSource = Functions.SqlGetDBName(sqlConnection);
             cmbSecndDB.DataSource = Functions.SqlGetDBName(sqlConnection);
+
+            //  clear checklistbox
+            clbEhraz.Items.Clear();
 
             //  default value
             cmbMainDB.Text = cmbSecndDB.Text = "Ehraz";
@@ -103,7 +124,7 @@ namespace Identification
             string strFunctionsFile = @"../Functions";
             string strFinal, strReport;
 
-
+            //  clear list
             lstReport.Items.Clear();
 
             //  check sql functions
@@ -217,9 +238,30 @@ namespace Identification
             //  column names
             dtDgv = Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text, "فیلد جدول اصلی");
 
+
+            //  add item to checklistbox
+            AddItemCheckList(Functions.DataTableToList(dtDgv), strArray, clbEhraz);
+
+
+            //  remove row if has 'stid'
+            #region Remove One Row            
+            for (int i = 0; i < dtDgv.Rows.Count; i++)
+            {
+                string strtxt = dtDgv.Rows[i][0].ToString().ToUpper();
+
+                if (dtDgv.Rows[i][0].ToString().ToUpper() == "STID")
+                {
+                    dtDgv.Rows.Remove(dtDgv.Rows[i]);
+                    break;
+                }
+            }
+            #endregion
+
+
             //  send dtDgv to dgv
             dgv.DataSource = dtDgv;
 
+            #region Default Value
             for (int j = 0; j < dtDgv.Rows.Count; j++)
             {
                 //  column radif identity(0,1)
@@ -227,6 +269,8 @@ namespace Identification
                 //  check item is false
                 dgv.Rows[j].Cells[0].Value = false;
             }
+            #endregion
+
 
             dtDgv = Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text);
             //clmSecond.Items.Clear();
@@ -256,6 +300,8 @@ namespace Identification
             }
 
             #endregion
+
+            cmbMainClmnJoin_SelectedIndexChanged(null, null);
 
             btnChange.Enabled = btnShow.Enabled = true;
             Cursor.Current = Cursors.Default; this.Enabled = true;
@@ -316,26 +362,21 @@ namespace Identification
         {
             //  wait mode enable
             Cursor.Current = Cursors.WaitCursor; this.Enabled = false;
-            
-            //  default value
-            int strTC = 0;
+
 
             main();
 
             if (strDescription.IndexOf(cmbMainClmnJoin.Text) <= 0)
             { strDescription += " ,join=" + cmbMainClmnJoin.Text; }
 
-            //  count do update
-            strTC = Convert.ToInt32(Functions.SqlRunQuery("select count(*) FROM " + strJoin + strWhere + " AND  " + txtLbl2.Text + ".Description is NULL", sqlConnection));
-
             //  create query
-            query = strUpdate + strDescription + "' FROM " + strJoin + strWhere + " AND  " + txtLbl2.Text + ".Description is NULL";
+            query = strUpdate + strDescription + "' FROM " + strJoin + strWhere + " AND  " + txtLbl2.Text + ".Description is NULL SELECT @@ROWCOUNT";
 
             //  save query
             File.WriteAllText(@"../Command2.txt", query);
 
             //  report
-            lstReport.Items.Add("نتیجه دستور : " + Functions.SqlExcutCommand(query, sqlConnection));
+            lstReport.Items.Add("رکورد نتیجه : " + Functions.SqlRunQuery(query, sqlConnection));
 
             //  default value
             int ResultCount = 0;
@@ -344,8 +385,7 @@ namespace Identification
             ResultCount = Functions.SqlCountColumn(cmbSecndTbl.Text, sqlConnection, "[" + cmbMainClmnUniq.Text + "_vld] is null");
 
             //  report
-            lstReport.Items.Add("رکورد نتیجه: " + Functions.StrNum(Convert.ToInt32(strTC)));
-            lstReport.Items.Add("رکورد مانده: " + Functions.StrNum(ResultCount));
+            lstReport.Items.Add("رکورد مانده : " + Functions.StrNum(ResultCount));
             lstReport.SelectedIndex = lstReport.Items.Count - 1;
 
             //  wait mode disable
@@ -369,18 +409,6 @@ namespace Identification
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-            //this.Enabled = false;
-            //dgvMainClmns.DataSource = Functions.SqlColumns(sqlConn, cmbMainTbl.Text);
-            //fun.LoadColumn(cmbMainDB.Text, cmbMainTbl.Text, dgvClmField, Variables.server);
-            //fun.LoadColumn(cmbSecndDB.Text, cmbSecndTbl.Text, dgvClmField2, Variables.server);
-            // dgvClmField.DisplayIndex = 1;
-            // dgvClmField2.DisplayIndex = 1;
-            //dgvMainClmns.Enabled = true;
-        }
-
         private void lstReport_SelectedIndexChanged(object sender, EventArgs e)
         {
             string text = "";
@@ -393,54 +421,85 @@ namespace Identification
 
         private void dgvSearch_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            string strQuery = "";
 
+            if (e.ColumnIndex == 0)
+            {
+                if (strDescription.IndexOf(cmbMainClmnJoin.Text) <= 0)
+                { strDescription += " ,join=" + cmbMainClmnJoin.Text; }
+
+                strQuery = "UPDATE [" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] SET [" + cmbMainClmnUniq.Text + "_vld] = " + dgvSearch.Rows[e.RowIndex].Cells[1].Value.ToString() +
+                            " , [Description]=N'" + strDescription + " , آپدیت دستی'" + " WHERE STID =" + dgvSearch.Rows[e.RowIndex].Cells[2].Value.ToString() + " AND [" + cmbMainClmnUniq.Text + "_vld] IS NULL SELECT @@ROWCOUNT";
+
+                lstReport.Items.Add("رکورد نتیجه: " + Functions.SqlRunQuery(strQuery, sqlConnection, cmbSecndDB.Text));
+
+                dgvSearch.Rows.Remove(dgvSearch.Rows[e.RowIndex]);
+
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
 
-            string a = "", b = "";
-            textBox1.Text = "";
-            strSlt = "";
-            string comMain = "[" + cmbMainDB.Text + "].dbo.[" + cmbMainTbl.Text + "] " + a;
-            string com2 = "[" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] " + b;
+            //string a = "", b = "";
+            //textBox1.Text = "";
+            //strSlt = "";
+            //string comMain = "[" + cmbMainDB.Text + "].dbo.[" + cmbMainTbl.Text + "] " + a;
+            //string com2 = "[" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] " + b;
+            ////**********************
+            //if (b != "" & a != "")
+            //{
+            //    for (int l = 0; l < dgv.Rows.Count; l++)
+            //    {
+
+            //        if (Convert.ToBoolean(dgv.Rows[l].Cells[0].Value) != false)
+            //        {
+            //            #region اطلاعات فیلد از جدول اصلی
+
+            //            strCell1 = dgv.Rows[l].Cells[5].Value.ToString();
+            //            strMain = "[" + a + "].[" + strCell1 + "] " + a + "_" + strCell1;
+            //            #endregion
+
+            //            #region اطلاعات فیلد از جدول فرعی
+
+            //            if (dgv.Rows[l].Cells[2].Value != null)
+            //            {
+            //                strCell2 = dgv.Rows[l].Cells[2].Value.ToString();
+
+            //                if (dgv.Rows[l].Cells[3].Value != null) { strLbl2 = dgv.Rows[l].Cells[3].Value.ToString(); }
+            //                else strLbl2 = dgv.Rows[l].Cells[2].Value.ToString();
+            //                strSecond = "[" + b + "].[" + strCell2 + "] " + b + "_" + strLbl2;
+            //            }
+            //            else strSecond = "";
+
+            //            #endregion
+
+            //            if (strSlt == "") { if (strSecond == "") strSlt = strMain; else strSlt = strMain + "," + strSecond; }
+            //            else { if (strSecond == "") strSlt += "," + strMain; else strSlt += "," + strMain + "," + strSecond; }
+            //        }
+            //    }
+            //}
+            //else MessageBox.Show("خطا");
             //**********************
-            if (b != "" & a != "")
+        }
+
+        private void cmbMainClmnJoin_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataTable dtDgv = new DataTable();
+
+            //  column names
+            dtDgv = Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text, "فیلد جدول اصلی");
+
+            //  add item to checklistbox
+            AddItemCheckList(Functions.DataTableToList(dtDgv), strArray, clbEhraz);
+
+            for (int i = 0; i < 22; i++)
             {
-                for (int l = 0; l < dgv.Rows.Count; l++)
-                {
-
-                    if (Convert.ToBoolean(dgv.Rows[l].Cells[0].Value) != false)
-                    {
-                        #region اطلاعات فیلد از جدول اصلی
-
-                        strCell1 = dgv.Rows[l].Cells[5].Value.ToString();
-                        strMain = "[" + a + "].[" + strCell1 + "] " + a + "_" + strCell1;
-                        #endregion
-
-                        #region اطلاعات فیلد از جدول فرعی
-
-                        if (dgv.Rows[l].Cells[2].Value != null)
-                        {
-                            strCell2 = dgv.Rows[l].Cells[2].Value.ToString();
-
-                            if (dgv.Rows[l].Cells[3].Value != null) { strLbl2 = dgv.Rows[l].Cells[3].Value.ToString(); }
-                            else strLbl2 = dgv.Rows[l].Cells[2].Value.ToString();
-                            strSecond = "[" + b + "].[" + strCell2 + "] " + b + "_" + strLbl2;
-                        }
-                        else strSecond = "";
-
-                        #endregion
-
-                        if (strSlt == "") { if (strSecond == "") strSlt = strMain; else strSlt = strMain + "," + strSecond; }
-                        else { if (strSecond == "") strSlt += "," + strMain; else strSlt += "," + strMain + "," + strSecond; }
-                    }
-
-                }
+                string strs = strArray[i];
+                if (strArray[i] == cmbMainClmnJoin.Text)
+                { clbEhraz.Items.Remove(strArray[i + 1]); }
+                i++;
             }
-            else MessageBox.Show("خطا");
-            //**********************
-            //textBox1.Text = "SELECT " + strSlt + " FROM " + comMain + " JOIN " + com2 + " ON " + strMaster + " " + a + ".[" + cmbMainClmnJoin.Text + "])=" + strMaster + " " + b + ".[" + cmbSecndClmnJoin.Text + "])";
         }
 
         private void cmbNameLike_SelectedIndexChanged(object sender, EventArgs e)
@@ -452,11 +511,11 @@ namespace Identification
         private void cmbFatherLike_SelectedIndexChanged(object sender, EventArgs e)
         { if (cmbFatherLike.Text != "") clbEhraz.SetItemChecked(2, true); }
 
+
         //*****************************           
 
         #region Functions
         //***           functions
-
 
         public void main()
         {
@@ -475,6 +534,7 @@ namespace Identification
             //  create update query
             strUpdate = "Update [" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] SET [" + cmbMainClmnUniq.Text + "_vld]=" + a + "." + cmbMainClmnUniq.Text + " , [Description]=N'";
 
+            //  report
             lstReport.Items.Add("احراز هویت بر اساس ");
 
             //  checked counter
@@ -532,18 +592,21 @@ namespace Identification
 
             #region Create Select Query & string Where & Join
 
-            strSelect = "SELECT " + strSlt + " FROM ";
+            strSelect = "SELECT [" + txtLbl1.Text + "].STID " + txtLbl1.Text + "_STID, [" + txtLbl2.Text + "].STID " + txtLbl2.Text + "_STID," + strSlt + " FROM ";
             strJoin = comMain + " JOIN " + com2 + " ON " + DeleteFreeSpace(a + ".[" + cmbMainClmnJoin.Text + "]") + " = " + DeleteFreeSpace(b + ".[" + cmbSecndClmnJoin.Text + "]");
 
             //**********************
 
             //  checked from checklistbox
-            foreach (int Checked in clbEhraz.CheckedIndices)
+            foreach (int intChecked in clbEhraz.CheckedIndices)
             {
-                switch (Checked)
+
+                string strChecked = clbEhraz.Items[intChecked].ToString();
+
+                switch (strChecked)
                 {
                     #region Name -> varchar
-                    case 0:
+                    case "نام":
 
                         //  create where for query
                         strWhere = Selection("Name", cmbPersentName, cmbNameLike.Text, strWhere, a, b);
@@ -556,7 +619,7 @@ namespace Identification
                     #endregion
 
                     #region Family -> varchar
-                    case 1:
+                    case "نام خانوادگی":
 
                         //  create where for query
                         strWhere = Selection("Family", cmbPersentFamily, cmbFamilyLike.Text, strWhere, a, b);
@@ -569,7 +632,7 @@ namespace Identification
                     #endregion
 
                     #region Father -> varchar
-                    case 2:
+                    case "نام پدر":
 
                         //  create where for query
                         strWhere = Selection("Father", cmbPersentFather, cmbFatherLike.Text, strWhere, a, b);
@@ -582,102 +645,100 @@ namespace Identification
                     #endregion
 
                     #region ShenasCode -> int
-                    case 3:
+                    case "شناسنامه":
 
                         //  create where for query
                         if (strWhere != "")
                         { strWhere += " AND " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null"; }
                         else strWhere += " Where " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null";
 
-                        strDescription += "شناسنامه ";
-                        lstReport.Items.Add("شناسنامه ");
+                        strDescription += "شناسنامه";
+                        lstReport.Items.Add("شناسنامه");
 
                         break;
                     #endregion
 
                     #region PBirthDate -> smallint                        
-                    case 4:
+                    case "سال تولد":
                         if (strWhere != "")
                         { strWhere += " AND " + b + ".PBirthDate=" + a + ".PBirthDate AND " + b + ".PBirthDate is not null "; }
                         else strWhere += " Where " + b + ".PBirthDate=" + a + ".PBirthDate AND " + b + ".PBirthDate is not null ";
 
-                        strDescription += "سال تولد ";
-                        lstReport.Items.Add("سال تولد ");
+                        strDescription += "سال تولد";
+                        lstReport.Items.Add("سال تولد");
                         break;
                     #endregion
 
                     #region CodeMelli -> char(10)
-                    case 5:
+                    case "کد ملی":
                         if (strWhere != "")
                         { strWhere += " AND " + a + ".CodeMelli=" + b + ".CodeMelli AND " + b + ".CodeMelli is not null "; }
                         else strWhere += " Where " + a + ".CodeMelli=" + b + ".CodeMelli AND " + b + ".CodeMelli is not null ";
 
-                        strDescription += "کد ملی ";
-                        lstReport.Items.Add("کد ملی ");
+                        strDescription += "کد ملی";
+                        lstReport.Items.Add("کد ملی");
 
                         break;
                     #endregion
 
                     #region HomeCity -> varchar
-                    case 6:
+                    case "شهر محل تولد":
                         if (strWhere != "")
                         { strWhere += " and Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')"; }
                         else strWhere += " Where Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
 
-                        strDescription += "شهر محل تولد ";
-                        lstReport.Items.Add("شهر محل تولد ");
+                        strDescription += "شهر محل تولد";
+                        lstReport.Items.Add("شهر محل تولد");
 
                         break;
                     #endregion
 
                     #region SodorCity -> varchar
-                    case 7:
+                    case "شهر محل صدور":
                         if (strWhere != "")
                         { strWhere += " and Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')"; }
                         else strWhere += " Where Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')";
 
-                        strDescription += "شهر محل تولد ";
-                        lstReport.Items.Add("شهر محل تولد ");
+                        strDescription += "شهر محل صدور";
+                        lstReport.Items.Add("شهر محل صدور");
 
                         break;
                     #endregion
 
                     #region SodorOstan -> varchar
-                    case 8:
+                    case "استان محل تولد":
                         break;
                     #endregion
 
                     #region HomeOstan -> varchar
-                    case 9:
+                    case "استان محل صدور":
                         break;
                     #endregion
 
                     #region Code Modiriat                        
-                    case 12:
+                    case "کد مرکز مدیریت":
                         if (strWhere != "")
                         { strWhere += " AND " + b + ".STID=" + a + ".STID AND " + b + ".STID is not null "; }
                         else strWhere += " Where " + b + ".STID=" + a + ".STID AND " + b + ".STID is not null ";
 
-                        strDescription += "کد مرکز مدیریت ";
+                        strDescription += "کد مرکز مدیریت";
                         lstReport.Items.Add("کد مرکز مدیریت");
 
                         break;
                     #endregion
 
                     #region Code Khadamat                        
-                    case 13:
+                    case "کد مرکز خدمات":
                         if (strWhere != "")
                         { strWhere += " AND " + b + ".MKID=" + a + ".MKID AND " + b + ".MKID is not null "; }
                         else strWhere += " Where " + b + ".MKID=" + a + ".MKID AND " + b + ".MKID is not null ";
 
-                        strDescription += "کد مرکز خدمات ";
+                        strDescription += "کد مرکز خدمات";
                         lstReport.Items.Add("کد مرکز خدمات");
 
                         break;
                         #endregion
-
                 }
-
             }
 
 
@@ -692,7 +753,6 @@ namespace Identification
 
             //  save query2 to file command.txt
             File.WriteAllText(@"../Command.txt", query2);
-
 
             #endregion
         }
@@ -855,6 +915,24 @@ namespace Identification
 
         private string DeleteFreeSpace(string strItem)
         { return "Replace(" + strItem + ", ' ', '')"; }
+
+        private void AddItemCheckList(List<string> lstItem, string[] strArr, CheckedListBox clbEhraz)
+        {
+            clbEhraz.Items.Clear();
+
+            for (int i = 0; i < lstItem.Count; i++)
+            {
+                for (int j = 0; j < 22; j++)
+                {
+                    if (lstItem[i] == strArr[j])
+                    {
+                        string strs = strArr[j + 1];
+                        clbEhraz.Items.Add(strArr[j + 1]);
+                    }
+                    j++;
+                }
+            }
+        }
 
         //*******************************************
         #endregion

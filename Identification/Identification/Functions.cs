@@ -1190,10 +1190,15 @@ namespace Identification
 
         #region SqlRunQuery
 
-        public string SqlRunQuery(string strQuery, SqlConnection sqlConnection)
+        public string SqlRunQuery(string strQuery, SqlConnection sqlConnection, string strDBName = "")
         {
+            //  change sqlconnection new database name
+            if (strDBName != "")
+            { sqlConnection = SqlConnectionChangeDB(strDBName, sqlConnection); }
+
             SqlCommand sqlCmd = new SqlCommand(strQuery, sqlConnection);
             string strExecute;
+            sqlCmd.Connection.Close();
             sqlCmd.Connection.Open();
             sqlCmd.CommandTimeout = 3600;
             strExecute = sqlCmd.ExecuteScalar().ToString();
@@ -1769,13 +1774,13 @@ namespace Identification
 
         #region SqlTableRecordsCount
 
-        public int SqlTableRecordsCount(string strTableName, SqlConnection sqlConnection, string DbName = "", string strLabel = "")
+        public int SqlTableRecordsCount(string strTableName, SqlConnection sqlConnection, string strDbName = "", string strLabel = "")
         {
 
             string strQuery = "SELECT COUNT(*) FROM dbo.[" + strTableName + "]";
 
             //  change database name
-            if (DbName != "") sqlConnection = SqlConnectionChangeDB(DbName, sqlConnection);
+            if (strDbName != "") sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection);
 
             //  naming
             if (strLabel != "")
