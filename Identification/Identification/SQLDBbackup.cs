@@ -56,9 +56,8 @@ namespace Identification
             //sfd.Filter = "Text files (*.bak)|*.bak|All files (*.*)|*.*";
             void_filepath();
             if (fbd.SelectedPath != "")
-            {
-                dataGridView1.DataSource = DBfiles(fbd.SelectedPath);
-            }
+            { dataGridView1.DataSource = DBfiles(fbd.SelectedPath); }
+
         }
 
         public DataTable DBfiles(string selectpath)

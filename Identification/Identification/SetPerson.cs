@@ -22,6 +22,8 @@ namespace Identification
         string query, query2, strJoin, strWhere, strSelect, strUpdate;
         string strCell1, strCell2, strLbl2, strMain, strSecond, strSlt;
         string strField, strDescription;
+
+        int intStepOver;
         #endregion
 
         #region Enable & Disable from item clbEhraz
@@ -40,7 +42,77 @@ namespace Identification
                 "STID",         "کد مرکز مدیریت",
                 "MKID",         "کد مرکز خدمات"
             };
-        #endregion        
+        #endregion
+
+        #region Text Estandard Event
+        string[] strJoinEvent =
+        {
+            "کدمرکزمدیریت",
+            "کدمرکزخدمات",
+            "کدملی",
+            "شماره شناسنامه"
+        };
+
+        private string strPersentEvent(int i)
+        {
+            string strRtn = "";
+
+            switch (i)
+            {
+                case 0:
+                    strRtn = "100";
+                    break;
+                case 1:
+                    strRtn = "95";
+                    break;
+                case 2:
+                    strRtn = "90";
+                    break;
+                case 3:
+                    strRtn = "85";
+                    break;
+                case 4:
+                    strRtn = "80";
+                    break;
+                case 5:
+                    strRtn = "75";
+                    break;
+                case 6:
+                    strRtn = "70";
+                    break;
+            }
+            return strRtn;
+        }
+
+
+        private string strTextEvent(int i)
+        {
+            string strRtn = "";
+
+            switch (i)
+            {
+                case 0:
+                    strRtn = "نام " + strPersentEvent(0);
+                    break;
+                case 1:
+                    strRtn = "نام خانوادگی " + strPersentEvent(0);
+                    break;
+                case 2:
+                    strRtn = "نام پدر " + strPersentEvent(0);
+                    break;
+                case 3:
+                    strRtn = "کدملی";
+                    break;
+                case 4:
+                    strRtn = "100 درصد";
+                    break;
+            }
+            return strRtn;
+        }
+        #endregion
+
+
+        string strEventListPath = @"../Event.txt";
 
         public SetPerson(SqlConnection sqlCon)
         {
@@ -60,11 +132,19 @@ namespace Identification
             cmbMainDB.DataSource = Functions.SqlGetDBName(sqlConnection);
             cmbSecndDB.DataSource = Functions.SqlGetDBName(sqlConnection);
 
+
+            //  check exists file event.txt
+            string sss = Functions.CreateFile(strEventListPath);
+
+            //  combobox read file text
+            Functions.ListToCmb(Functions.ReadTxt(strEventListPath), cmbEventList);
+
             //  clear checklistbox
             clbEhraz.Items.Clear();
 
             //  default value
-            cmbMainDB.Text = cmbSecndDB.Text = "Ehraz";
+            cmbMainDB.Text = cmbSecndDB.Text = "AmarPartDB";
+            intStepOver = 0;
         }
 
         private void cmbDBNameMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -76,7 +156,7 @@ namespace Identification
             cmbMainTbl.DataSource = Functions.SqlTableName(sqlConnection);
 
             //  default value            
-            cmbMainTbl.Text = "TBL_Student_95-02-21_copy";
+            cmbMainTbl.Text = "TBL_Student_copy";
         }
 
         private void cmbDBName2_SelectedIndexChanged(object sender, EventArgs e)
@@ -88,7 +168,7 @@ namespace Identification
             cmbSecndTbl.DataSource = Functions.SqlTableName(sqlConnection);
 
             //  default value
-            cmbSecndTbl.Text = "TBL_MKsarparast_95-02-21_copy";
+            cmbSecndTbl.Text = "TBL_MKsarparast_uniq_copy";
         }
 
         private void cmbTBNameMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -173,8 +253,8 @@ namespace Identification
                 Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text));
 
                 //  list column names                
-                lstMainClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text));
-                lstSecndClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text));
+                lstMainClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text), 1);
+                lstSecndClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text), 1);
 
 
                 #region Create New Field
@@ -363,7 +443,7 @@ namespace Identification
             //  wait mode enable
             Cursor.Current = Cursors.WaitCursor; this.Enabled = false;
 
-
+            //  function filters
             main();
 
             if (strDescription.IndexOf(cmbMainClmnJoin.Text) <= 0)
@@ -502,11 +582,70 @@ namespace Identification
             }
         }
 
+        private void btnEvent_Click(object sender, EventArgs e)
+        {
+            List<GroupBox> GroupBoxes = new List<GroupBox>();
+            List<ComboBox> Caja = new List<ComboBox>();
+            for (int i = 0; i < 3; i++)
+            {
+                ComboBox cb = new ComboBox();
+                cb.Location = new System.Drawing.Point(51, 21);
+                cb.Name = "comboBox" + i.ToString();
+                cb.Size = new System.Drawing.Size(121, 21);
+                cb.DropDownStyle = ComboBoxStyle.DropDownList;
+                Caja.Add(cb);
+                GroupBox gb = new GroupBox();
+                gb.Location = new System.Drawing.Point(51, 21);
+                gb.Size = new System.Drawing.Size(203, 56);
+                gb.Text = "رویداد " + (i + 1).ToString();
+                gb.Name = "GroupBox" + i.ToString();
+                gb.Controls.Add(cb);
+                GroupBoxes.Add(gb);
+                this.flowLayoutPanel1.Controls.Add(gb);
+            }
+        }
+
+        private void cmbEventList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //  items is defined
+
+        }
+
         private void cmbNameLike_SelectedIndexChanged(object sender, EventArgs e)
         { if (cmbNameLike.Text != "") clbEhraz.SetItemChecked(0, true); }
 
         private void cmbFamilyLike_SelectedIndexChanged(object sender, EventArgs e)
         { if (cmbFamilyLike.Text != "") clbEhraz.SetItemChecked(1, true); }
+
+        private void dgv_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void btnStepOver_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < clbEhraz.Items.Count; i++)
+            { clbEhraz.SetItemChecked(i, false); }
+
+            switch (intStepOver)
+            {
+                case 0:
+                    clbEhraz.SetItemChecked(intStepOver, true);
+                    cmbPersentName.Text = strPersentEvent(intStepOver);
+                    break;
+                case 1:
+                    clbEhraz.SetItemChecked(intStepOver, true);
+                    break;
+                case 2:
+                    clbEhraz.SetItemChecked(intStepOver, true);
+                    break;
+                case 3:
+                    intStepOver = 0;
+                    break;
+            }
+
+            intStepOver++;
+        }
 
         private void cmbFatherLike_SelectedIndexChanged(object sender, EventArgs e)
         { if (cmbFatherLike.Text != "") clbEhraz.SetItemChecked(2, true); }
@@ -516,6 +655,23 @@ namespace Identification
 
         #region Functions
         //***           functions
+
+        //  function is defined
+        private void Defined(int i)
+        {
+            switch (i)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
+        }
+
 
         public void main()
         {
@@ -797,9 +953,13 @@ namespace Identification
         //  
         private string loopWord(List<string> lstLike, string strType, string strLblA, string strLblB, string strColumnUniq, string strWhere)
         {
+            string strMath = " AND ";
 
             for (int i = 0; i < lstLike.Count; i++)
             {
+                if (i > 1)
+                { strMath = " OR "; }
+
                 if (lstLike[i] == "NULL")
                 {
                     if (strWhere == "")
@@ -808,7 +968,7 @@ namespace Identification
                     }
                     else
                     {
-                        strWhere = strWhere + " OR (" + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " )";
+                        strWhere = strWhere + strMath + " (" + strLblA + ".[" + strType + "] IS " + lstLike[i] + " OR " + strLblB + ".[" + strType + "] IS " + lstLike[i] + " )";
                     }
                 }
                 else if (lstLike[i] == "اله-الله")
@@ -820,8 +980,8 @@ namespace Identification
                     }
                     else
                     {
-                        strWhere = strWhere +
-                                   " OR (REPLACE(REPLACE(" + strLblA + ".[" + strType + "], N'الله', ''), N'اله', '') = REPLACE(REPLACE(" + strLblB + ".[" + strType + "], N'الله', ''), N'اله', '') AND " +
+                        strWhere = strWhere + strMath +
+                                   " (REPLACE(REPLACE(" + strLblA + ".[" + strType + "], N'الله', ''), N'اله', '') = REPLACE(REPLACE(" + strLblB + ".[" + strType + "], N'الله', ''), N'اله', '') AND " +
                                    "(" + strLblA + ".[" + strType + "] LIKE N'%اله%' OR " + strLblB + ".[" + strType + "] LIKE N'%اله%' or " + strLblA + ".[" + strType + "] LIKE N'%الله%' or " + strLblB + ".[" + strType + "] LIKE N'%الله%') AND " + strLblA + ".[" + strType + "]<> " + strLblB + ".[" + strType + "])";
                     }
                 }
@@ -834,7 +994,7 @@ namespace Identification
                     }
                     else
                     {
-                        strWhere = strWhere + " OR (Replace(" + strLblA + ".[" + strType + "] ,'" + lstLike[i] + "','') = Replace(" + strLblB + ".[" + strType + "],'" + lstLike[i] + "','')" +
+                        strWhere = strWhere + strMath + " (Replace(" + strLblA + ".[" + strType + "] ,'" + lstLike[i] + "','') = Replace(" + strLblB + ".[" + strType + "],'" + lstLike[i] + "','')" +
                                     " AND (" + strLblA + ".[" + strType + "] LIKE N'%" + lstLike[i] + "%' OR " + strLblB + ".[" + strType + "] LIKE N'%" + lstLike[i] + "%') AND " + strLblA + ".[" + strType + "]<>" + strLblB + ".[" + strType + "])";
                     }
                 }

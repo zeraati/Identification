@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            PresentationControls.CheckBoxProperties checkBoxProperties4 = new PresentationControls.CheckBoxProperties();
             PresentationControls.CheckBoxProperties checkBoxProperties1 = new PresentationControls.CheckBoxProperties();
             PresentationControls.CheckBoxProperties checkBoxProperties2 = new PresentationControls.CheckBoxProperties();
+            PresentationControls.CheckBoxProperties checkBoxProperties3 = new PresentationControls.CheckBoxProperties();
             this.clbEhraz = new System.Windows.Forms.CheckedListBox();
             this.lstReport = new System.Windows.Forms.ListBox();
             this.cmbPersentFamily = new System.Windows.Forms.ComboBox();
@@ -64,6 +64,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.btnShow = new System.Windows.Forms.Button();
             this.dgvSearch = new System.Windows.Forms.DataGridView();
+            this.btnUpdate = new System.Windows.Forms.DataGridViewButtonColumn();
             this.cmbMainClmnJoin = new System.Windows.Forms.ComboBox();
             this.cmbSecndClmnJoin = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -77,6 +78,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.dgv = new System.Windows.Forms.DataGridView();
+            this.chb = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmSN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmSecond = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.txtSecound = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmEqual = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.txtLbl1 = new System.Windows.Forms.TextBox();
@@ -86,21 +92,25 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lstSecndClmns = new System.Windows.Forms.ListBox();
             this.lstMainClmns = new System.Windows.Forms.ListBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.lstEvent = new System.Windows.Forms.ListBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnEvent = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.chb = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmSN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmSecond = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.txtSecound = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClmEqual = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.btnUpdate = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.cmbEventList = new System.Windows.Forms.ComboBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.btnStepOver = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSearch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // clbEhraz
@@ -212,7 +222,7 @@
             // btnChange
             // 
             this.btnChange.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.btnChange.Location = new System.Drawing.Point(265, 95);
+            this.btnChange.Location = new System.Drawing.Point(258, 95);
             this.btnChange.Name = "btnChange";
             this.btnChange.Size = new System.Drawing.Size(98, 32);
             this.btnChange.TabIndex = 8;
@@ -350,7 +360,7 @@
             // btnCheck
             // 
             this.btnCheck.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.btnCheck.Location = new System.Drawing.Point(134, 95);
+            this.btnCheck.Location = new System.Drawing.Point(130, 95);
             this.btnCheck.Name = "btnCheck";
             this.btnCheck.Size = new System.Drawing.Size(108, 32);
             this.btnCheck.TabIndex = 7;
@@ -432,7 +442,7 @@
             // btnShow
             // 
             this.btnShow.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.btnShow.Location = new System.Drawing.Point(395, 95);
+            this.btnShow.Location = new System.Drawing.Point(381, 95);
             this.btnShow.Name = "btnShow";
             this.btnShow.Size = new System.Drawing.Size(88, 32);
             this.btnShow.TabIndex = 9;
@@ -453,6 +463,17 @@
             this.dgvSearch.Size = new System.Drawing.Size(925, 130);
             this.dgvSearch.TabIndex = 54;
             this.dgvSearch.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSearch_CellContentClick);
+            // 
+            // btnUpdate
+            // 
+            this.btnUpdate.Frozen = true;
+            this.btnUpdate.HeaderText = "آپدیت";
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.ReadOnly = true;
+            this.btnUpdate.Text = "آپدیت";
+            this.btnUpdate.ToolTipText = "آپدیت";
+            this.btnUpdate.UseColumnTextForButtonValue = true;
+            this.btnUpdate.Width = 50;
             // 
             // cmbMainClmnJoin
             // 
@@ -523,8 +544,8 @@
             // 
             // cmbNameLike
             // 
-            checkBoxProperties4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmbNameLike.CheckBoxProperties = checkBoxProperties4;
+            checkBoxProperties1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.cmbNameLike.CheckBoxProperties = checkBoxProperties1;
             this.cmbNameLike.DisplayMemberSingleItem = "";
             this.cmbNameLike.FormattingEnabled = true;
             this.cmbNameLike.Items.AddRange(new object[] {
@@ -540,8 +561,8 @@
             // 
             // cmbFamilyLike
             // 
-            checkBoxProperties1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmbFamilyLike.CheckBoxProperties = checkBoxProperties1;
+            checkBoxProperties2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.cmbFamilyLike.CheckBoxProperties = checkBoxProperties2;
             this.cmbFamilyLike.DisplayMemberSingleItem = "";
             this.cmbFamilyLike.FormattingEnabled = true;
             this.cmbFamilyLike.Items.AddRange(new object[] {
@@ -557,8 +578,8 @@
             // 
             // cmbFatherLike
             // 
-            checkBoxProperties2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmbFatherLike.CheckBoxProperties = checkBoxProperties2;
+            checkBoxProperties3.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.cmbFatherLike.CheckBoxProperties = checkBoxProperties3;
             this.cmbFatherLike.DisplayMemberSingleItem = "";
             this.cmbFatherLike.FormattingEnabled = true;
             this.cmbFatherLike.Items.AddRange(new object[] {
@@ -606,11 +627,53 @@
             this.dgv.RowHeadersVisible = false;
             this.dgv.Size = new System.Drawing.Size(430, 127);
             this.dgv.TabIndex = 73;
+            this.dgv.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellContentClick);
+            // 
+            // chb
+            // 
+            this.chb.FillWeight = 5F;
+            this.chb.Frozen = true;
+            this.chb.HeaderText = "";
+            this.chb.Name = "chb";
+            this.chb.Width = 30;
+            // 
+            // clmSN
+            // 
+            this.clmSN.Frozen = true;
+            this.clmSN.HeaderText = "ردیف";
+            this.clmSN.Name = "clmSN";
+            this.clmSN.ReadOnly = true;
+            this.clmSN.ToolTipText = "ردیف";
+            this.clmSN.Width = 30;
+            // 
+            // clmSecond
+            // 
+            this.clmSecond.HeaderText = "Column1";
+            this.clmSecond.Name = "clmSecond";
+            this.clmSecond.ToolTipText = "فیلد جدول فرعی";
+            // 
+            // txtSecound
+            // 
+            this.txtSecound.HeaderText = "نامگذاری";
+            this.txtSecound.Name = "txtSecound";
+            this.txtSecound.ToolTipText = "نامگذاری";
+            // 
+            // ClmEqual
+            // 
+            this.ClmEqual.HeaderText = "عملیات";
+            this.ClmEqual.Items.AddRange(new object[] {
+            "<>",
+            "="});
+            this.ClmEqual.Name = "ClmEqual";
+            this.ClmEqual.ToolTipText = "عملیات";
+            this.ClmEqual.Width = 40;
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(485, 140);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -679,7 +742,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(442, 186);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "نمایش کل";
+            this.tabPage2.Text = "نمایش فیلدهای جداول";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // lstSecndClmns
@@ -699,6 +762,54 @@
             this.lstMainClmns.Name = "lstMainClmns";
             this.lstMainClmns.Size = new System.Drawing.Size(201, 134);
             this.lstMainClmns.TabIndex = 43;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.lstEvent);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(442, 186);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "توضیحات رویداد";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // lstEvent
+            // 
+            this.lstEvent.FormattingEnabled = true;
+            this.lstEvent.Location = new System.Drawing.Point(6, 7);
+            this.lstEvent.Name = "lstEvent";
+            this.lstEvent.Size = new System.Drawing.Size(430, 173);
+            this.lstEvent.TabIndex = 1;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.btnEvent);
+            this.tabPage4.Controls.Add(this.flowLayoutPanel1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(442, 186);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "تعریف رویداد جدید";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // btnEvent
+            // 
+            this.btnEvent.Location = new System.Drawing.Point(6, 13);
+            this.btnEvent.Name = "btnEvent";
+            this.btnEvent.Size = new System.Drawing.Size(75, 23);
+            this.btnEvent.TabIndex = 0;
+            this.btnEvent.Text = "button2";
+            this.btnEvent.UseVisualStyleBackColor = true;
+            this.btnEvent.Click += new System.EventHandler(this.btnEvent_Click);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(6, 42);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(430, 141);
+            this.flowLayoutPanel1.TabIndex = 3;
             // 
             // label15
             // 
@@ -727,55 +838,41 @@
             this.label17.TabIndex = 78;
             this.label17.Text = "یا";
             // 
-            // chb
+            // cmbEventList
             // 
-            this.chb.FillWeight = 5F;
-            this.chb.Frozen = true;
-            this.chb.HeaderText = "";
-            this.chb.Name = "chb";
-            this.chb.Width = 30;
+            this.cmbEventList.FormattingEnabled = true;
+            this.cmbEventList.Items.AddRange(new object[] {
+            "رویداد استاندارد شماره 1",
+            "رویداد استاندارد شماره 2",
+            "رویداد استاندارد شماره 3",
+            "رویداد استاندارد شماره 4"});
+            this.cmbEventList.Location = new System.Drawing.Point(705, 114);
+            this.cmbEventList.Name = "cmbEventList";
+            this.cmbEventList.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cmbEventList.Size = new System.Drawing.Size(138, 21);
+            this.cmbEventList.TabIndex = 79;
+            this.cmbEventList.SelectedIndexChanged += new System.EventHandler(this.cmbEventList_SelectedIndexChanged);
             // 
-            // clmSN
+            // label18
             // 
-            this.clmSN.Frozen = true;
-            this.clmSN.HeaderText = "ردیف";
-            this.clmSN.Name = "clmSN";
-            this.clmSN.ReadOnly = true;
-            this.clmSN.ToolTipText = "ردیف";
-            this.clmSN.Width = 30;
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(631, 117);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(68, 13);
+            this.label18.TabIndex = 80;
+            this.label18.Text = "انتخاب رویداد";
             // 
-            // clmSecond
+            // btnStepOver
             // 
-            this.clmSecond.HeaderText = "Column1";
-            this.clmSecond.Name = "clmSecond";
-            this.clmSecond.ToolTipText = "فیلد جدول فرعی";
-            // 
-            // txtSecound
-            // 
-            this.txtSecound.HeaderText = "نامگذاری";
-            this.txtSecound.Name = "txtSecound";
-            this.txtSecound.ToolTipText = "نامگذاری";
-            // 
-            // ClmEqual
-            // 
-            this.ClmEqual.HeaderText = "عملیات";
-            this.ClmEqual.Items.AddRange(new object[] {
-            "<>",
-            "="});
-            this.ClmEqual.Name = "ClmEqual";
-            this.ClmEqual.ToolTipText = "عملیات";
-            this.ClmEqual.Width = 40;
-            // 
-            // btnUpdate
-            // 
-            this.btnUpdate.Frozen = true;
-            this.btnUpdate.HeaderText = "آپدیت";
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.ReadOnly = true;
-            this.btnUpdate.Text = "آپدیت";
-            this.btnUpdate.ToolTipText = "آپدیت";
-            this.btnUpdate.UseColumnTextForButtonValue = true;
-            this.btnUpdate.Width = 50;
+            this.btnStepOver.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.btnStepOver.Location = new System.Drawing.Point(847, 114);
+            this.btnStepOver.Name = "btnStepOver";
+            this.btnStepOver.Size = new System.Drawing.Size(88, 21);
+            this.btnStepOver.TabIndex = 81;
+            this.btnStepOver.Text = "گام بعدی";
+            this.btnStepOver.UseVisualStyleBackColor = true;
+            this.btnStepOver.Click += new System.EventHandler(this.btnStepOver_Click);
+            this.btnStepOver.Enter += new System.EventHandler(this.btnStepOver_Click);
             // 
             // SetPerson
             // 
@@ -784,6 +881,9 @@
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(944, 579);
+            this.Controls.Add(this.btnStepOver);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.cmbEventList);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
@@ -840,6 +940,8 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -911,5 +1013,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn txtSecound;
         private System.Windows.Forms.DataGridViewComboBoxColumn ClmEqual;
         private System.Windows.Forms.DataGridViewButtonColumn btnUpdate;
+        private System.Windows.Forms.ComboBox cmbEventList;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.ListBox lstEvent;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Button btnEvent;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button btnStepOver;
     }
 }

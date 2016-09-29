@@ -11,6 +11,7 @@ using Persia;
 using PersiaSL;
 using System.Data.SqlClient;
 using System.Net;
+using System.IO;
 
 namespace Identification
 {
@@ -19,6 +20,9 @@ namespace Identification
         Functions Functions = new Functions();
         SqlConnection sqlConnection = new SqlConnection();
 
+        FontDialog FD = new FontDialog();
+
+        string strPathFont = @"../Font.txt";
         string strFunctionsFile = @"../Functions";
         string strType, strDate;
         int intTableCheck;
@@ -46,6 +50,17 @@ namespace Identification
             strDate = strDate.Replace("/", "");
 
             if (cmbDBName.Text != "") cmbDBName.DropDownWidth = Functions.DropDownWidth(cmbDBName);
+
+            //  create font file if no file
+            Functions.CreateFile(strPathFont);
+
+            //  set font from font file
+            string strReadText = File.ReadAllText(strPathFont);
+            if (strReadText != "")
+            {
+
+                //Estandard.ActiveForm.Font = FD.Font=FontConverter.
+            }
         }
 
         private void خروجToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -72,7 +87,7 @@ namespace Identification
             { lstReport(strReport); }
 
             //  dafault value
-            cmbDBName.Text = "Test";
+            // cmbDBName.Text = "Test";
 
             //  set cmbTBName source    // load table names
             loadTbName();
@@ -82,13 +97,15 @@ namespace Identification
 
         private void cmbTB_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             //  load column names
             loadColumn();
 
             //  displayed count record
             chbDisRec_CheckedChanged(null, null);
 
-            cmbTableNameTab1.Text = cmbTableNameColumn.Text = cmbTableName.Text;
+            cmbTableNameTab1.Text = cmbTableName.Text;
 
             //TName = cmbTB.SelectedIndex;
 
@@ -96,19 +113,7 @@ namespace Identification
 
             if (cmbTableName.Items.Count != 0) cmbTableName.DropDownWidth = Functions.DropDownWidth(cmbTableName);
 
-        }
-
-
-
-        //  txtlen enable & disable
-        private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbTypeTab2.Text == "int" | cmbTypeTab2.Text == "tinyint" | cmbTypeTab2.Text == "bigint" | cmbTypeTab2.Text == "smallint" | cmbTypeTab2.Text == "date" |
-                cmbTypeTab2.Text == "datetime" | cmbTypeTab2.Text == "bit" | cmbTypeTab2.Text == "float" | cmbTypeTab2.Text == "real" | cmbTypeTab2.Text == "float to int")
-            {
-                txtLen.Visible = false;
-            }
-            else txtLen.Visible = true;
+            Cursor.Current = Cursors.Default;
         }
 
 
@@ -131,6 +136,8 @@ namespace Identification
 
         private void btnTBCopy_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             string strFinal;
 
             //  copy table data
@@ -142,6 +149,7 @@ namespace Identification
             // load table names of source
             if (strFinal.Contains("Done")) loadTbName();
 
+            Cursor.Current = Cursors.Default;
         }
 
         private void btnTBDelete_Click(object sender, EventArgs e)
@@ -165,190 +173,44 @@ namespace Identification
             else lst1.Items.Add("عملیات لغو شد");
         }
 
-        private void cmbTB2_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbTableNameTab1_SelectedIndexChanged(object sender, EventArgs e)
         {
             txtNewTableName.Text = cmbTableNameTab1.Text;
             txtCopyTableName.Text = cmbTableNameTab1.Text + "_copy";
             cmbTableNameTab1.DropDownWidth = Functions.DropDownWidth(cmbTableNameTab1);
         }
 
+
+
+
+
+
+
+
+
+        private void dgvDesign_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // My combobox column is the second one so I hard coded a 1, flavor to taste
+            DataGridViewComboBoxCell cb = (DataGridViewComboBoxCell)dgvDesign.Rows[e.RowIndex].Cells[3];
+            if (cb.Value != null & dgvDesign.Rows[e.RowIndex].Cells[4].Value != null)
+            {
+                dgvDesign.Rows[e.RowIndex].Cells[5].ReadOnly = ReadOnly(dgvDesign.Rows[e.RowIndex].Cells[4].Value.ToString());
+                if (ReadOnly(dgvDesign.Rows[e.RowIndex].Cells[4].Value.ToString()) == true) dgvDesign.Rows[e.RowIndex].Cells[5].Value = null;
+            }
+        }
+
+
+
+
         //**************************************************
         #endregion
 
-
-        #region TabControl Field
-        //  ****    tabcontrol field
-        private void btnChangeFieldName_Click(object sender, EventArgs e)
-        {
-
-            //  rename column
-            string strReport = Functions.SqlRename(" COLUMN ", cmbColumnTab2.Text, txtFildEdit.Text, sqlConnection, cmbTableNameColumn.Text);
-
-            //  report
-            lstReport(cmbColumnTab2.Text + " => " + " Rename => " + txtFildEdit.Text + strReport);
-
-            //  load column
-            if (strReport.Contains("Done")) loadColumn();
-
-        }
-
-        private void btnEditDataType_Click(object sender, EventArgs e)
-        {
-            string strDataType = cmbTypeTab2.Text;
-            string strNullable = "Not NULL", strReport = "";
-
-
-            //  nullable is not null
-            if (chbxNull.CheckState == CheckState.Checked) strNullable = "Null";
-
-            //  data type is string
-            if (txtLen.Visible == true) { strDataType = cmbTypeTab2.Text + "(" + txtLen.Text + ")"; }
-
-            //  run query
-            strReport = Functions.SqlEditDataTypeColumn(cmbTableNameColumn.Text, cmbColumnTab2.Text, strDataType, strNullable, sqlConnection, cmbDBName.Text);
-
-            //  report
-            lstReport("Edit DataType Column => " + cmbColumnTab2.Text + strReport);
-
-            //  load column
-            if (strReport.Contains("Done")) loadColumn();
-
-        }
-
-        private void btnAddField_Click(object sender, EventArgs e)
-        {
-            string strNulable = " NOT NULL ";
-            string strDataType = cmbTypeTab2.Text, strReport = "";
-
-            //  checked null or not null
-            if (chbxNull.CheckState == CheckState.Checked) strNulable = " NULL ";
-
-            //  data type is string
-            if (txtLen.Visible == true) { strDataType = cmbTypeTab2.Text + "(" + txtLen.Text + ")"; }
-
-
-            if (txtNewField.Text != "")
-            {
-                //  run query new uniqe column
-                if (chbUniqe.CheckState == CheckState.Checked) strReport = Functions.SqlAddNewColumn(cmbTableName.Text, txtNewField.Text, "INT", sqlConnection, 1, 1);
-
-                //  run query new column
-                else strReport = Functions.SqlAddNewColumn(cmbTableName.Text, txtNewField.Text, strDataType, strNulable, sqlConnection, cmbDBName.Text);
-
-                //  report
-                lstReport("New Colummn => [" + txtNewField.Text + "] " + strReport);
-            }
-            else MessageBox.Show("نام فیلد را وارد کنید", "هشدار");
-
-            if (strReport.Contains("Done")) loadColumn();
-
-        }
-
-        private void btnDelField_Click(object sender, EventArgs e)
-        {
-            string strFinaly = "";
-
-            DialogResult DR = new DialogResult();
-            DR = MessageBox.Show("آیا فیلد [" + cmbColumnDelete.Text + "]حذف شود ", "!هشدار", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
-
-            if (DR == DialogResult.Yes)
-            {
-                //  run query
-                strFinaly = Functions.SqlDropColumn(cmbTableNameColumn.Text, cmbColumnDelete.Text, sqlConnection);
-
-                //  report
-                lstReport(cmbColumnDelete.Text + " => Delete => " + strFinaly);
-
-                //  load fields
-                if (strFinaly.Contains("Done")) loadColumn();
-
-            }
-            else if (DR == DialogResult.No) lst1.Items.Add("عملیات لغو شد");
-        }
-
-        private void btnCopyField_Click(object sender, EventArgs e)
-        {
-            string strFinal = "";
-
-            //  run query
-            strFinal = Functions.SqlCopyColumn(cmbTableNameColumn.Text, cmbColumnCopy.Text, sqlConnection);
-
-            //  conclude final 
-            lstReport(cmbColumnCopy.Text + " => Copy " + strFinal);
-
-            //  load column
-            if (strFinal.Contains("Done")) loadColumn();
-
-
-        }
-
-        private void cmbTBField_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbTableNameColumn.Items.Count != 0) cmbTableNameColumn.DropDownWidth = Functions.DropDownWidth(cmbTableNameColumn);
-
-            //  load field name
-            loadColumn();
-
-        }
-
-        private void cmbField_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            txtFildEdit.Text = cmbColumnTab2.Text + "_copy";
-
-            #region Column Info
-            //  column info
-            DataTable dtColumnInfo = Functions.SqlColumns(cmbTableNameColumn.Text, sqlConnection, cmbColumnTab2.Text);
-            if (dtColumnInfo.Rows.Count != 0)
-            {
-                cmbTypeTab2.Text = dtColumnInfo.Rows[0][2].ToString();
-                chbxNull.CheckState = CheckState.Unchecked;
-                if (dtColumnInfo.Rows[0][1].ToString().ToUpper() == "NULL")
-                { chbxNull.CheckState = CheckState.Checked; }
-
-                if (dtColumnInfo.Rows[0][3].ToString() != "NULL")
-                { txtLen.Text = dtColumnInfo.Rows[0][3].ToString().Replace("(", "").Replace(")", ""); }
-
-                //  column primary key
-                int intColumnKey = Functions.SqlCountColumnKey(cmbTableNameColumn.Text, cmbColumnTab2.Text, sqlConnection);
-
-                //  default value
-                chBxKey.CheckState = CheckState.Unchecked;
-                //  checkbox do checked
-                if (intColumnKey != 0)
-                { chBxKey.CheckState = CheckState.Checked; }
-            }
-
-            #endregion
-
-            if (cmbColumnTab2.Items.Count != 0) cmbColumnTab2.DropDownWidth = Functions.DropDownWidth(cmbColumnTab2);
-        }
-
-        private void cmbFieldDel_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        //**************************************************
-        #endregion
 
 
         private void btnselectALL2_Click(object sender, EventArgs e)
         {
             Functions.SelectUnselect(chlstbxColumn, btnselectALL2);
         }
-
-        #region TabControl Design
-
-
-
-
-        #endregion
-
-
-
-
-
 
 
         #region نمایش رکوردهای هر فیلد
@@ -360,6 +222,7 @@ namespace Identification
 
             DataTable dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection, cmbDBName.Text);
 
+            //List<string> lstTest = Functions.DataTableToList(dtColumns,1);
             string strCount, strFieldName;
 
 
@@ -380,10 +243,10 @@ namespace Identification
                 for (int j = 0; j < dtColumns.Rows.Count; j++)
                 {
                     //  get field name
-                    strFieldName = dtColumns.Rows[j][0].ToString();
+                    strFieldName = dtColumns.Rows[j][1].ToString();
 
                     //  get data type
-                    strType = dtColumns.Rows[j][2].ToString();
+                    strType = dtColumns.Rows[j][3].ToString();
 
 
                     if (strType == "image" | strType == "ntext")
@@ -436,10 +299,139 @@ namespace Identification
             sqlbackup.ShowDialog();
         }
 
-        private void btnUpdDesign_Click(object sender, EventArgs e)
+        Label lblOldColumn = new Label();
+        private void dgvDesign_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            if (dgvDesign.Rows[e.RowIndex].Cells[2].Value != null & lblOldColumn.Text == "")
+            {
+                lblOldColumn.Text = dgvDesign.Rows[e.RowIndex].Cells[2].Value.ToString();
+            }
 
         }
+
+        private void btnUpdDesign_Click(object sender, EventArgs e)
+        {
+            string strDataType = "", strFinal = "", strId;
+            bool bGoLoadColumn = false;
+
+
+            if (dgvDesign != null)
+            {
+                for (int i = 0; i < dgvDesign.RowCount; i++)
+                {
+                    //  checked rows
+                    if (Convert.ToBoolean(dgvDesign.Rows[i].Cells[1].Value) == true)
+                    {
+
+                        //  data type is string
+                        strDataType = dgvDesign.Rows[i].Cells[4].Value.ToString();
+                        //  len is null => numberic
+                        if (dgvDesign.Rows[i].Cells[5].Value != null)
+                        { strDataType = dgvDesign.Rows[i].Cells[4].Value.ToString() + "(" + dgvDesign.Rows[i].Cells[5].Value.ToString() + ")"; }
+
+                        //  warrning if is null
+                        if (
+                            dgvDesign.Rows[i].Cells[2].Value != null |
+                            dgvDesign.Rows[i].Cells[3].Value != null |
+                            dgvDesign.Rows[i].Cells[4].Value != null |
+                            dgvDesign.Rows[i].Cells[5].Value != null
+                            )
+                        {
+                            //  id is null
+                            #region Id Is Null & Add New Column
+
+                            if (dgvDesign.Rows[i].Cells[0].Value == null)
+                            {
+
+                                //  create new column
+                                strFinal = Functions.SqlAddNewColumn
+                                    (
+                                    cmbTableName.Text,                              //  table name
+                                    dgvDesign.Rows[i].Cells[2].Value.ToString(),    //  column name
+                                    strDataType,                                    //  datatype
+                                    dgvDesign.Rows[i].Cells[3].Value.ToString(),    //  nullable
+                                    sqlConnection,                                  //  connection
+                                    cmbDBName.Text
+                                    );
+
+                                //  enable load column
+                                bGoLoadColumn = true;
+
+                                //  report
+                                lst1.Items.Add(strFinal + dgvDesign.Rows[i].Cells[2].Value.ToString());
+                            }
+                            #endregion
+
+                            #region Id Using => Edit or Delete Column
+
+                            //  id using
+                            else
+                            {
+                                //  get Id
+                                strId = dgvDesign.Rows[i].Cells[0].Value.ToString();
+
+                                //  edit column
+                                if (dgvDesign.Rows[i].Cells[6].Value.ToString() == "ویرایش")
+                                {
+
+                                    strFinal = Functions.SqlEditColumn
+                                                                    (
+                                                                    cmbTableName.Text,
+                                                                    lblOldColumn.Text,
+                                                                    dgvDesign.Rows[i].Cells[2].Value.ToString(),
+                                                                    strDataType,
+                                                                    sqlConnection,
+                                                                    cmbDBName.Text
+                                                                    );
+                                    lblOldColumn.Text = "";
+                                }
+                                //  delete column
+                                else
+                                {
+                                    DialogResult DR = MessageBox.Show("؟آیا می خواهید فیلدها را حذف کنید", "!هشدار", MessageBoxButtons.YesNo);
+                                    if (DR == DialogResult.Yes)
+                                    {
+                                        strFinal = Functions.SqlDropColumn
+                                                                    (cmbTableName.Text,
+                                                                    dgvDesign.Rows[i].Cells[2].Value.ToString(),
+                                                                    sqlConnection,
+                                                                    cmbDBName.Text);
+                                    }
+                                    else lst1.Items.Add(".عملیات لغو شد");
+                                }
+
+                                //  report
+                                lstReport(strFinal);
+
+                                //  enable load column
+                                bGoLoadColumn = true;
+                            }
+
+                            #endregion
+
+                        }
+                    }
+                }
+            }
+
+            //  load column  
+            if (bGoLoadColumn == true) { loadColumn(); bGoLoadColumn = false; }
+
+        }
+
+        private void فونتToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            FD.Font = Estandard.ActiveForm.Font;
+
+            if (FD.ShowDialog() == DialogResult.OK)
+            {
+                Estandard.ActiveForm.Font = FD.Font;
+                File.WriteAllText(strPathFont, FD.Font.ToString());
+            }
+        }
+
+
 
 
 
@@ -447,57 +439,115 @@ namespace Identification
         #region loadColumn of DataGridView
         private void loadColumn()
         {
+            //  clear item
+            dgvDesign.Columns.Clear();
+            chlstbxColumn.Items.Clear();
 
             #region DataGridView Design
 
             DataTable dtColumns = new DataTable();
+            DataGridViewTextBoxColumn dgvTxBxClmOrd = new DataGridViewTextBoxColumn();
+            DataGridViewCheckBoxColumn dgvChBxClm = new DataGridViewCheckBoxColumn();
+            DataGridViewTextBoxColumn dgvTxtBxClm = new DataGridViewTextBoxColumn();
             DataGridViewComboBoxColumn dgvCmBxClmType = new DataGridViewComboBoxColumn();
             DataGridViewComboBoxColumn dgvCmBxClmNull = new DataGridViewComboBoxColumn();
             DataGridViewTextBoxColumn dgvTxtClmLen = new DataGridViewTextBoxColumn();
+            DataGridViewComboBoxColumn dgvCmBxClmEvent = new DataGridViewComboBoxColumn(); // copy , delete
+            #endregion
 
+            //  header text
+            #region Headers Text
+
+            dgvTxBxClmOrd.HeaderText = "ID";
+            dgvTxtBxClm.HeaderText = "نام فیلد";
+            dgvCmBxClmNull.HeaderText = "Nullable";
+            dgvCmBxClmType.HeaderText = "DataType";
+            dgvTxtClmLen.HeaderText = "Lenth";
+            dgvCmBxClmEvent.HeaderText = "عملیات";
+
+            #endregion
 
             //****  null or not null
-            dgvCmBxClmNull.HeaderText = "Nullable";
             dgvCmBxClmNull.Items.Add("Not Null");
             dgvCmBxClmNull.Items.Add("Null");
             //*******************************
-            //****  data type
-            dgvCmBxClmType.HeaderText = "DataType";
+
+            //  add item copy , delete            
+            dgvCmBxClmEvent.Items.Add("ویرایش");
+            dgvCmBxClmEvent.Items.Add("حذف");
+            //*******************************
+
+            //****  data types standard
             DataType(dgvCmBxClmType);
-            //*******************************
-            //****  Len
-            dgvTxtClmLen.HeaderText = "Lenth";
-            //*******************************
+            //*******************************     
 
             //  load columns info            
-            dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection,cmbDBName.Text);
+            dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection, cmbDBName.Text);
 
-            //  load column names
-            dgvDesign.DataSource = Functions.SqlColumnNames(cmbTableName.Text, sqlConnection);
+            //  list type test
+            List<string> lsttype = Functions.DataTableToList(dtColumns, 3);
 
+            //  add columns & default value
+            #region Add Column & Default Value
 
+            #region Width
+            dgvTxBxClmOrd.Width = 30;
+            dgvChBxClm.Width = 30;
+            dgvTxtClmLen.Width = 40;
+            dgvCmBxClmEvent.Width = 60;
+            #endregion
 
-            //  add columns
+            #region Add
+
+            //  add column id
+            dgvDesign.Columns.Add(dgvTxBxClmOrd);
+            dgvTxBxClmOrd.ReadOnly = true;
+            //  add checkbox column
+            dgvDesign.Columns.Add(dgvChBxClm);
+            dgvChBxClm.Frozen = true;
+            //  add column name field
+            dgvDesign.Columns.Add(dgvTxtBxClm);
+            //  add column nullable
             dgvDesign.Columns.Add(dgvCmBxClmNull);
+            //  add column datatype
             dgvDesign.Columns.Add(dgvCmBxClmType);
+            //  add column length
             dgvDesign.Columns.Add(dgvTxtClmLen);
+            //  add column event
+            dgvDesign.Columns.Add(dgvCmBxClmEvent);
+            #endregion
 
-            //  
-            //  load column len of source
+            //  default value
+            #region Default Value
+
             for (int i = 0; i < dtColumns.Rows.Count; i++)
             {
-                dgvDesign.Rows[i].Cells[4].Value = "tytu";// dtColumns.Rows[i][3].ToString();
+                dgvDesign.Rows.Add(dgvTxBxClmOrd.ToolTipText = dtColumns.Rows[i][0].ToString(),
+                false,
+                dgvTxtBxClm.ToolTipText = dtColumns.Rows[i][1].ToString(),
+                dgvCmBxClmNull.DisplayMember = dtColumns.Rows[i][2].ToString(),
+                dgvCmBxClmType.DisplayMember = dtColumns.Rows[i][3].ToString(),
+                dgvTxtClmLen.ToolTipText = dtColumns.Rows[i][4].ToString().Replace("(", "").Replace(")", ""),
+                dgvCmBxClmEvent.ToolTipText = "ویرایش");
+
+                chlstbxColumn.Items.Add
+                    (
+                    dtColumns.Rows[i][1].ToString() +
+                    " [" + dtColumns.Rows[i][2].ToString() + "] - " +
+                    dtColumns.Rows[i][3].ToString() +
+                    dtColumns.Rows[i][4].ToString()
+                    );
+
+                //  disable text column len is numberic
+
+                dgvDesign.Rows[i].Cells[5].ReadOnly = ReadOnly(dgvDesign.Rows[i].Cells[4].Value.ToString());
+                if (ReadOnly(dgvDesign.Rows[i].Cells[4].Value.ToString()) == true) dgvDesign.Rows[i].Cells[5].Value = null;
+
             }
 
             #endregion
 
-            //  load cmb field source
-            cmbColumnTab2.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTableNameColumn.Text, sqlConnection));
-            cmbColumnCopy.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTableNameColumn.Text, sqlConnection));
-            cmbColumnDelete.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTableNameColumn.Text, sqlConnection));
-
-            //  load clb field source
-            Functions.LoadColumnInfo(cmbTableName.Text, chlstbxColumn, sqlConnection);
+            #endregion
 
         }
         #endregion
@@ -508,8 +558,8 @@ namespace Identification
         {
             cmbTableName.DataSource = Functions.SqlTableName(sqlConnection);
             cmbTableNameTab1.DataSource = Functions.SqlTableName(sqlConnection);
-            cmbTableNameColumn.DataSource = Functions.SqlTableName(sqlConnection);
         }
+
         #endregion
 
         #region Update
@@ -725,7 +775,7 @@ namespace Identification
 
                             #region Date Convert
                             case 6:
-                                DateConvert frm = new DateConvert(sqlConnection);
+                                DateConvert frm = new DateConvert(sqlConnection, cmbTableName.Text);
                                 frm.ShowDialog();
                                 break;
                             #endregion
@@ -811,9 +861,12 @@ namespace Identification
 
                                 break;
                                 #endregion
+
                         }
                     }
                 }
+
+
                 lst1.SelectedIndex = lst1.Items.Count - 1;
 
                 //  select tabcontrol
@@ -1172,7 +1225,7 @@ namespace Identification
                             Functions.SqlUpdateColumnData(cmbTableName.Text, strColumnNameInput, "CodeMelli2", sqlConnection));
 
             //  edit column data type
-            lstReport("CodeMelli Data Type " + Functions.SqlEditField(cmbTableName.Text, strColumnNameInput, sqlConnection, strColumnNameInput, "VARCHAR", "10"));
+            lstReport("CodeMelli Data Type " + Functions.SqlEditColumn(cmbTableName.Text, strColumnNameInput, sqlConnection, strColumnNameInput, "VARCHAR", "10"));
 
             //  drop column     'CodeMelli2'
             Functions.SqlDropColumn(cmbTableName.Text, "CodeMelli2", sqlConnection);
@@ -1194,33 +1247,22 @@ namespace Identification
             cmbClm.Items[2].ToString();
         }
 
-        private void Design(DataTable dtDesign)
-        {
-            DataGridViewColumn dgvClm = new DataGridViewColumn();
-
-            dgvClm.HeaderText = "Column Name";
-            //dgvCmBxClm.HeaderText = "Column Name";
-
-            for (int i = 1; i < dtDesign.Rows.Count; i++)
-            {
-
-                //dgvDesign.Rows[i].Cells[1].Value = "dfdsf";
-
-            }
-            //dgvDesign.Columns.Add(dgvCmBxClm);
-        }
-
-
-
         #endregion
 
-        private void dgvDesign_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private bool ReadOnly(string strDataType)
         {
+            bool b = false;
+            if (strDataType == "bit" | strDataType == "int" | strDataType == "smallint" | strDataType == "bigint" | strDataType == "datetime"
+                | strDataType == "date" | strDataType == "smalldate" | strDataType == "image" | strDataType == "tinyint" | strDataType == "real"
+                | strDataType == "float")
+            { b = true; }
+            return b;
         }
 
         private void تبدیلتاریخToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DateConvert frm = new DateConvert(sqlConnection);
+            DateConvert frm = new DateConvert(sqlConnection, cmbTableName.Text);
             frm.ShowDialog();
         }
 

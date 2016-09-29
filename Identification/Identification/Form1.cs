@@ -53,8 +53,18 @@ namespace Identification
             Application.Exit();
         }
 
+        private void btnConnect_Enter(object sender,KeyEventArgs e)
+        {
+            if (e.KeyData==Keys.Enter)
+            {
+                btnConnect_Click(null, null);
+            }
+        }
+
         private void btnConnect_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             //  desable open other forms
             EnableFrm = false;
 
@@ -127,7 +137,7 @@ namespace Identification
                 EnableFrm = false;
             }
 
-
+            Cursor.Current = Cursors.Default;
             //Connect();
         }
 

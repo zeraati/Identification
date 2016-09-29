@@ -13,6 +13,27 @@ namespace Identification
     class Functions
     {
 
+        #region Create File Text Not Exists
+
+        public string CreateFile(string strFilePath)
+        {
+            string strReturn = "";
+
+            if (File.Exists(strFilePath))
+            {
+                strReturn = "OK";
+            }
+            else
+            {
+                File.CreateText(strFilePath);
+                strReturn = "Create";
+            }
+            return strReturn;
+        }
+
+        #endregion
+
+
         #region LoadColumn==> In CheckedListBox & ComboBox
 
         /// <summary>
@@ -138,6 +159,14 @@ namespace Identification
         }
 
 
+        #region List to Combobox
+        public void ListToCmb(List<string> lst, ComboBox cmb)
+        {
+            for (int i = 0; i < lst.Count; i++)
+            { cmb.Items.Add(lst[i]); }
+        }
+        #endregion
+
 
         #region LoadColumn==> In CheckListBox For DBName
 
@@ -232,7 +261,6 @@ namespace Identification
         public string CheckSqlFunctions(string strFilePath, string strDataBaseName, SqlConnection sqlConnection)
         {
             string strRetrun = "";
-            List<string> lst = new List<string>();
             List<string> lstSql = new List<string>();
 
             bool bol = false;
@@ -249,18 +277,16 @@ namespace Identification
             {
                 bol = false;
 
-                //  list filename functions
-                lst.Add(Path.GetFileNameWithoutExtension(file));
 
                 //  check functions in sql & file
                 for (int i = 0; i < lstSql.Count; i++)
                 {
-                    if (lst[lst.Count - 1] == lstSql[i])
+                    if (Path.GetFileNameWithoutExtension(file) == lstSql[i])
                     { bol = true; break; }
                 }
 
                 //  create function is not sql
-                if (bol == false) { SqlExcutCommand(File.ReadAllText(file), sqlConnection); strRetrun = "Create Function Is Sql"; }
+                if (bol == false) { SqlExcutCommand(File.ReadAllText(file), sqlConnection); strRetrun = "Create Function Is Sql : " + Path.GetFileNameWithoutExtension(file); }
             }
             return strRetrun;
         }
@@ -274,7 +300,7 @@ namespace Identification
 
             //  convert data to list
             for (int i = 0; i < dt.Rows.Count; i++)
-            { lst.Add(dt.Rows[i][0].ToString() + " [ " + dt.Rows[i][1].ToString() + " - " + dt.Rows[i][2].ToString() + dt.Rows[i][3].ToString() + "]"); }
+            { lst.Add(dt.Rows[i][1].ToString() + " [ " + dt.Rows[i][2].ToString() + " - " + dt.Rows[i][3].ToString() + dt.Rows[i][4].ToString() + "]"); }
 
             return lst;
         }
@@ -1317,9 +1343,9 @@ namespace Identification
             if (dtClmInfo.Rows[0][3].ToString() == "")
 
             //  add new field
-            { SqlAddNewColumn(strTableName, strColumnName + "_Copy", dtClmInfo.Rows[0][2].ToString(), dtClmInfo.Rows[0][1].ToString(), sqlConnection); }
+            { SqlAddNewColumn(strTableName, strColumnName + "_Copy", dtClmInfo.Rows[0][3].ToString(), dtClmInfo.Rows[0][2].ToString(), sqlConnection); }
             else
-            { SqlAddNewColumn(strTableName, strColumnName + "_Copy", dtClmInfo.Rows[0][2].ToString() + dtClmInfo.Rows[0][3].ToString(), dtClmInfo.Rows[0][1].ToString(), sqlConnection); }
+            { SqlAddNewColumn(strTableName, strColumnName + "_Copy", dtClmInfo.Rows[0][3].ToString() + dtClmInfo.Rows[0][4].ToString(), dtClmInfo.Rows[0][2].ToString(), sqlConnection); }
 
             //  copy column
             return SqlUpdateColumnData(strTableName, strColumnName + "_Copy", strColumnName, sqlConnection, "CopyColumn");
@@ -1448,17 +1474,17 @@ namespace Identification
         #endregion
 
 
-        #region SqlEditField
+        #region SqlEditColumn
         /// <summary>
         /// 
         /// </summary>
         /// <param name="strTableName"></param>
-        /// <param name="strField"></param>
-        /// <param name="strEditField"></param>
+        /// <param name="strOldColumn"></param>
+        /// <param name="strNewColumn"></param>
         /// <param name="sqlConnection"></param>
         /// <param name="str">Field Or DataType</param>
         /// <returns></returns>
-        public string SqlEditField(string strTableName, string strField, SqlConnection sqlConnection, string strEditField = "", string strDataType = "", string strLen = "")
+        public string SqlEditColumn(string strTableName, string strOldColumn, SqlConnection sqlConnection, string strNewColumn = "", string strDataType = "", string strLen = "")
         {
             string strQuery = "";
             int intSelect = 0;
@@ -1466,7 +1492,7 @@ namespace Identification
             if (strDataType == "")
             {
                 //  edit field name
-                strQuery = "[" + sqlConnection.Database + "].sys.sp_rename @objname = N'" + strTableName + "." + strField + "', @newname = N'" + strEditField.Trim() + "'";
+                strQuery = "[" + sqlConnection.Database + "].sys.sp_rename @objname = N'" + strTableName + "." + strOldColumn + "', @newname = N'" + strNewColumn.Trim() + "'";
             }
             else
             {
@@ -1480,7 +1506,7 @@ namespace Identification
                         while (SqlExcutCommand(strQuery, sqlConnection, "EditField") == " => Error!")
                         {
 
-                            strQuery = "Alter Table [" + strTableName + "] Alter Column [" + strField + "] " + strArrType[intSelect];
+                            strQuery = "Alter Table [" + strTableName + "] Alter Column [" + strOldColumn + "] " + strArrType[intSelect];
 
                             intSelect++;
 
@@ -1490,13 +1516,39 @@ namespace Identification
                 }
                 else
                 {
-                    strQuery = "Alter Table [" + strTableName + "] Alter Column [" + strField + "] ";
+                    strQuery = "Alter Table [" + strTableName + "] Alter Column [" + strOldColumn + "] ";
                 }
 
             }
 
-
             return "Done!";
+        }
+
+        public string SqlEditColumn(string strTableName, string strOldColumn, string strNewColumn, string strDataType, SqlConnection sqlConnection, string strDbName = "")
+        {
+            string strQuery = "", strFinal = "", strReport = "", strFinal2 = "";
+            //  connection change database name
+            if (strDbName != "") { sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection); }
+
+            strQuery = "[" + sqlConnection.Database + "].sys.sp_rename @objname = N'" + strTableName + "." + strOldColumn + "', @newname = N'" + strNewColumn.Trim() + "'";
+
+            strFinal = SqlExcutCommand(strQuery, sqlConnection, "Rename Column => " + strOldColumn);
+            if (strFinal.Contains("Done"))
+            {
+                //  change data type
+                strQuery = "Alter Table [" + strTableName + "] Alter Column [" + strNewColumn + "] " + strDataType;
+
+                //  sql command
+                strFinal2 = SqlExcutCommand(strQuery, sqlConnection, "=> Datatype Column => " + strOldColumn);
+
+                if (strFinal2.Contains("Done"))
+                {
+                    strReport = strFinal + strFinal2;
+                }
+            }
+            else strReport = "Error !";
+
+            return strReport;
         }
 
         #endregion
@@ -1724,11 +1776,12 @@ namespace Identification
         /// <returns>data table</returns>
         public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection, string strDbName = "")
         {
-            string Query = "SELECT  Name ," +
+            string Query = "SELECT  ORDINAL ," +
+                           "Name ," +
                            " [Null] ," +
                            " [Type] , [Len]" +
                            " FROM    ( 	" +
-                                        " SELECT COLUMN_NAME Name," +
+                                        " SELECT ORDINAL_POSITION ORDINAL , COLUMN_NAME Name," +
                                         " CASE  WHEN IS_NULLABLE = 'YES' THEN 'Null' ELSE 'Not Null' END [Null],DATA_TYPE [Type]," +
                                         " CASE  WHEN CHARACTER_MAXIMUM_LENGTH IS NULL THEN '' ELSE ' ('+CAST(CHARACTER_MAXIMUM_LENGTH AS NVARCHAR(50))+')' END AS [Len]" +
                                         " FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'" +
@@ -1768,6 +1821,7 @@ namespace Identification
 
             return SqlDataAdapter(strQuery, sqlConnection);
         }
+
 
         #endregion
 
@@ -1895,9 +1949,12 @@ namespace Identification
 
 
         #region SqlDropColumn
-        public string SqlDropColumn(string strTable, string strColumn, SqlConnection sqlConnection)
+        public string SqlDropColumn(string strTable, string strColumn, SqlConnection sqlConnection, string strDbName = "")
         {
             string strQuery = "ALTER TABLE dbo.[" + strTable + "] DROP COLUMN [" + strColumn + "]";
+
+            //  connection change database name
+            if (strDbName != "") { sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection); }
 
             return SqlExcutCommand(strQuery, sqlConnection, strColumn + " ==> DropColumn");
         }

@@ -19,11 +19,14 @@ namespace Identification
         Functions Functions = new Functions();
         SqlConnection sqlConnection = new SqlConnection();
 
+        string strTableName="";
+
         #endregion
-        public DateConvert(SqlConnection sqlCon)
+        public DateConvert(SqlConnection sqlCon,string strTBLName)
         {
             InitializeComponent();
             sqlConnection = sqlCon;
+            strTableName = strTBLName;
         }
 
         private void بستنپنجرهToolStripMenuItem_Click(object sender, EventArgs e)
@@ -46,6 +49,8 @@ namespace Identification
             //  load table name of source
             cmbTableName.DataSource = Functions.SqlTableName(sqlConnection);
 
+            //  default value
+            cmbTableName.Text = strTableName;
         }
 
         private void cmbTB_SelectedIndexChanged(object sender, EventArgs e)
@@ -172,7 +177,8 @@ namespace Identification
         public bool checkDataType(string strColumn, string strType)
         {
             bool bolReturn = false;
-            if (Functions.SqlColumns(cmbTableName.Text, sqlConnection, strColumn).Rows[0][2].ToString().ToUpper().Contains(strType.ToUpper())) bolReturn = true;
+            List<string> lst = Functions.DataTableToList(Functions.SqlColumns(cmbTableName.Text, sqlConnection,"", strColumn));
+            if (Functions.SqlColumns(cmbTableName.Text, sqlConnection, "",strColumn).Rows[0][2].ToString().ToUpper().Contains(strType.ToUpper())) bolReturn = true;
             return bolReturn;
         }
         #endregion
