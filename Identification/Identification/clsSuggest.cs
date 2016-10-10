@@ -27,7 +27,7 @@ namespace Identification
             {
                 str3 = str.Substring(0, str.IndexOf(" "));
                 query = "SELECT [WorldPersion],[WorldEnglish] FROM [LogFile].[dbo].[Dictionery] WHERE [WorldPersion] = N'" + str + "' order by [WorldPersion]";
-                dtsql = Functions.SqlDataAdapter(query,sqlCon);
+                //dtsql = Functions.SqlDataAdapter(query,sqlCon);
                 if (dtsql.Rows.Count != 0)
                 {
                     dtreurn = dtsql;
@@ -38,7 +38,7 @@ namespace Identification
                     {
 
                         query = "SELECT [WorldPersion],[WorldEnglish] FROM [LogFile].[dbo].[Dictionery] WHERE [WorldPersion] like N'%" + str3 + "%' order by [WorldPersion]";
-                        dtsql = Functions.SqlDataAdapter(query, sqlCon);
+                        //dtsql = Functions.SqlDataAdapter(query, sqlCon);
                         for (int i = 0; i < dtsql.Rows.Count; i++)
                         {
                             DataRow dr = dtret.NewRow();
@@ -56,7 +56,7 @@ namespace Identification
             {
                 query = "SELECT [WorldPersion],[WorldEnglish] FROM [LogFile].[dbo].[Dictionery] WHERE [WorldPersion] like N'%" + str + "%' order by [WorldPersion]";
                 DataRow dr = dtsql.NewRow();
-                dtsql = Functions.SqlDataAdapter(query, sqlCon);
+                //dtsql = Functions.SqlDataAdapter(query, sqlCon);
                 for (int i = 0; i < dtsql.Rows.Count; i++)
                 {
                     dr[dtsql.Columns[0].ColumnName] = dtsql.Rows[i][0].ToString();

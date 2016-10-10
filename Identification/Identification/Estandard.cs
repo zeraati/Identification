@@ -44,7 +44,7 @@ namespace Identification
             cmbDBName.DataSource = Functions.SqlGetDBName(sqlConnection);
 
             //  defualt value
-            cmbDBName.Text = "master";
+            cmbDBName.Text = "Ehraz";
 
             strDate = solarDate.ToString("yyyyMMdd");
             strDate = strDate.Replace("/", "");
@@ -75,22 +75,41 @@ namespace Identification
 
         private void cmbDBName_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string strReport = "";
+            List<string> lstRtn = new List<string>();
             //  change data base name
             sqlConnection = Functions.SqlConnectionChangeDB(cmbDBName.Text, sqlConnection);
 
             //  check sql functions
-            strReport = Functions.CheckSqlFunctions(strFunctionsFile, cmbDBName.Text, sqlConnection);
+            lstRtn = Functions.CheckSqlFunctions(strFunctionsFile, cmbDBName.Text, sqlConnection);
 
             //  report
-            if (strReport != "")
-            { lstReport(strReport); }
+            if (lstRtn.Count != 0)
+            {
+                for (int k = 0; k < lstRtn.Count; k++)
+                {
+                    lst1.Items.Add(lstRtn[k]);
+                }
+                //  select tabcontrol report
+                tabControl2.SelectedTab = tabControl2.TabPages[1];
+            }
+
+
+
+            //  create table log    //  table name,
+
+
+
+
+
 
             //  dafault value
+
             // cmbDBName.Text = "Test";
 
             //  set cmbTBName source    // load table names
             loadTbName();
+            
+            //  dafault value
 
             if (cmbDBName.Text != "") cmbDBName.DropDownWidth = Functions.DropDownWidth(cmbDBName);
         }
@@ -223,17 +242,17 @@ namespace Identification
             DataTable dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection, cmbDBName.Text);
 
             //List<string> lstTest = Functions.DataTableToList(dtColumns,1);
-            string strCount, strFieldName;
-
+            string strFieldName;
+            int intCount;
 
             //  record table
-            strCount = Functions.SqlRecordCount(cmbTableName.Text, "*", sqlConnection);
+            intCount = Functions.SqlRecordCount(cmbTableName.Text, sqlConnection);
 
 
             //  add item
             lst1.Items.Add("***************************************");
             lst1.Items.Add("تعداد فیلد : " + dtColumns.Rows.Count);
-            lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(Convert.ToInt32(strCount)));
+            lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(intCount));
 
 
             //  checked field
@@ -250,14 +269,13 @@ namespace Identification
 
 
                     if (strType == "image" | strType == "ntext")
-                    {
-                        lst1.Items.Add("فیلد " + strFieldName + " قابل شمارش نیست ");
-                    }
+                    { lst1.Items.Add("فیلد " + strFieldName + " قابل شمارش نیست "); }
+
                     else
                     {
-                        //  count fields record
-                        strCount = Functions.SqlRecordCount(cmbTableName.Text, "[" + strFieldName + "]", sqlConnection);
-                        lst1.Items.Add(strFieldName + " => " + strCount + " Record");
+                        //  count columns record
+                        intCount = Functions.SqlRecordCount(cmbTableName.Text, sqlConnection, strFieldName, cmbDBName.Text);
+                        lst1.Items.Add(strFieldName + " => " + intCount + " Record");
                     }
 
                 }
@@ -300,6 +318,7 @@ namespace Identification
         }
 
         Label lblOldColumn = new Label();
+
         private void dgvDesign_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (dgvDesign.Rows[e.RowIndex].Cells[2].Value != null & lblOldColumn.Text == "")
@@ -416,7 +435,6 @@ namespace Identification
 
             //  load column  
             if (bGoLoadColumn == true) { loadColumn(); bGoLoadColumn = false; }
-
         }
 
         private void فونتToolStripMenuItem_Click(object sender, EventArgs e)
@@ -431,7 +449,40 @@ namespace Identification
             }
         }
 
+        //  standard automatic
+        private void btnAuto_Click(object sender, EventArgs e)
+        {   //
+            List<string> lsttest = new List<string>();
 
+            #region Edit Column Names
+
+            for (int i = 0; i < 12; i++)
+            {
+                for (int j = 0; j < dgvDesign.Rows.Count - 1; j++)
+                {
+                    string str = dgvDesign.Rows[j].Cells[2].Value.ToString().ToUpper().Replace(" ", "");
+                    string strs = Variable.strArray[i, 0].ToUpper().Replace(" ", "") + " , " + Variable.strArray[i, 1].ToUpper().Replace(" ", "") + " , " + Variable.strArray[i, 2].ToUpper().Replace(" ", "");
+                    //  check column Same              
+                    if (dgvDesign.Rows[j].Cells[2].Value.ToString() == Variable.strArray[i, 0])
+                    { continue; }
+
+                    if (dgvDesign.Rows[j].Cells[2].Value.ToString().ToUpper().Replace(" ", "") == Variable.strArray[i, 0].ToUpper().Replace(" ", "") ||
+                        dgvDesign.Rows[j].Cells[2].Value.ToString().ToUpper().Replace(" ", "") == Variable.strArray[i, 1].ToUpper().Replace(" ", "") ||
+                        dgvDesign.Rows[j].Cells[2].Value.ToString().ToUpper().Replace(" ", "") == Variable.strArray[i, 2].ToUpper().Replace(" ", ""))
+                    {
+                        lsttest.Add(Variable.strArray[i, 0] + " , " + j.ToString());
+                        lstReport(Functions.SqlRename("COLUMN", dgvDesign.Rows[j].Cells[2].Value.ToString(), Variable.strArray[i, 0], sqlConnection, cmbTableName.Text));
+                        break;
+                    }
+                }
+            }
+
+            #endregion
+
+            //  load column
+            cmbTB_SelectedIndexChanged(null, null);
+
+        }
 
 
 
@@ -446,6 +497,7 @@ namespace Identification
             #region DataGridView Design
 
             DataTable dtColumns = new DataTable();
+            List<string> lstCount = new List<string>();
             DataGridViewTextBoxColumn dgvTxBxClmOrd = new DataGridViewTextBoxColumn();
             DataGridViewCheckBoxColumn dgvChBxClm = new DataGridViewCheckBoxColumn();
             DataGridViewTextBoxColumn dgvTxtBxClm = new DataGridViewTextBoxColumn();
@@ -453,17 +505,27 @@ namespace Identification
             DataGridViewComboBoxColumn dgvCmBxClmNull = new DataGridViewComboBoxColumn();
             DataGridViewTextBoxColumn dgvTxtClmLen = new DataGridViewTextBoxColumn();
             DataGridViewComboBoxColumn dgvCmBxClmEvent = new DataGridViewComboBoxColumn(); // copy , delete
+            DataGridViewTextBoxColumn dgvTxtClmCount = new DataGridViewTextBoxColumn(); //  count columns
+
             #endregion
 
             //  header text
-            #region Headers Text
+            #region HeadersText & ToolTipText
 
             dgvTxBxClmOrd.HeaderText = "ID";
+            dgvTxBxClmOrd.ToolTipText = "ID";
             dgvTxtBxClm.HeaderText = "نام فیلد";
+            dgvTxtBxClm.ToolTipText = "نام فیلد";
             dgvCmBxClmNull.HeaderText = "Nullable";
+            dgvCmBxClmNull.ToolTipText = "Nullable";
             dgvCmBxClmType.HeaderText = "DataType";
+            dgvCmBxClmType.ToolTipText = "DataType";
             dgvTxtClmLen.HeaderText = "Lenth";
+            dgvTxtClmLen.ToolTipText = "Lenth";
             dgvCmBxClmEvent.HeaderText = "عملیات";
+            dgvCmBxClmEvent.ToolTipText = "عملیات";
+            dgvTxtClmCount.HeaderText = "تعداد رکورد فیلد";
+            dgvTxtClmCount.ToolTipText = "تعداد رکورد فیلد";
 
             #endregion
 
@@ -484,6 +546,9 @@ namespace Identification
             //  load columns info            
             dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection, cmbDBName.Text);
 
+            //  count columns to list
+            lstCount = Functions.SqlRecordCountColumn(cmbTableName.Text, sqlConnection, cmbDBName.Text);
+
             //  list type test
             List<string> lsttype = Functions.DataTableToList(dtColumns, 3);
 
@@ -495,6 +560,7 @@ namespace Identification
             dgvChBxClm.Width = 30;
             dgvTxtClmLen.Width = 40;
             dgvCmBxClmEvent.Width = 60;
+            dgvTxtClmCount.Width = 50;
             #endregion
 
             #region Add
@@ -515,20 +581,24 @@ namespace Identification
             dgvDesign.Columns.Add(dgvTxtClmLen);
             //  add column event
             dgvDesign.Columns.Add(dgvCmBxClmEvent);
+            //  add column count
+            dgvDesign.Columns.Add(dgvTxtClmCount);
+            dgvTxtClmCount.ReadOnly = true;
             #endregion
 
             //  default value
             #region Default Value
 
             for (int i = 0; i < dtColumns.Rows.Count; i++)
-            {
+            {   
                 dgvDesign.Rows.Add(dgvTxBxClmOrd.ToolTipText = dtColumns.Rows[i][0].ToString(),
                 false,
                 dgvTxtBxClm.ToolTipText = dtColumns.Rows[i][1].ToString(),
                 dgvCmBxClmNull.DisplayMember = dtColumns.Rows[i][2].ToString(),
                 dgvCmBxClmType.DisplayMember = dtColumns.Rows[i][3].ToString(),
                 dgvTxtClmLen.ToolTipText = dtColumns.Rows[i][4].ToString().Replace("(", "").Replace(")", ""),
-                dgvCmBxClmEvent.ToolTipText = "ویرایش");
+                dgvCmBxClmEvent.ToolTipText = "ویرایش",
+                lstCount[i]);
 
                 chlstbxColumn.Items.Add
                     (
@@ -575,7 +645,7 @@ namespace Identification
                 int intIncerement, intCount, intTableCount;
 
                 //  table records count
-                intTableCount = Functions.SqlTableRecordsCount(cmbTableName.Text, sqlConnection);
+                intTableCount = Functions.SqlRecordCount(cmbTableName.Text, sqlConnection, "*", cmbDBName.Text);
 
                 lst1.Items.Add("تعداد فیلد : " + chlstbxColumn.Items.Count.ToString());
                 lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(intTableCount));
@@ -622,8 +692,16 @@ namespace Identification
                         switch (i)
                         {
 
-                            #region Delete Not Valid
+                            #region Standard Column Name
                             case 0:
+
+
+
+                                break;
+                            #endregion
+
+                            #region Delete Not Valid
+                            case 1:
 
                                 for (int j = 0; j < chlstbxColumn.Items.Count; j++)
                                 {
@@ -661,14 +739,14 @@ namespace Identification
                             #endregion
 
                             #region Edit Data Type Column
-                            case 1:
+                            case 2:
                                 EditDataType();
                                 loadColumn();
                                 break;
                             #endregion
 
                             #region Replace Character ک و ی
-                            case 2:
+                            case 3:
                                 for (int j = 0; j < chlstbxColumn.Items.Count; j++)
                                 {
                                     //  column name
@@ -686,7 +764,7 @@ namespace Identification
                             #endregion
 
                             #region Standard CodeMelli
-                            case 3:
+                            case 4:
 
                                 StandardCodeMelli(strFieldName);
 
@@ -694,7 +772,7 @@ namespace Identification
                             #endregion
 
                             #region Standard ShenasCode
-                            case 4:
+                            case 5:
 
                                 strColumnData = "dbo.[CM-Fix]([" + strFieldName + "])";
 
@@ -736,7 +814,7 @@ namespace Identification
                             #endregion
 
                             #region Standard Date
-                            case 5:
+                            case 6:
                                 for (int l = 0; l < chlstbxColumn.Items.Count; l++)
                                 {
                                     if (chlstbxColumn.GetItemCheckState(l) == CheckState.Checked)
@@ -774,21 +852,21 @@ namespace Identification
                             #endregion
 
                             #region Date Convert
-                            case 6:
+                            case 7:
                                 DateConvert frm = new DateConvert(sqlConnection, cmbTableName.Text);
                                 frm.ShowDialog();
                                 break;
                             #endregion
 
                             #region Save Characters Substring
-                            case 7:
+                            case 8:
                                 Substring frmSubstring = new Substring();
                                 frmSubstring.ShowDialog();
                                 break;
                             #endregion
 
                             #region Delete Space Or Zero Value Columns
-                            case 8:
+                            case 9:
                                 intTableCheck = 0;
                                 for (int j = 0; j < chlstbxColumn.Items.Count; j++)
                                 {
@@ -814,7 +892,7 @@ namespace Identification
                             #endregion
 
                             #region Delete Space Rows
-                            case 9:
+                            case 10:
 
                                 //  defualt value
                                 strWhere = "";
@@ -845,8 +923,8 @@ namespace Identification
                                 break;
                             #endregion
 
-                            #region حذف جدول خالی
-                            case 10:
+                            #region Delete Tables Space
+                            case 11:
                                 if (intTableCheck == 0)
                                 {
                                     //  run query
@@ -992,18 +1070,18 @@ namespace Identification
             //  query
             strQuery = "SELECT name,[object_id] FROM sys.tables WHERE name<>N'___Report'";
             //  run query
-            dtTable = Functions.SqlDataAdapter(strQuery, sqlConnection);
+            dtTable = Functions.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text);
 
             for (int u = 0; u < dtTable.Rows.Count; u++)
             {
 
                 //  record count
-                intCountRecord = Functions.SqlTableRecordsCount(dtTable.Rows[u][0].ToString(), sqlConnection);
+                intCountRecord = Functions.SqlRecordCount(dtTable.Rows[u][0].ToString(), sqlConnection);
 
                 //  query
                 strQuery = "SELECT COUNT(*) FROM sys.columns WHERE [object_id]=" + dtTable.Rows[u][1].ToString();
                 //  run query
-                intCountColumn = Functions.SqlDataAdapter(strQuery, sqlConnection).Rows.Count;
+                intCountColumn = Functions.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text).Rows.Count;
 
                 //**************    Insert Fields    Tables ,[Relation 1] ,[Relation 2] ,Description ,TedadRecord ,TedadField ,ShenasNameBank)   
                 //  query
@@ -1159,7 +1237,7 @@ namespace Identification
             strQuery = "SELECT name FROM sys.columns WHERE object_id=(SELECT object_id FROM sys.tables WHERE name=N'" + cmbTableName.Text + "')";
 
             //  check column
-            int intCheckColumn = Functions.CheckField(Functions.SqlDataAdapter(strQuery, sqlConnection), "CodeMelli2");
+            int intCheckColumn = Functions.CheckField(Functions.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text), "CodeMelli2");
 
             if (intCheckColumn == 0)
             {
@@ -1239,7 +1317,12 @@ namespace Identification
 
         private void DataType(DataGridViewComboBoxColumn cmbClm)
         {
-            string[] strDataType = { "bit", "tinyint", "smallint", "int", "bigint", "char", "nchar", "varchar", "nvarchar", "text", "ntext", "date", "datetime", "real", "float" };
+            string[] strDataType =
+                { "bit", "tinyint", "smallint", "int", "bigint",
+                "char", "nchar", "varchar", "nvarchar",
+                "text", "ntext", "date", "datetime", "real", "float" };
+
+
             for (int i = 0; i < 14; i++)
             {
                 cmbClm.Items.Add(strDataType[i]);
@@ -1249,7 +1332,11 @@ namespace Identification
 
         #endregion
 
-
+        /// <summary>
+        /// readonly for datatypes numberic
+        /// </summary>
+        /// <param name="strDataType"></param>
+        /// <returns></returns>
         private bool ReadOnly(string strDataType)
         {
             bool b = false;
@@ -1259,6 +1346,24 @@ namespace Identification
             { b = true; }
             return b;
         }
+
+        //private void button1_Click(object sender, EventArgs e)
+        //{
+        //    DataTable dt = Functions.SqlColumnNames(cmbTableName.Text, sqlConnection, cmbDBName.Text);
+        //    string[] arr = new string[dt.Rows.Count];
+
+        //    for (int i = 0; i < dt.Rows.Count; i++)
+        //    {
+        //        if (arr[i] != "")
+        //        {
+        //            arr[i] = dt.Rows[i][0].ToString() + " , ";
+        //            textBox1.Text += arr[i];
+        //        }
+        //    }
+
+        //}
+
+
 
         private void تبدیلتاریخToolStripMenuItem_Click(object sender, EventArgs e)
         {

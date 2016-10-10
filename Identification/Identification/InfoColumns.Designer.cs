@@ -1,6 +1,6 @@
 ﻿namespace Identification
 {
-    partial class NullSearch
+    partial class InfoColumns
     {
         /// <summary>
         /// Required designer variable.
@@ -29,15 +29,13 @@
         private void InitializeComponent()
         {
             this.btnSearch = new System.Windows.Forms.Button();
-            this.DGVSearch = new System.Windows.Forms.DataGridView();
             this.cmbDBName = new System.Windows.Forms.ComboBox();
-            this.cmbTBName = new System.Windows.Forms.ComboBox();
+            this.cmbTableName = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnDelField = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.Column1 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.DGVSearch = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.DGVSearch)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,18 +49,6 @@
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // DGVSearch
-            // 
-            this.DGVSearch.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DGVSearch.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2});
-            this.DGVSearch.Location = new System.Drawing.Point(12, 120);
-            this.DGVSearch.Name = "DGVSearch";
-            this.DGVSearch.Size = new System.Drawing.Size(735, 307);
-            this.DGVSearch.TabIndex = 1;
-            this.DGVSearch.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVSearch_CellContentClick);
-            // 
             // cmbDBName
             // 
             this.cmbDBName.FormattingEnabled = true;
@@ -73,15 +59,15 @@
             this.cmbDBName.TabIndex = 2;
             this.cmbDBName.SelectedIndexChanged += new System.EventHandler(this.cmbDBName_SelectedIndexChanged);
             // 
-            // cmbTBName
+            // cmbTableName
             // 
-            this.cmbTBName.FormattingEnabled = true;
-            this.cmbTBName.Location = new System.Drawing.Point(119, 75);
-            this.cmbTBName.Name = "cmbTBName";
-            this.cmbTBName.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.cmbTBName.Size = new System.Drawing.Size(230, 21);
-            this.cmbTBName.TabIndex = 3;
-            this.cmbTBName.SelectedIndexChanged += new System.EventHandler(this.cmbTBName_SelectedIndexChanged);
+            this.cmbTableName.FormattingEnabled = true;
+            this.cmbTableName.Location = new System.Drawing.Point(119, 75);
+            this.cmbTableName.Name = "cmbTableName";
+            this.cmbTableName.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cmbTableName.Size = new System.Drawing.Size(230, 21);
+            this.cmbTableName.TabIndex = 3;
+            this.cmbTableName.SelectedIndexChanged += new System.EventHandler(this.cmbTBName_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -118,34 +104,28 @@
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 7;
             // 
-            // Column1
+            // DGVSearch
             // 
-            this.Column1.HeaderText = "نمایش";
-            this.Column1.Name = "Column1";
-            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Column1.Text = "نمایش";
-            this.Column1.ToolTipText = "نمایش";
+            this.DGVSearch.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DGVSearch.Location = new System.Drawing.Point(12, 114);
+            this.DGVSearch.Name = "DGVSearch";
+            this.DGVSearch.Size = new System.Drawing.Size(735, 313);
+            this.DGVSearch.TabIndex = 8;
             // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "فیلد";
-            this.Column2.Name = "Column2";
-            // 
-            // NullSearch
+            // InfoColumns
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(759, 439);
+            this.Controls.Add(this.DGVSearch);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnDelField);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.cmbTBName);
+            this.Controls.Add(this.cmbTableName);
             this.Controls.Add(this.cmbDBName);
-            this.Controls.Add(this.DGVSearch);
             this.Controls.Add(this.btnSearch);
-            this.Name = "NullSearch";
+            this.Name = "InfoColumns";
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RightToLeftLayout = true;
             this.Text = "جستجوی اطلاعات خالی";
@@ -159,14 +139,12 @@
         #endregion
 
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.DataGridView DGVSearch;
         private System.Windows.Forms.ComboBox cmbDBName;
-        private System.Windows.Forms.ComboBox cmbTBName;
+        private System.Windows.Forms.ComboBox cmbTableName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnDelField;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.DataGridViewButtonColumn Column1;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Column2;
+        private System.Windows.Forms.DataGridView DGVSearch;
     }
 }

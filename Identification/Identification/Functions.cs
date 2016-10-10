@@ -10,6 +10,29 @@ using System.Data.SqlClient;
 
 namespace Identification
 {
+
+    public class Variable
+    {
+        #region Enable & Disable from item clbEhraz
+        public static string[,] strArray =
+            {
+            {"Name","FirstName","نام", },
+            { "Family","LastName","نام خانوادگی"},
+            {"Father","FatherName","نام پدر"},
+            {"ShenasCode","ShNo","شماره شناسنامه" },
+            { "PBirthDate","BirthDate","سال تولد" },
+            { "CodeMelli","MelliCode","کد ملی" },
+            { "HomeCity","Cityname","شهر محل تولد" },
+            { "SodorCity","","شهر محل صدور" },
+            { "HomeOstan","OstanName","استان محل تولد" },
+            { "SodorOstan","Sodor","استان محل صدور" },
+            { "STID","CodeMarkazModiriat","کد مرکز مدیریت" },
+            { "MKID","CodeMarkazKhadamat","کد مرکز خدمات" }
+            };
+
+        #endregion
+    }
+
     class Functions
     {
 
@@ -253,14 +276,12 @@ namespace Identification
 
         //**************    functions
 
-        public string ReturnValue { get; set; }
-
 
         #region CheckSQLFunctions
 
-        public string CheckSqlFunctions(string strFilePath, string strDataBaseName, SqlConnection sqlConnection)
+        public List<string> CheckSqlFunctions(string strFilePath, string strDataBaseName, SqlConnection sqlConnection)
         {
-            string strRetrun = "";
+            List<string> lstRetrun = new List<string>();
             List<string> lstSql = new List<string>();
 
             bool bol = false;
@@ -268,7 +289,7 @@ namespace Identification
             string strQuery = "SELECT name FROM [" + strDataBaseName + "].sys.objects WHERE type='FN'";
 
             //  list sql functions of source
-            lstSql = DataTableToList(SqlDataAdapter(strQuery, sqlConnection.DataSource, sqlConnection.Database, ""));
+            lstSql = DataTableToList(SqlDataAdapter(strQuery, sqlConnection, strDataBaseName));
 
             //  function file
             string[] files = Directory.GetFiles(strFilePath, "*.txt");
@@ -286,9 +307,9 @@ namespace Identification
                 }
 
                 //  create function is not sql
-                if (bol == false) { SqlExcutCommand(File.ReadAllText(file), sqlConnection); strRetrun = "Create Function Is Sql : " + Path.GetFileNameWithoutExtension(file); }
+                if (bol == false) { SqlExcutCommand(File.ReadAllText(file), sqlConnection); lstRetrun.Add("Create Function Is Sql : " + Path.GetFileNameWithoutExtension(file)); }
             }
-            return strRetrun;
+            return lstRetrun;
         }
         #endregion
 
@@ -707,6 +728,7 @@ namespace Identification
         #region ListBoxSelectAllWithRollBack
 
         List<int> lstSelectedIndex = new List<int>();
+
         private void ListBoxSelectAllWithRollBack(bool bolCheckAll, ListBox listBox)
         {
 
@@ -1329,7 +1351,7 @@ namespace Identification
             { strQuery = "EXEC sp_rename '" + strTable + "." + strOldName + "', '" + strNewName + "' , 'COLUMN'"; }
 
 
-            return SqlExcutCommand(strQuery, sqlConnection, "");
+            return SqlExcutCommand(strQuery, sqlConnection, "SqlRename => " + strOldName + " => " + strNewName);
         }
         #endregion
 
@@ -1452,7 +1474,7 @@ namespace Identification
             int intCount = 0;
             string strReturn = "";
 
-            intCount = SqlTableRecordsCount(strTableName, sqlConnection);
+            intCount = SqlRecordCount(strTableName, sqlConnection);
 
             if (intCount == 0) { strReturn = SqlDropTable(strTableName, sqlConnection); }
 
@@ -1686,7 +1708,7 @@ namespace Identification
             if (strLabel != "")
             { strQuery = "SELECT name [" + strLabel + "] FROM sys.databases "; }
 
-            DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection);
+            DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection, "");
 
             for (int i = 0; i < dtAdapter.Rows.Count; i++)
             { lstReturn.Add(dtAdapter.Rows[i][0].ToString()); }
@@ -1699,44 +1721,22 @@ namespace Identification
 
         #region SqlDataAdapter
 
-        public DataTable SqlDataAdapter(string query, string server, string DBName = "master", string stat = "SqlDataAdapter")
+        public DataTable SqlDataAdapter(string strQuery, SqlConnection sqlConnection, string strTable = "", string strNumberTop = "")
         {
             DataTable dt = new DataTable();
 
-            try
-            {
-                SqlDataAdapter da = new SqlDataAdapter(query, SqlConnect(server));
-                da.Fill(dt);
-                return dt;
-            }
-            catch (Exception e)
-            {
-                if (stat != "SqlDataAdapter")
-                    MessageBox.Show(stat + Environment.NewLine + e.Message, "خطا");
-                return dt;
-            }
-        }
 
-        public DataTable SqlDataAdapter(string strQuery, SqlConnection sqlConnection, string stat = "SqlDataAdapter", string strTable = "")
-        {
-            DataTable dt = new DataTable();
+            if (strNumberTop != "" && strTable != "")
+            { strQuery = "SELECT TOP 100 * FROM [" + strTable + "]"; }
 
             try
             {
-                //  select table qury if query empty
-                if (strQuery == "" && strTable != "")
-                { strQuery = "SELECT TOP 100 * FROM [" + strTable + "]"; }
-
                 SqlDataAdapter da = new SqlDataAdapter(strQuery, sqlConnection);
                 da.Fill(dt);
                 return dt;
             }
             catch (Exception e)
-            {
-                if (stat != "SqlDataAdapter")
-                    MessageBox.Show(stat + Environment.NewLine + e.Message, "خطا");
-                return dt;
-            }
+            { return dt; }
         }
 
 
@@ -1745,7 +1745,7 @@ namespace Identification
 
         #region SqlTableName
 
-        public List<string> SqlTableName(SqlConnection sqlConnection, string strLabel = "")
+        public List<string> SqlTableName(SqlConnection sqlConnection, string strDbName = "", string strLabel = "")
         {
             string strQuery = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'";
 
@@ -1753,7 +1753,7 @@ namespace Identification
             { strQuery = "SELECT TABLE_NAME [" + strLabel + "] FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'"; }
 
             List<string> lstReturn = new List<string>();
-            DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection);
+            DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection, strDbName);
 
             for (int i = 0; i < dtAdapter.Rows.Count; i++)
             {
@@ -1789,7 +1789,7 @@ namespace Identification
             //  change database name
             if (strDbName != "") sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection);
 
-            return SqlDataAdapter(Query, sqlConnection);
+            return SqlDataAdapter(Query, sqlConnection, strDbName);
         }
 
         public DataTable SqlColumns(string strTableName, SqlConnection sqlConnection, string strDbName = "", string strColumnName = "")
@@ -1807,19 +1807,18 @@ namespace Identification
             //  change database name
             if (strDbName != "") sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection);
 
-            return SqlDataAdapter(Query, sqlConnection);
+            return SqlDataAdapter(Query, sqlConnection, strDbName);
         }
 
         public DataTable SqlColumnNames(string strTableName, SqlConnection sqlConnection, string strDbName = "", string strLable = "")
         {
             string strQuery = " SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'";
+
             if (strLable != "")
             { strQuery = " SELECT COLUMN_NAME [" + strLable + "] FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'"; }
 
-            //  change database name
-            if (strDbName != "") sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection);
+            return SqlDataAdapter(strQuery, sqlConnection, strDbName);
 
-            return SqlDataAdapter(strQuery, sqlConnection);
         }
 
 
@@ -1828,49 +1827,61 @@ namespace Identification
 
         #region SqlTableRecordsCount
 
-        public int SqlTableRecordsCount(string strTableName, SqlConnection sqlConnection, string strDbName = "", string strLabel = "")
+        public int SqlRecordCount(string strTableName, SqlConnection sqlConnection, string strColumnName = "", string strNull = "NULL", string strLabel = "")
         {
+            int count;
+            strNull = (strNull != "NULL") ? "WHERE [" + strColumnName + "] IS NOT NULL" : "WHERE [" + strColumnName + "] IS NULL";
 
+            //  query
             string strQuery = "SELECT COUNT(*) FROM dbo.[" + strTableName + "]";
 
-            //  change database name
-            if (strDbName != "") sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection);
-
-            //  naming
-            if (strLabel != "")
-            { strQuery = "SELECT COUNT(*) [" + strLabel + "] FROM dbo.[" + strTableName + "]"; }
+            //  add label
+            if (strColumnName != "")
+            { strQuery = (strLabel != "") ? "SELECT COUNT(*) [" + strLabel + "] FROM dbo.[" + strTableName + "] " + strNull : "SELECT COUNT(*) FROM dbo.[" + strTableName + "] " + strNull; }
 
             SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
-            int count;
             cmd.Connection.Close();
             cmd.Connection.Open();
             cmd.CommandTimeout = 3600;
             count = Convert.ToInt32(cmd.ExecuteScalar());
             cmd.Connection.Close();
             return count;
+
         }
 
-        public string SqlRecordCount(string strTableName, string strFieldName, SqlConnection sqlConnection, string DbName = "", string strLabel = "")
+        public List<string> SqlRecordCountColumn(string strTableName, SqlConnection sqlConnection, string strDbName = "")
         {
-            string strQuery = "SELECT COUNT(" + strFieldName + ") FROM dbo.[" + strTableName + "]";
+            //  column name
+            List<string> lstClm = DataTableToList(SqlColumnNames(strTableName, sqlConnection, strDbName));
 
-            //  change database name
-            if (DbName != "") sqlConnection = SqlConnectionChangeDB(DbName, sqlConnection);
+            //  return
+            List<string> lstRtn = new List<string>();
 
-            //  naming
-            if (strLabel != "")
-            { strQuery = "SELECT COUNT(" + strFieldName + ") [" + strLabel + "] FROM dbo.[" + strTableName + "]"; }
+            for (int i = 0; i < lstClm.Count; i++)
+            { lstRtn.Add(StrNum(SqlRecordCount(strTableName, sqlConnection, lstClm[i], strDbName))); }
 
-            SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
-            string count = "";
+            return lstRtn;
 
-            cmd.Connection.Close();
-            cmd.Connection.Open();
-            cmd.CommandTimeout = 3600;
-            count = cmd.ExecuteScalar().ToString();
+        }
 
-            cmd.Connection.Close();
-            return count;
+        public List<string> SqlRecordsNull(string strTableName, SqlConnection sqlConnection, string strDbName = "")
+        {
+            string strQuery = "";
+
+            //  return
+            List<string> lstRtn = new List<string>();
+
+            //  column name
+            List<string> lstClm = DataTableToList(SqlColumnNames(strTableName, sqlConnection, strDbName));
+
+            for (int i = 0; i < lstClm.Count; i++)
+            {
+                strQuery = "select COUNT(*) from dbo.[" + strTableName + "] WHERE [" + lstClm[i] + "] IS NULL";
+                lstRtn.Add(StrNum(SqlExecuteScalar(strQuery, sqlConnection)));
+            }
+
+            return lstRtn;
+
         }
         #endregion
 
@@ -1891,17 +1902,17 @@ namespace Identification
         #endregion
 
         #region SqlCheckUniqColumn
-        public string SqlCheckUniqColumn(SqlConnection sqlConnection, string strTable, string strColumn)
+        public string SqlCheckUniqColumn(SqlConnection sqlConnection, string strTable, string strColumn, string strDbName = "")
         {
             // create query
             string strQry = "SELECT[" + strColumn + "],COUNT(*)cnt FROM[" + strTable + "] GROUP BY[" + strColumn + "] HAVING COUNT(*) > 1";
 
             // check result
-            if (SqlDataAdapter(strQry, sqlConnection).Rows.Count > 0)
+            if (SqlDataAdapter(strQry, sqlConnection, strDbName).Rows.Count > 0)
             { return strTable + " ==>" + strColumn + " ==> its not uniq"; }
 
-
             return strTable + " ==>" + strColumn + " ==> its uniq";
+
         }
 
         #endregion
@@ -1962,16 +1973,34 @@ namespace Identification
 
 
         #region SqlJoin
-        public DataTable SqlJoin(string strFirstTable, string strSecendTable, string strJoinColumn1, string strJoinColumn2, SqlConnection sqlConnection, string strFirstDbName = "", string strSecondDbName = "")
+        public DataTable SqlJoin(string strFirstTable, string strSecendTable, string strJoinColumn1, string strJoinColumn2, SqlConnection sqlConnection, string strFirstDbName = "", string strSecondDbName = "", string strType = "*")
         {
-            string strQuery = "SELECT * FROM [" + strFirstTable + "] a LEFT JOIN [" + strSecendTable + "] b ON a.[" + strJoinColumn1 + "] = b.[" + strJoinColumn2 + "]";
+            string strQuery = "";
 
-            if (strFirstDbName != "" & strSecondDbName != "")
+            if (strType == "*")
             {
-                strQuery = "SELECT * FROM [" + strFirstDbName + "].dbo.[" + strFirstTable + "] a LEFT JOIN [" + strSecondDbName + "].dbo.[" + strSecendTable + "] b" +
-                            " ON a.[" + strJoinColumn1 + "] = b.[" + strJoinColumn2 + "]";
-            }
+                strQuery = "SELECT a.[" + strJoinColumn1 + "] FROM [" + strFirstTable + "] a LEFT JOIN [" + strSecendTable + "] b" +
+                    " ON a.[" + strJoinColumn1 + "] = b.[" + strJoinColumn2 + "] WHERE a." + strJoinColumn1 + " IS NOT NULL OR b." + strJoinColumn2 + " IS NOT NULL";
 
+                if (strFirstDbName != "" & strSecondDbName != "")
+                {
+                    strQuery = "SELECT a.[" + strJoinColumn1 + "] FROM [" + strFirstDbName + "].dbo.[" + strFirstTable + "] a LEFT JOIN [" + strSecondDbName + "].dbo.[" + strSecendTable + "] b" +
+                                " ON a.[" + strJoinColumn1 + "] = b.[" + strJoinColumn2 + "] WHERE a." + strJoinColumn1 + " IS NOT NULL OR b." + strJoinColumn2 + " IS NOT NULL";
+                }
+            }
+            else
+            {
+                strQuery = "SELECT a.[" + strJoinColumn1 + "] FROM [" + strFirstTable + "] a LEFT JOIN [" + strSecendTable + "] b" +
+                    " ON a.[" + strJoinColumn1 + "] = b.[" + strJoinColumn2 + "] WHERE a." + strJoinColumn1 + " IS NOT NULL OR b." + strJoinColumn2 + " IS NOT NULL" +
+                    " GROUP BY a.[" + strJoinColumn1 + "]";
+
+                if (strFirstDbName != "" & strSecondDbName != "")
+                {
+                    strQuery = "SELECT a.[" + strJoinColumn1 + "] FROM [" + strFirstDbName + "].dbo.[" + strFirstTable + "] a LEFT JOIN [" + strSecondDbName + "].dbo.[" + strSecendTable + "] b" +
+                                " ON a.[" + strJoinColumn1 + "] = b.[" + strJoinColumn2 + "] WHERE a." + strJoinColumn1 + " IS NOT NULL OR b." + strJoinColumn2 + " IS NOT NULL" +
+                                " GROUP BY a.[" + strJoinColumn1 + "]";
+                }
+            }
             return SqlDataAdapter(strQuery, sqlConnection, "SqlJoin");
         }
 

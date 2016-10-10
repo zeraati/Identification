@@ -29,9 +29,7 @@ namespace Identification
             int intLenght = Convert.ToInt32(txtLenght.Text);
             int intStart = Convert.ToInt32(txtStart.Text);
             intLenght++;
-                        
-            this.functions.ReturnValue= intStart.ToString() + "," + intLenght.ToString();
-            
+                                    
             Close();
         }
     }

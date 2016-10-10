@@ -8,6 +8,8 @@ namespace Identification
 {
     static class Program
     {
+        private static object strServer;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

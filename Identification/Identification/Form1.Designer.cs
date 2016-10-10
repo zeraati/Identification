@@ -54,6 +54,7 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.txtMsg = new System.Windows.Forms.TextBox();
             this.chbRemember = new System.Windows.Forms.CheckBox();
+            this.پیداکردنتکراریToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -167,6 +168,7 @@
             this.ثبتتلفنToolStripMenuItem,
             this.یونیکToolStripMenuItem,
             this.نمایشاطلاعاتخالیToolStripMenuItem,
+            this.پیداکردنتکراریToolStripMenuItem,
             this.خروجToolStripMenuItem});
             this.پروندهToolStripMenuItem.Name = "پروندهToolStripMenuItem";
             this.پروندهToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
@@ -216,8 +218,7 @@
             this.نمایشاطلاعاتخالیToolStripMenuItem.Name = "نمایشاطلاعاتخالیToolStripMenuItem";
             this.نمایشاطلاعاتخالیToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F7;
             this.نمایشاطلاعاتخالیToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.نمایشاطلاعاتخالیToolStripMenuItem.Text = "نمایش اطلاعات خالی";
-            this.نمایشاطلاعاتخالیToolStripMenuItem.Visible = false;
+            this.نمایشاطلاعاتخالیToolStripMenuItem.Text = "نمایش تعداد رکوردها";
             this.نمایشاطلاعاتخالیToolStripMenuItem.Click += new System.EventHandler(this.نمایشاطلاعاتخالیToolStripMenuItem_Click);
             // 
             // خروجToolStripMenuItem
@@ -292,6 +293,14 @@
             this.chbRemember.Text = "به خاطر سپردن رمز";
             this.chbRemember.UseVisualStyleBackColor = true;
             // 
+            // پیداکردنتکراریToolStripMenuItem
+            // 
+            this.پیداکردنتکراریToolStripMenuItem.Name = "پیداکردنتکراریToolStripMenuItem";
+            this.پیداکردنتکراریToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
+            this.پیداکردنتکراریToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.پیداکردنتکراریToolStripMenuItem.Text = "پیدا کردن تکراری";
+            this.پیداکردنتکراریToolStripMenuItem.Click += new System.EventHandler(this.پیداکردنتکراریToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnConnect;
@@ -318,7 +327,6 @@
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RightToLeftLayout = true;
             this.Text = "اتصال به بانک";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -354,6 +362,7 @@
         private System.Windows.Forms.ToolStripMenuItem یونیکToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem نمایشاطلاعاتخالیToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem پشتیبانگیریToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem پیداکردنتکراریToolStripMenuItem;
     }
 }
 

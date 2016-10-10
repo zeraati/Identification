@@ -16,33 +16,20 @@ namespace Identification
     {
 
         #region Global
-        Functions Functions = new Functions();
-        SqlConnection sqlConnection = new SqlConnection();
+        Functions functions = new Functions();
+        SqlConnection sqlConnectionMain = new SqlConnection();
+        SqlConnection sqlConnectionSecond = new SqlConnection();
 
         string query, query2, strJoin, strWhere, strSelect, strUpdate;
         string strCell1, strCell2, strLbl2, strMain, strSecond, strSlt;
         string strField, strDescription;
 
         int intStepOver;
+
+        bool bEnableCreateClm = false;
+
         #endregion
 
-        #region Enable & Disable from item clbEhraz
-        string[] strArray =
-            {
-                "Name",         "نام",
-                "Family",       "نام خانوادگی",
-                "Father",       "نام پدر",
-                "ShenasCode",   "شماره شناسنامه",
-                "PBirthDate",   "سال تولد",
-                "CodeMelli",    "کد ملی",
-                "HomeCity",     "شهر محل تولد",
-                "SodorCity",    "شهر محل صدور",
-                "HomeOstan",    "استان محل تولد",
-                "SodorOstan",   "استان محل صدور",
-                "STID",         "کد مرکز مدیریت",
-                "MKID",         "کد مرکز خدمات"
-            };
-        #endregion
 
         #region Text Estandard Event
         string[] strJoinEvent =
@@ -117,83 +104,84 @@ namespace Identification
         public SetPerson(SqlConnection sqlCon)
         {
             InitializeComponent();
-            sqlConnection = sqlCon;
+            sqlConnectionMain = sqlCon;
+            sqlConnectionSecond = sqlCon;
         }
 
         private void SetPerson_Load(object sender, EventArgs e)
         {
             //  Sql Server Connection Info
-            this.Text = "Identification" + "  -  Server Name = " + sqlConnection.DataSource + " - DataBase Name = " + sqlConnection.Database;
+            this.Text = "Identification" + "  -  Server Name = " + sqlConnectionMain.DataSource;
 
             //  disable button
             btnChange.Enabled = btnShow.Enabled = false;
 
             //  load database name source
-            cmbMainDB.DataSource = Functions.SqlGetDBName(sqlConnection);
-            cmbSecndDB.DataSource = Functions.SqlGetDBName(sqlConnection);
+            cmbMainDB.DataSource = functions.SqlGetDBName(sqlConnectionMain);
+            cmbSecondDB.DataSource = functions.SqlGetDBName(sqlConnectionSecond);
 
 
             //  check exists file event.txt
-            string sss = Functions.CreateFile(strEventListPath);
+            string sss = functions.CreateFile(strEventListPath);
 
             //  combobox read file text
-            Functions.ListToCmb(Functions.ReadTxt(strEventListPath), cmbEventList);
+            functions.ListToCmb(functions.ReadTxt(strEventListPath), cmbEventList);
 
             //  clear checklistbox
             clbEhraz.Items.Clear();
 
             //  default value
-            cmbMainDB.Text = cmbSecndDB.Text = "AmarPartDB";
+            //cmbMainDB.Text = cmbSecondDB.Text = "AmarPartDB";
             intStepOver = 0;
         }
 
         private void cmbDBNameMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  change data base name
-            sqlConnection = Functions.SqlConnectionChangeDB(cmbMainDB.Text, sqlConnection);
+            sqlConnectionMain = functions.SqlConnectionChangeDB(cmbMainDB.Text, sqlConnectionMain);
 
             //  load table name
-            cmbMainTbl.DataSource = Functions.SqlTableName(sqlConnection);
+            cmbMainTbl.DataSource = functions.SqlTableName(sqlConnectionMain);
 
             //  default value            
-            cmbMainTbl.Text = "TBL_Student_copy";
+            //cmbMainTbl.Text = "TBL_Student";
         }
 
         private void cmbDBName2_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  change data base name
-            sqlConnection = Functions.SqlConnectionChangeDB(cmbSecndDB.Text, sqlConnection);
+            sqlConnectionSecond = functions.SqlConnectionChangeDB(cmbSecondDB.Text, sqlConnectionSecond);
 
             //  load table name
-            cmbSecndTbl.DataSource = Functions.SqlTableName(sqlConnection);
+            cmbSecondTbl.DataSource = functions.SqlTableName(sqlConnectionSecond);
 
             //  default value
-            cmbSecndTbl.Text = "TBL_MKsarparast_uniq_copy";
+            //cmbSecondTbl.Text = "TBL_MKsarparast";
         }
 
         private void cmbTBNameMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  load cmb field source
-            cmbMainClmnJoin.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection));
-            cmbMainClmnUniq.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection));
+            cmbMainClmnJoin.DataSource = functions.DataTableToList(functions.SqlColumnNames(cmbMainTbl.Text, sqlConnectionMain));
+            cmbMainClmnUniq.DataSource = functions.DataTableToList(functions.SqlColumnNames(cmbMainTbl.Text, sqlConnectionSecond));
 
             //  default value
-            cmbMainClmnJoin.Text = "STID";
+            //cmbMainClmnJoin.Text = "STID";
         }
 
         private void cmbTBName2_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  load cmb field source
-            cmbSecndClmnJoin.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection));
+            cmbSecndClmnJoin.DataSource = functions.DataTableToList(functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond));
 
             //  default value
-            cmbSecndClmnJoin.Text = "STID";
+            //cmbSecndClmnJoin.Text = "STID";
         }
 
         private void btnAllSelect_Click(object sender, EventArgs e)
         {
             //  select all & unselect all
-            Functions.SelectUnselect(clbEhraz, btnSelectAll);
+            functions.SelectUnselect(clbEhraz, btnSelectAll);
         }
 
         private void btnCheck_Click(object sender, EventArgs e)
@@ -202,125 +190,152 @@ namespace Identification
             int intCount = 0, intCheck = 0;
 
             string strFunctionsFile = @"../Functions";
-            string strFinal, strReport;
+            string strFinal;
+
+            List<string> lst = new List<string>();
 
             //  clear list
             lstReport.Items.Clear();
 
             //  check sql functions
-            strReport = Functions.CheckSqlFunctions(strFunctionsFile, cmbMainDB.Text, sqlConnection);
+            lst = functions.CheckSqlFunctions(strFunctionsFile, cmbMainDB.Text, sqlConnectionMain);
 
             //  report from functions
-            if (strReport != "")
-            { lstReport.Items.Add(strReport); }
+            if (lst.Count != 0)
+            {
+                for (int j = 0; j < lst.Count; j++)
+                { lstReport.Items.Add(lst[j]); }
+            }
 
             intCheck = 0;
 
             DataTable dtTotal = new DataTable();
             DialogResult dr;
 
-            if (cmbMainDB.Text == cmbSecndDB.Text & cmbMainTbl.Text == cmbSecndTbl.Text)
+            //if (cmbMainDB.Text == cmbSecondDB.Text & cmbMainTbl.Text == cmbSecondTbl.Text)
+            //{
+            //    MessageBox.Show("جداول نباید مثل هم باشد", "!خطا");
+            //}
+            //else
+            //{
+            #region Data Bases Info
+
+            //  table main record count
+            intCount = functions.SqlRecordCount(cmbMainTbl.Text, sqlConnectionMain);
+
+            //  report count
+            lstReport.Items.Add("تعداد رکورد جدول از بانک اصلی : " + functions.StrNum(intCount));
+
+            //  table second count
+            intCount = functions.SqlRecordCount(cmbSecondTbl.Text, sqlConnectionSecond);
+
+            //  report count
+            lstReport.Items.Add("تعداد رکورد جدول از بانک فرعی : " + functions.StrNum(intCount));
+
+            //  cmb main join cmb second and total
+            intCount = functions.SqlJoin(cmbMainTbl.Text, cmbSecondTbl.Text, cmbMainClmnJoin.Text, cmbSecndClmnJoin.Text, sqlConnectionMain, cmbMainDB.Text, cmbSecondDB.Text).Rows.Count;
+
+            //  report count
+            lstReport.Items.Add("تعداد کل رکورد ها : " + functions.StrNum(intCount));
+
+            //  cmb main join cmb second and filter
+            intCount = functions.SqlJoin(cmbMainTbl.Text, cmbSecondTbl.Text, cmbMainClmnJoin.Text, cmbSecndClmnJoin.Text, sqlConnectionMain, cmbMainDB.Text, cmbSecondDB.Text, "").Rows.Count;
+
+            //  report count
+            lstReport.Items.Add("تعداد کل رکورد ها از بین دو بانک فوق : " + functions.StrNum(intCount));
+
+            #endregion
+
+            //*****         END
+
+            //  datagridview combobox column source
+            functions.ComboBoxSource(clmSecond, functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text));
+
+            //  list column names                
+            lstMainClmns.DataSource = functions.DataTableToList(functions.SqlColumns(cmbMainTbl.Text, sqlConnectionMain, cmbMainDB.Text), 1);
+            lstSecndClmns.DataSource = functions.DataTableToList(functions.SqlColumns(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text), 1);
+
+
+            #region Create New Field
+
+            //  new field
+            strField = cmbMainClmnUniq.Text + "_vld";
+            //  check new field
+            intCheck = CheckField(functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond), strField);
+
+            if (intCheck == 0)
             {
-                MessageBox.Show("جداول نباید مثل هم باشد", "!خطا");
-            }
-            else
-            {
-                #region Data Bases Info
-
-                //  table main record count
-                intCount = Functions.SqlTableRecordsCount(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text);
-
-                //  report count
-                lstReport.Items.Add("تعداد رکورد جدول از بانک اصلی : " + Functions.StrNum(intCount));
-
-                //  table second count
-                intCount = Functions.SqlTableRecordsCount(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text);
-
-                //  report count
-                lstReport.Items.Add("تعداد رکورد جدول از بانک فرعی : " + Functions.StrNum(intCount));
-
-                //  cmb main join cmb second
-                intCount = Functions.SqlJoin(cmbMainTbl.Text, cmbSecndTbl.Text, cmbMainClmnJoin.Text, cmbSecndClmnJoin.Text, sqlConnection, cmbMainDB.Text, cmbSecndDB.Text).Rows.Count;
-
-                //  report count
-                lstReport.Items.Add("تعداد کل رکورد ها : " + Functions.StrNum(intCount));
-
-                #endregion
-
-                //*****         END
-
-                //  datagridview combobox column source
-                Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text));
-
-                //  list column names                
-                lstMainClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text), 1);
-                lstSecndClmns.DataSource = Functions.DataTableToList(Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text), 1);
-
-
-                #region Create New Field
-
-                //  new field
-                strField = cmbMainClmnUniq.Text + "_vld";
-                //  check new field
-                intCheck = CheckField(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text), strField);
-
-                if (intCheck == 0)
+                dr = MessageBox.Show(" بسازم ؟" + cmbMainClmnUniq.Text + "_vld آیا فیلد ", "! هشدار", MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
                 {
-                    dr = MessageBox.Show(" بسازم ؟" + cmbMainClmnUniq.Text + "_vld آیا فیلد ", "! هشدار", MessageBoxButtons.YesNo);
-                    if (dr == DialogResult.Yes)
+                    //  add new field
+                    strFinal = functions.SqlAddNewColumn(cmbSecondTbl.Text, strField, "INT", "NULL", sqlConnectionSecond);
+
+                    if (strFinal.Contains("Done"))
                     {
-                        //  add new field
-                        strFinal = Functions.SqlAddNewColumn(cmbSecndTbl.Text, strField, "INT", "NULL", sqlConnection, cmbSecndDB.Text);
+                        //  report
+                        lstReport.Items.Add(strField + "با موفقیت انجام شد");
+
+                        //  datagridview combobox column source
+                        functions.ComboBoxSource(clmSecond, functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond));
+
+                        //  enable for create where
+                        bEnableCreateClm = true;
+                    }
+                    else
+                    {
+                        //  disable for create where
+                        bEnableCreateClm = false;
+
+                        //  report
+                        lstReport.Items.Add("با مشکل مواجه شد " + strField);
+                    }
+
+                    //    
+
+                    intCheck = 0;
+
+                    //  check field "Description"
+                    intCheck = CheckField(functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond), "Description");
+
+                    if (intCheck == 0)
+                    {
+                        // add column   
+                        strFinal = functions.SqlAddNewColumn(cmbSecondTbl.Text, "Description", "NVARCHAR(MAX)", "NULL", sqlConnectionSecond);
 
                         if (strFinal.Contains("Done"))
                         {
-                            lstReport.Items.Add(strField + "با موفقیت انجام شد");
+                            //  report
+                            lstReport.Items.Add("با موفقیت انجام شد Description");
 
                             //  datagridview combobox column source
-                            Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text, ""));
+                            functions.ComboBoxSource(clmSecond, functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond));
                         }
-                        else lstReport.Items.Add("با مشکل مواجه شد " + strField);
-
-                        //    
-
-                        intCheck = 0;
-
-                        //  check field "Description"
-                        intCheck = CheckField(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text, ""), "Description");
-
-                        if (intCheck == 0)
-                        {
-                            // add column   
-                            strFinal = Functions.SqlAddNewColumn(cmbSecndTbl.Text, "Description", "NVARCHAR(MAX)", "NULL", sqlConnection, cmbSecndDB.Text);
-
-                            if (strFinal.Contains("Done"))
-                            {
-                                lstReport.Items.Add("با موفقیت انجام شد Description");
-
-                                //  datagridview combobox column source
-                                Functions.ComboBoxSource(clmSecond, Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text));
-                            }
-                            else lstReport.Items.Add("با مشکل مواجه شد");
-                        }
-
+                        else lstReport.Items.Add("با مشکل مواجه شد");
                     }
-                    else if (dr == DialogResult.No)
-                    {
-                        lstReport.Items.Add("لغو شد");
-                    }
+
                 }
-                #endregion
+                else if (dr == DialogResult.No)
+                {
+                    //  disable for create where
+                    bEnableCreateClm = false;
+
+                    lstReport.Items.Add("لغو شد");
+                }
             }
+            #endregion
+
+            //}
 
             #region DataGridView
             DataTable dtDgv = new DataTable();
 
             //  column names
-            dtDgv = Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text, "فیلد جدول اصلی");
+            dtDgv = functions.SqlColumnNames(cmbMainTbl.Text, sqlConnectionMain, "", "فیلد جدول اصلی");
 
 
             //  add item to checklistbox
-            AddItemCheckList(Functions.DataTableToList(dtDgv), strArray, clbEhraz);
+            AddItemCheckList(functions.DataTableToList(dtDgv), Variable.strArray, clbEhraz);
 
 
             //  remove row if has 'stid'
@@ -329,7 +344,7 @@ namespace Identification
             {
                 string strtxt = dtDgv.Rows[i][0].ToString().ToUpper();
 
-                if (dtDgv.Rows[i][0].ToString().ToUpper() == "STID")
+                if (dtDgv.Rows[i][0].ToString().ToUpper() == cmbMainClmnJoin.Text.ToUpper())
                 {
                     dtDgv.Rows.Remove(dtDgv.Rows[i]);
                     break;
@@ -352,7 +367,7 @@ namespace Identification
             #endregion
 
 
-            dtDgv = Functions.SqlColumns(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text);
+            dtDgv = functions.SqlColumns(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text);
             //clmSecond.Items.Clear();
             clmSecond.HeaderText = "فیلد جدول فرعی";
             #endregion
@@ -361,7 +376,10 @@ namespace Identification
             #region Defualt Value
 
             //  column names to list
-            List<string> lstColumnNames = Functions.DataTableToList(Functions.SqlColumnNames(cmbSecndTbl.Text, sqlConnection, cmbSecndDB.Text));
+            List<string> lstColumnNames = functions.DataTableToList(functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text));
+            //  test list
+            List<string> lsttest = new List<string>();
+            bool bBreak = false;
 
             for (int i = 0; i < dgv.Rows.Count; i++)
             {
@@ -376,6 +394,32 @@ namespace Identification
                         dgv.Rows[i].Cells[2].Value = lstColumnNames[j].ToString();
                         break;
                     }
+                    else
+                    {
+                        for (int l = 0; l < 12; l++)
+                        {
+                            if (Variable.strArray[l, 0] == lstColumnNames[j].ToString()
+                                || Variable.strArray[l, 1] == lstColumnNames[j].ToString()
+                                || Variable.strArray[l, 2] == lstColumnNames[j].ToString())
+                            {
+                                //  defualt value in combobox
+                                dgv.Rows[i].Cells[2].Value = Variable.strArray[l, 0];
+                                string strtest = Variable.strArray[l, 0];
+                                lsttest.Add(Variable.strArray[l, 0]);
+                                bBreak = true;
+                                goto Br;
+
+                            }
+                        Br: if (bBreak == true) { bBreak = false; break; }
+                        }
+
+
+                    }
+                    /*
+                 | strArray[j, 0] == lstColumnNames[j].ToString()
+                        | strArray[j, 1] == lstColumnNames[j].ToString()
+                        | strArray[j, 2] == lstColumnNames[j].ToString()    
+                 */
                 }
             }
 
@@ -412,7 +456,8 @@ namespace Identification
 
         private void تغییراتصالبهبانکگToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Form1 frmLogin = new Form1();
+            frmLogin.ShowDialog();
         }
 
         //**********************************************************
@@ -424,14 +469,11 @@ namespace Identification
             //  create query
             main();
 
-            //  change database name
-            sqlConnection = Functions.SqlConnectionChangeDB(cmbMainDB.Text, sqlConnection);
-
             //  datagridview run query2
-            dgvSearch.DataSource = Functions.SqlDataAdapter(query2, sqlConnection);
+            dgvSearch.DataSource = functions.SqlDataAdapter(query2, sqlConnectionMain);
 
             //  report counter
-            lstReport.Items.Add("رکورد نتیجه: " + Functions.StrNum(dgvSearch.RowCount - 1));
+            lstReport.Items.Add("رکورد نتیجه: " + functions.StrNum(dgvSearch.RowCount - 1));
             lstReport.SelectedIndex = lstReport.Items.Count - 1;
 
             Cursor.Current = Cursors.Default;
@@ -446,8 +488,8 @@ namespace Identification
             //  function filters
             main();
 
-            if (strDescription.IndexOf(cmbMainClmnJoin.Text) <= 0)
-            { strDescription += " ,join=" + cmbMainClmnJoin.Text; }
+            //if (strDescription.IndexOf(cmbMainClmnJoin.Text) <= 0) { strDescription += " ,join=" + cmbMainClmnJoin.Text; }
+            strDescription += (strDescription.IndexOf(cmbMainClmnJoin.Text) <= 0) ? " ,join=" + cmbMainClmnJoin.Text : strDescription;
 
             //  create query
             query = strUpdate + strDescription + "' FROM " + strJoin + strWhere + " AND  " + txtLbl2.Text + ".Description is NULL SELECT @@ROWCOUNT";
@@ -456,16 +498,16 @@ namespace Identification
             File.WriteAllText(@"../Command2.txt", query);
 
             //  report
-            lstReport.Items.Add("رکورد نتیجه : " + Functions.SqlRunQuery(query, sqlConnection));
+            lstReport.Items.Add("رکورد نتیجه : " + functions.SqlRunQuery(query, sqlConnectionSecond));
 
             //  default value
             int ResultCount = 0;
 
             //  count not used
-            ResultCount = Functions.SqlCountColumn(cmbSecndTbl.Text, sqlConnection, "[" + cmbMainClmnUniq.Text + "_vld] is null");
+            ResultCount = functions.SqlCountColumn(cmbSecondTbl.Text, sqlConnectionSecond, "[" + cmbMainClmnUniq.Text + "_vld] is null");
 
             //  report
-            lstReport.Items.Add("رکورد مانده : " + Functions.StrNum(ResultCount));
+            lstReport.Items.Add("رکورد مانده : " + functions.StrNum(ResultCount));
             lstReport.SelectedIndex = lstReport.Items.Count - 1;
 
             //  wait mode disable
@@ -508,10 +550,10 @@ namespace Identification
                 if (strDescription.IndexOf(cmbMainClmnJoin.Text) <= 0)
                 { strDescription += " ,join=" + cmbMainClmnJoin.Text; }
 
-                strQuery = "UPDATE [" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] SET [" + cmbMainClmnUniq.Text + "_vld] = " + dgvSearch.Rows[e.RowIndex].Cells[1].Value.ToString() +
+                strQuery = "UPDATE [" + cmbSecondDB.Text + "].dbo.[" + cmbSecondTbl.Text + "] SET [" + cmbMainClmnUniq.Text + "_vld] = " + dgvSearch.Rows[e.RowIndex].Cells[1].Value.ToString() +
                             " , [Description]=N'" + strDescription + " , آپدیت دستی'" + " WHERE STID =" + dgvSearch.Rows[e.RowIndex].Cells[2].Value.ToString() + " AND [" + cmbMainClmnUniq.Text + "_vld] IS NULL SELECT @@ROWCOUNT";
 
-                lstReport.Items.Add("رکورد نتیجه: " + Functions.SqlRunQuery(strQuery, sqlConnection, cmbSecndDB.Text));
+                lstReport.Items.Add("رکورد نتیجه: " + functions.SqlRunQuery(strQuery, sqlConnectionSecond, cmbSecondDB.Text));
 
                 dgvSearch.Rows.Remove(dgvSearch.Rows[e.RowIndex]);
 
@@ -568,17 +610,22 @@ namespace Identification
             DataTable dtDgv = new DataTable();
 
             //  column names
-            dtDgv = Functions.SqlColumnNames(cmbMainTbl.Text, sqlConnection, cmbMainDB.Text, "فیلد جدول اصلی");
+            dtDgv = functions.SqlColumnNames(cmbMainTbl.Text, sqlConnectionMain, cmbMainDB.Text, "فیلد جدول اصلی");
 
             //  add item to checklistbox
-            AddItemCheckList(Functions.DataTableToList(dtDgv), strArray, clbEhraz);
+            AddItemCheckList(functions.DataTableToList(dtDgv), Variable.strArray, clbEhraz);
 
-            for (int i = 0; i < 22; i++)
+            for (int i = 0; i < 12; i++)
             {
-                string strs = strArray[i];
-                if (strArray[i] == cmbMainClmnJoin.Text)
-                { clbEhraz.Items.Remove(strArray[i + 1]); }
-                i++;
+                for (int o = 0; o < 3; o++)
+                {
+                    string strs = Variable.strArray[i, o];
+                    if (Variable.strArray[i, o].ToUpper() == cmbMainClmnJoin.Text.ToUpper())
+                    {
+                        string strtest = Variable.strArray[i, 2]; clbEhraz.Items.Remove(Variable.strArray[i, 2]);
+                    }
+
+                }
             }
         }
 
@@ -605,14 +652,10 @@ namespace Identification
             }
         }
 
-        private void cmbEventList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //  items is defined
-
-        }
-
         private void cmbNameLike_SelectedIndexChanged(object sender, EventArgs e)
-        { if (cmbNameLike.Text != "") clbEhraz.SetItemChecked(0, true); }
+        {
+            if (cmbNameLike.Text != "") clbEhraz.SetItemChecked(0, true);
+        }
 
         private void cmbFamilyLike_SelectedIndexChanged(object sender, EventArgs e)
         { if (cmbFamilyLike.Text != "") clbEhraz.SetItemChecked(1, true); }
@@ -621,6 +664,15 @@ namespace Identification
         {
 
         }
+
+
+        #region Event
+        private void cmbEventList_SelectedValueChanged(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
 
         private void btnStepOver_Click(object sender, EventArgs e)
         {
@@ -688,7 +740,7 @@ namespace Identification
             a = txtLbl1.Text; b = txtLbl2.Text;
 
             //  create update query
-            strUpdate = "Update [" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] SET [" + cmbMainClmnUniq.Text + "_vld]=" + a + "." + cmbMainClmnUniq.Text + " , [Description]=N'";
+            strUpdate = "Update [" + cmbSecondDB.Text + "].dbo.[" + cmbSecondTbl.Text + "] SET [" + cmbMainClmnUniq.Text + "_vld]=" + a + "." + cmbMainClmnUniq.Text + " , [Description]=N'";
 
             //  report
             lstReport.Items.Add("احراز هویت بر اساس ");
@@ -703,7 +755,7 @@ namespace Identification
 
             //  Naming Table
             string comMain = "[" + cmbMainDB.Text + "].dbo.[" + cmbMainTbl.Text + "] " + a;
-            string com2 = "[" + cmbSecndDB.Text + "].dbo.[" + cmbSecndTbl.Text + "] " + b;
+            string com2 = "[" + cmbSecondDB.Text + "].dbo.[" + cmbSecondTbl.Text + "] " + b;
 
             //  column info from table main & table second
             #region column info
@@ -748,7 +800,8 @@ namespace Identification
 
             #region Create Select Query & string Where & Join
 
-            strSelect = "SELECT [" + txtLbl1.Text + "].STID " + txtLbl1.Text + "_STID, [" + txtLbl2.Text + "].STID " + txtLbl2.Text + "_STID," + strSlt + " FROM ";
+            strSelect = "SELECT [" + txtLbl1.Text + "].[" + cmbMainClmnJoin.Text + "] " + txtLbl1.Text + "_" + cmbMainClmnJoin.Text +
+                ", [" + txtLbl2.Text + "].[" + cmbSecndClmnJoin.Text + "] " + txtLbl2.Text + "_" + cmbSecndClmnJoin.Text + "," + strSlt + " FROM ";
             strJoin = comMain + " JOIN " + com2 + " ON " + DeleteFreeSpace(a + ".[" + cmbMainClmnJoin.Text + "]") + " = " + DeleteFreeSpace(b + ".[" + cmbSecndClmnJoin.Text + "]");
 
             //**********************
@@ -801,15 +854,15 @@ namespace Identification
                     #endregion
 
                     #region ShenasCode -> int
-                    case "شناسنامه":
+                    case "شماره شناسنامه":
 
                         //  create where for query
                         if (strWhere != "")
                         { strWhere += " AND " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null"; }
                         else strWhere += " Where " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null";
 
-                        strDescription += "شناسنامه";
-                        lstReport.Items.Add("شناسنامه");
+                        strDescription += "شماره شناسنامه";
+                        lstReport.Items.Add("شماره شناسنامه");
 
                         break;
                     #endregion
@@ -897,12 +950,18 @@ namespace Identification
                 }
             }
 
-
-            if (strWhere != "")
+            if (bEnableCreateClm == true)
             {
-                strWhere += " AND " + b + ".[" + cmbMainClmnUniq.Text + "_vld] IS NULL ";
+                if (chbUniq.CheckState == CheckState.Checked)
+                {
+                    if (strWhere != "")
+                    {
+                        strWhere += " AND " + b + ".[" + cmbMainClmnUniq.Text + "_vld] IS NULL ";
+                    }
+                    else strWhere += " Where " + b + ".[" + cmbMainClmnUniq.Text + "_vld] IS NULL ";
+                }
             }
-            else strWhere += " Where " + b + ".[" + cmbMainClmnUniq.Text + "_vld] IS NULL ";
+
 
             //  create query finaly
             query2 = strSelect + strJoin + strWhere;
@@ -1065,10 +1124,8 @@ namespace Identification
             int intReturn = 0;
             for (int i = 0; i < dtInput.Rows.Count; i++)
             {
-                if (dtInput.Rows[i][0].ToString() == strSearchField)
-                {
-                    intReturn = 1;
-                }
+                //if (dtInput.Rows[i][0].ToString() == strSearchField) { intReturn = 1; }
+                intReturn = (dtInput.Rows[i][0].ToString() == strSearchField) ? 1 : intReturn;
             }
             return intReturn;
         }
@@ -1076,20 +1133,21 @@ namespace Identification
         private string DeleteFreeSpace(string strItem)
         { return "Replace(" + strItem + ", ' ', '')"; }
 
-        private void AddItemCheckList(List<string> lstItem, string[] strArr, CheckedListBox clbEhraz)
+        private void AddItemCheckList(List<string> lstItem, string[,] strArr, CheckedListBox clbEhraz)
         {
             clbEhraz.Items.Clear();
-
             for (int i = 0; i < lstItem.Count; i++)
             {
-                for (int j = 0; j < 22; j++)
+                for (int o = 0; o < 12; o++)
                 {
-                    if (lstItem[i] == strArr[j])
+                    for (int j = 0; j < 3; j++)
                     {
-                        string strs = strArr[j + 1];
-                        clbEhraz.Items.Add(strArr[j + 1]);
+                        if (lstItem[i].ToUpper() == strArr[o, j].ToUpper())
+                        {
+                            string strs = strArr[o, j];
+                            clbEhraz.Items.Add(strArr[o, 2]);
+                        }
                     }
-                    j++;
                 }
             }
         }

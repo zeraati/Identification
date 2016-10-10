@@ -18,11 +18,12 @@ namespace Identification
     {
         Functions Functions = new Functions();
 
-        Boolean answer, EnableFrm;
+        Boolean EnableFrm;
         SqlConnection sqlConnection = new SqlConnection();
 
         string strUser, strPass, str, Alltext;
         string strPathLoginFolder = @"../Login.pos";
+
 
         public Form1()
         {
@@ -30,22 +31,16 @@ namespace Identification
 
             //  Load Server Name
             cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
+
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-            //  Defualt
-            //btnConnect_Click(null, null);
-            //احرازهویتToolStripMenuItem_Click(null, null);
-        }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            //cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
 
             //  change database
-            if (cmbDBNames.Text != "") sqlConnection = Functions.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection);
+            //if (cmbDBNames.Text != "") sqlConnection = Functions.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection);
+            sqlConnection = (cmbDBNames.Text != "") ? Functions.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection) : sqlConnection;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -53,12 +48,9 @@ namespace Identification
             Application.Exit();
         }
 
-        private void btnConnect_Enter(object sender,KeyEventArgs e)
+        private void btnConnect_Enter(object sender, KeyEventArgs e)
         {
-            if (e.KeyData==Keys.Enter)
-            {
-                btnConnect_Click(null, null);
-            }
+            if (e.KeyData == Keys.Enter) { btnConnect_Click(null, null); }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -74,7 +66,6 @@ namespace Identification
 
             //  create sql connection            
             sqlConnection = Functions.SqlConnect(strServer, strUser, strPass);
-
 
             //  test sql connection
             if (Functions.SqlConnectionTest(sqlConnection))
@@ -202,9 +193,7 @@ namespace Identification
         }
 
         private void اتصالToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            btnConnect_Click(null, null);
-        }
+        { btnConnect_Click(null, null); }
 
         private void احرازهویتToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -224,8 +213,14 @@ namespace Identification
 
         private void نمایشاطلاعاتخالیToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NullSearch nlsch = new NullSearch(sqlConnection);
-            nlsch.ShowDialog();
+            InfoColumns frmInfoClm = new InfoColumns(sqlConnection);
+            frmInfoClm.ShowDialog();
+        }
+
+        private void پیداکردنتکراریToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FindDuplicate frmfd = new FindDuplicate(sqlConnection);
+            frmfd.ShowDialog();
         }
 
         private void پشتیبانگیریToolStripMenuItem_Click(object sender, EventArgs e)

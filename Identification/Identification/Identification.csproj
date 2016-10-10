@@ -89,6 +89,12 @@
     <Compile Include="Estandard.Designer.cs">
       <DependentUpon>Estandard.cs</DependentUpon>
     </Compile>
+    <Compile Include="FindDuplicate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FindDuplicate.Designer.cs">
+      <DependentUpon>FindDuplicate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,11 +102,11 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Functions.cs" />
-    <Compile Include="NullSearch.cs">
+    <Compile Include="InfoColumns.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NullSearch.Designer.cs">
-      <DependentUpon>NullSearch.cs</DependentUpon>
+    <Compile Include="InfoColumns.Designer.cs">
+      <DependentUpon>InfoColumns.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -136,11 +142,14 @@
     <EmbeddedResource Include="Estandard.resx">
       <DependentUpon>Estandard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FindDuplicate.resx">
+      <DependentUpon>FindDuplicate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NullSearch.resx">
-      <DependentUpon>NullSearch.cs</DependentUpon>
+    <EmbeddedResource Include="InfoColumns.resx">
+      <DependentUpon>InfoColumns.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

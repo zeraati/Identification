@@ -36,8 +36,10 @@
             this.تبدیلتاریخToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.بستنToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.خروجToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.فونتToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnAuto = new System.Windows.Forms.Button();
             this.btnUpdDesign = new System.Windows.Forms.Button();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -69,7 +71,6 @@
             this.cmbTableName = new System.Windows.Forms.ComboBox();
             this.cmbDBName = new System.Windows.Forms.ComboBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.فونتToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -87,7 +88,7 @@
             this.اجراییToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(643, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(646, 24);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -117,7 +118,7 @@
             this.پشتیبانگیریToolStripMenuItem.Name = "پشتیبانگیریToolStripMenuItem";
             this.پشتیبانگیریToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
             this.پشتیبانگیریToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
-            this.پشتیبانگیریToolStripMenuItem.Text = "پشتیبان گیری";
+            this.پشتیبانگیریToolStripMenuItem.Text = "پشتیبان گیری از بانک";
             this.پشتیبانگیریToolStripMenuItem.Click += new System.EventHandler(this.پشتیبانگیریToolStripMenuItem_Click);
             // 
             // تبدیلتاریخToolStripMenuItem
@@ -142,6 +143,14 @@
             this.خروجToolStripMenuItem.Text = "خروج";
             this.خروجToolStripMenuItem.Click += new System.EventHandler(this.خروجToolStripMenuItem_Click_1);
             // 
+            // فونتToolStripMenuItem
+            // 
+            this.فونتToolStripMenuItem.Name = "فونتToolStripMenuItem";
+            this.فونتToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.فونتToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.فونتToolStripMenuItem.Text = "فونت";
+            this.فونتToolStripMenuItem.Click += new System.EventHandler(this.فونتToolStripMenuItem_Click);
+            // 
             // timer1
             // 
             this.timer1.Enabled = true;
@@ -149,6 +158,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox1.Controls.Add(this.btnAuto);
             this.groupBox1.Controls.Add(this.btnUpdDesign);
             this.groupBox1.Controls.Add(this.tabControl2);
             this.groupBox1.Controls.Add(this.chbDisRec);
@@ -170,9 +180,19 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "استاندارد سازی";
             // 
+            // btnAuto
+            // 
+            this.btnAuto.Location = new System.Drawing.Point(133, 76);
+            this.btnAuto.Name = "btnAuto";
+            this.btnAuto.Size = new System.Drawing.Size(100, 23);
+            this.btnAuto.TabIndex = 76;
+            this.btnAuto.Text = "اصلاح خودکار";
+            this.btnAuto.UseVisualStyleBackColor = true;
+            this.btnAuto.Click += new System.EventHandler(this.btnAuto_Click);
+            // 
             // btnUpdDesign
             // 
-            this.btnUpdDesign.Location = new System.Drawing.Point(6, 61);
+            this.btnUpdDesign.Location = new System.Drawing.Point(32, 76);
             this.btnUpdDesign.Name = "btnUpdDesign";
             this.btnUpdDesign.Size = new System.Drawing.Size(85, 23);
             this.btnUpdDesign.TabIndex = 14;
@@ -215,6 +235,7 @@
             this.clb2.FormattingEnabled = true;
             this.clb2.HorizontalScrollbar = true;
             this.clb2.Items.AddRange(new object[] {
+            "اصلاح نام فیلد",
             "حذف مقدار تهی",
             "نوع و اندازه فیلد",
             "اصلاح ي و ک",
@@ -266,10 +287,10 @@
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.lst1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 24);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(596, 235);
+            this.tabPage2.Size = new System.Drawing.Size(596, 237);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "نتیجه عملیات";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -315,10 +336,10 @@
             this.tabPage3.Controls.Add(this.label5);
             this.tabPage3.Controls.Add(this.cmbTableNameTab1);
             this.tabPage3.Controls.Add(this.btnTBDelete);
-            this.tabPage3.Location = new System.Drawing.Point(4, 24);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(596, 235);
+            this.tabPage3.Size = new System.Drawing.Size(596, 237);
             this.tabPage3.TabIndex = 3;
             this.tabPage3.Text = "ویرایش جدول";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -395,7 +416,7 @@
             // chbDisRec
             // 
             this.chbDisRec.AutoSize = true;
-            this.chbDisRec.Location = new System.Drawing.Point(114, 65);
+            this.chbDisRec.Location = new System.Drawing.Point(114, 49);
             this.chbDisRec.Name = "chbDisRec";
             this.chbDisRec.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.chbDisRec.Size = new System.Drawing.Size(140, 17);
@@ -407,7 +428,7 @@
             // cbReplace
             // 
             this.cbReplace.AutoSize = true;
-            this.cbReplace.Location = new System.Drawing.Point(537, 67);
+            this.cbReplace.Location = new System.Drawing.Point(537, 51);
             this.cbReplace.Name = "cbReplace";
             this.cbReplace.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.cbReplace.Size = new System.Drawing.Size(66, 17);
@@ -418,7 +439,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(338, 66);
+            this.label7.Location = new System.Drawing.Point(338, 50);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(54, 13);
             this.label7.TabIndex = 35;
@@ -427,7 +448,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(474, 66);
+            this.label6.Location = new System.Drawing.Point(474, 50);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(56, 13);
             this.label6.TabIndex = 34;
@@ -435,7 +456,7 @@
             // 
             // txtNew
             // 
-            this.txtNew.Location = new System.Drawing.Point(260, 63);
+            this.txtNew.Location = new System.Drawing.Point(260, 47);
             this.txtNew.Name = "txtNew";
             this.txtNew.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtNew.Size = new System.Drawing.Size(70, 20);
@@ -444,7 +465,7 @@
             // 
             // txtBefore
             // 
-            this.txtBefore.Location = new System.Drawing.Point(398, 63);
+            this.txtBefore.Location = new System.Drawing.Point(398, 47);
             this.txtBefore.Name = "txtBefore";
             this.txtBefore.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtBefore.Size = new System.Drawing.Size(70, 20);
@@ -453,7 +474,7 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(6, 30);
+            this.btnUpdate.Location = new System.Drawing.Point(6, 16);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(77, 23);
             this.btnUpdate.TabIndex = 3;
@@ -464,7 +485,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(300, 35);
+            this.label2.Location = new System.Drawing.Point(300, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 13);
             this.label2.TabIndex = 25;
@@ -473,7 +494,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(562, 35);
+            this.label1.Location = new System.Drawing.Point(562, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 13);
             this.label1.TabIndex = 24;
@@ -484,7 +505,7 @@
             this.cmbTableName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTableName.DropDownWidth = 100;
             this.cmbTableName.FormattingEnabled = true;
-            this.cmbTableName.Location = new System.Drawing.Point(89, 32);
+            this.cmbTableName.Location = new System.Drawing.Point(89, 18);
             this.cmbTableName.Name = "cmbTableName";
             this.cmbTableName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.cmbTableName.Size = new System.Drawing.Size(203, 21);
@@ -496,7 +517,7 @@
             this.cmbDBName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDBName.DropDownWidth = 500;
             this.cmbDBName.FormattingEnabled = true;
-            this.cmbDBName.Location = new System.Drawing.Point(338, 32);
+            this.cmbDBName.Location = new System.Drawing.Point(338, 18);
             this.cmbDBName.MaxDropDownItems = 2;
             this.cmbDBName.MaxLength = 100;
             this.cmbDBName.Name = "cmbDBName";
@@ -504,14 +525,6 @@
             this.cmbDBName.Size = new System.Drawing.Size(223, 21);
             this.cmbDBName.TabIndex = 1;
             this.cmbDBName.SelectedIndexChanged += new System.EventHandler(this.cmbDBName_SelectedIndexChanged);
-            // 
-            // فونتToolStripMenuItem
-            // 
-            this.فونتToolStripMenuItem.Name = "فونتToolStripMenuItem";
-            this.فونتToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.فونتToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
-            this.فونتToolStripMenuItem.Text = "فونت";
-            this.فونتToolStripMenuItem.Click += new System.EventHandler(this.فونتToolStripMenuItem_Click);
             // 
             // Estandard
             // 
@@ -521,7 +534,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(643, 397);
+            this.ClientSize = new System.Drawing.Size(646, 397);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -593,5 +606,6 @@
         private System.Windows.Forms.Button btnTBDelete;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem فونتToolStripMenuItem;
+        private System.Windows.Forms.Button btnAuto;
     }
 }

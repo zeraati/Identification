@@ -52,7 +52,6 @@ E:\Projects\Identification\Identification\Identification\bin\Debug\Identificatio
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.DateConvert.resources
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Estandard.resources
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Form1.resources
-E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.NullSearch.resources
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.Properties.Resources.resources
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.SetPerson.resources
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.SQLDBbackup.resources
@@ -62,3 +61,5 @@ E:\Projects\Identification\Identification\Identification\obj\Debug\Identificatio
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.exe
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.pdb
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.csprojResolveAssemblyReference.cache
+E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.InfoColumns.resources
+E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.FindDuplicate.resources
