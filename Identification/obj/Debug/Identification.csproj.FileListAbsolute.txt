@@ -63,3 +63,9 @@ E:\Projects\Identification\Identification\Identification\obj\Debug\Identificatio
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.csprojResolveAssemblyReference.cache
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.InfoColumns.resources
 E:\Projects\Identification\Identification\Identification\obj\Debug\Identification.FindDuplicate.resources
+C:\Users\Mojtaba\Downloads\Identification\Identification\Identification\bin\Debug\Identification.exe.config
+C:\Users\Mojtaba\Downloads\Identification\Identification\Identification\obj\Debug\Identification.exe
+C:\Users\Mojtaba\Downloads\Identification\Identification\Identification\obj\Debug\Identification.pdb
+C:\Users\Mojtaba\Downloads\Identification\Identification\bin\Debug\Identification.exe.config
+C:\Users\Mojtaba\Downloads\Identification\Identification\obj\Debug\Identification.exe
+C:\Users\Mojtaba\Downloads\Identification\Identification\obj\Debug\Identification.pdb
