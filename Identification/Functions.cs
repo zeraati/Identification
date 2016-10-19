@@ -1301,19 +1301,14 @@ namespace Identification
         public string SqlAddNewColumn(string strTableName, string strColumnName, string strDataType, string strNulable, SqlConnection sqlConnection, string strDBName = "")
         {
             string strQuery = "";
-            SqlConnection sqlConn = new SqlConnection();
-            sqlConn = sqlConnection;
 
-            if (strDBName == sqlConnection.Database)
-            {
-                strQuery = "ALTER TABLE dbo.[" + strTableName + "] ADD [" + strColumnName + "] " + strDataType.ToUpper() + " " + strNulable;
-            }
-            else
-            {
-                sqlConn = SqlConnectionChangeDB(strDBName, sqlConnection);
-                strQuery = "ALTER TABLE dbo.[" + strTableName + "] ADD [" + strColumnName + "] " + strDataType.ToUpper() + " " + strNulable;
-            }
-            return SqlExcutCommand(strQuery, sqlConn, "AddNewField");
+
+            if (strDBName != "")
+            { sqlConnection = SqlConnectionChangeDB(strDBName, sqlConnection); }
+
+            strQuery = "ALTER TABLE dbo.[" + strTableName + "] ADD [" + strColumnName + "] " + strDataType.ToUpper() + " " + strNulable;
+
+            return SqlExcutCommand(strQuery, sqlConnection, "AddNewField");
         }
 
         public string SqlAddNewColumn(string strTableName, string strColumnName, string strDataType, SqlConnection sqlConnection, int intSeed = 1, int intStart = 1, string strDBName = "")

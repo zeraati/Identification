@@ -274,7 +274,7 @@ namespace Identification
                 if (dr == DialogResult.Yes)
                 {
                     //  add new field
-                    strFinal = functions.SqlAddNewColumn(cmbSecondTbl.Text, strField, "INT", "NULL", sqlConnectionSecond);
+                    strFinal = functions.SqlAddNewColumn(cmbSecondTbl.Text, strField, "INT", "NULL", sqlConnectionSecond, cmbSecondDB.Text);
 
                     if (strFinal.Contains("Done"))
                     {
@@ -306,7 +306,7 @@ namespace Identification
                     if (intCheck == 0)
                     {
                         // add column   
-                        strFinal = functions.SqlAddNewColumn(cmbSecondTbl.Text, "Description", "NVARCHAR(MAX)", "NULL", sqlConnectionSecond);
+                        strFinal = functions.SqlAddNewColumn(cmbSecondTbl.Text, "Description", "NVARCHAR(MAX)", "NULL", sqlConnectionSecond, cmbSecondDB.Text);
 
                         if (strFinal.Contains("Done"))
                         {
