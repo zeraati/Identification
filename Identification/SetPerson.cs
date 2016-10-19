@@ -131,8 +131,13 @@ namespace Identification
             clbEhraz.Items.Clear();
 
             //  default value
-            //cmbMainDB.Text = cmbSecondDB.Text = "AmarPartDB";
             intStepOver = 0;
+
+
+            // defult
+            cmbMainDB.Text = cmbSecondDB.Text = "_Main";
+            cmbMainTbl.Text = "TBL_Student_Main";
+            cmbSecondTbl.Text = "TBL_Student_Iden";
         }
 
         private void cmbDBNameMain_SelectedIndexChanged(object sender, EventArgs e)

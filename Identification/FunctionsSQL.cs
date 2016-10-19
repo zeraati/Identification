@@ -49,11 +49,6 @@ namespace Identification
         string strcon;
 
 
-
-
-
-
-
         public List<string> DataTableToList(DataTable dt, int IndexColumn = 0)
         {
             List<string> lst = new List<string>();

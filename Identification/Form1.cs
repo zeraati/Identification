@@ -32,14 +32,15 @@ namespace Identification
             //  Load Server Name
             cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
 
+            // defult server
+            cmbServer.Text = "172.20.18.53";
+
         }
 
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-
             //  change database
-            //if (cmbDBNames.Text != "") sqlConnection = Functions.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection);
             sqlConnection = (cmbDBNames.Text != "") ? Functions.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection) : sqlConnection;
         }
 
@@ -49,9 +50,7 @@ namespace Identification
         }
 
         private void btnConnect_Enter(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData == Keys.Enter) { btnConnect_Click(null, null); }
-        }
+        {if (e.KeyData == Keys.Enter) btnConnect_Click(null, null);}
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
@@ -129,7 +128,6 @@ namespace Identification
             }
 
             Cursor.Current = Cursors.Default;
-            //Connect();
         }
 
         private void cmbServer_SelectedIndexChanged(object sender, EventArgs e)
@@ -221,6 +219,11 @@ namespace Identification
         {
             FindDuplicate frmfd = new FindDuplicate(sqlConnection);
             frmfd.ShowDialog();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void پشتیبانگیریToolStripMenuItem_Click(object sender, EventArgs e)
