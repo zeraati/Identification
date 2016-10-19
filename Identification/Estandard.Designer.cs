@@ -235,7 +235,6 @@
             this.clb2.FormattingEnabled = true;
             this.clb2.HorizontalScrollbar = true;
             this.clb2.Items.AddRange(new object[] {
-            "اصلاح نام فیلد",
             "حذف مقدار تهی",
             "نوع و اندازه فیلد",
             "اصلاح ي و ک",

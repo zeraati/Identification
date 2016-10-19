@@ -16,10 +16,10 @@ namespace Identification
         #region Enable & Disable from item clbEhraz
         public static string[,] strArray =
             {
-            {"Name","FirstName","نام", },
+            { "Name","FirstName","نام", },
             { "Family","LastName","نام خانوادگی"},
-            {"Father","FatherName","نام پدر"},
-            {"ShenasCode","ShNo","شماره شناسنامه" },
+            { "Father","FatherName","نام پدر"},
+            { "ShenasCode","ShNo","شماره شناسنامه" },
             { "PBirthDate","BirthDate","سال تولد" },
             { "CodeMelli","MelliCode","کد ملی" },
             { "HomeCity","Cityname","شهر محل تولد" },
@@ -27,7 +27,8 @@ namespace Identification
             { "HomeOstan","OstanName","استان محل تولد" },
             { "SodorOstan","Sodor","استان محل صدور" },
             { "STID","CodeMarkazModiriat","کد مرکز مدیریت" },
-            { "MKID","CodeMarkazKhadamat","کد مرکز خدمات" }
+            { "MKID","CodeMarkazKhadamat","کد مرکز خدمات" },
+            { "STID","StudentID","کد مرکز مدیریت" }
             };
 
         #endregion
@@ -1832,7 +1833,7 @@ namespace Identification
 
             //  add label
             if (strColumnName != "")
-            { strQuery = (strLabel != "") ? "SELECT COUNT(*) [" + strLabel + "] FROM dbo.[" + strTableName + "] " + strNull : "SELECT COUNT(*) FROM dbo.[" + strTableName + "] " + strNull; }
+            { strQuery = (strLabel != "") ? "SELECT COUNT(*) [" + strLabel + "] FROM dbo.[" + strTableName + "] " + strNull : "SELECT COUNT(*) FROM dbo.[" + strTableName + "] "; }
 
             SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
             cmd.Connection.Close();

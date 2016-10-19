@@ -456,7 +456,7 @@ namespace Identification
 
             #region Edit Column Names
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < Variable.strArray.Length/3; i++)
             {
                 for (int j = 0; j < dgvDesign.Rows.Count - 1; j++)
                 {
@@ -684,24 +684,17 @@ namespace Identification
                 #endregion
 
 
-
                 for (int i = 0; i < clb2.Items.Count; i++)
                 {
                     if (clb2.GetItemCheckState(i) == CheckState.Checked)
                     {
-                        switch (i)
+                        string strChecked = clb2.Items[i].ToString();
+
+                        switch (strChecked)
                         {
 
-                            #region Standard Column Name
-                            case 0:
-
-
-
-                                break;
-                            #endregion
-
                             #region Delete Not Valid
-                            case 1:
+                            case "حذف مقدار تهی":
 
                                 for (int j = 0; j < chlstbxColumn.Items.Count; j++)
                                 {
@@ -739,14 +732,14 @@ namespace Identification
                             #endregion
 
                             #region Edit Data Type Column
-                            case 2:
+                            case "نوع و اندازه فیلد":
                                 EditDataType();
                                 loadColumn();
                                 break;
                             #endregion
 
                             #region Replace Character ک و ی
-                            case 3:
+                            case "اصلاح ي و ک":
                                 for (int j = 0; j < chlstbxColumn.Items.Count; j++)
                                 {
                                     //  column name
@@ -764,7 +757,7 @@ namespace Identification
                             #endregion
 
                             #region Standard CodeMelli
-                            case 4:
+                            case "اصلاح کد ملی":
 
                                 StandardCodeMelli(strFieldName);
 
@@ -772,7 +765,7 @@ namespace Identification
                             #endregion
 
                             #region Standard ShenasCode
-                            case 5:
+                            case "اصلاح شناسنامه":
 
                                 strColumnData = "dbo.[CM-Fix]([" + strFieldName + "])";
 
@@ -814,7 +807,7 @@ namespace Identification
                             #endregion
 
                             #region Standard Date
-                            case 6:
+                            case "استاندارد کردن تاریخ":
                                 for (int l = 0; l < chlstbxColumn.Items.Count; l++)
                                 {
                                     if (chlstbxColumn.GetItemCheckState(l) == CheckState.Checked)
@@ -852,21 +845,21 @@ namespace Identification
                             #endregion
 
                             #region Date Convert
-                            case 7:
+                            case "تبدیل تاریخ":
                                 DateConvert frm = new DateConvert(sqlConnection, cmbTableName.Text);
                                 frm.ShowDialog();
                                 break;
                             #endregion
 
                             #region Save Characters Substring
-                            case 8:
+                            case "ذخیره چند کاراکتر":
                                 Substring frmSubstring = new Substring();
                                 frmSubstring.ShowDialog();
                                 break;
                             #endregion
 
                             #region Delete Space Or Zero Value Columns
-                            case 9:
+                            case "حذف فیلد های خالی":
                                 intTableCheck = 0;
                                 for (int j = 0; j < chlstbxColumn.Items.Count; j++)
                                 {
@@ -892,7 +885,7 @@ namespace Identification
                             #endregion
 
                             #region Delete Space Rows
-                            case 10:
+                            case "حذف رکوردهای خالی":
 
                                 //  defualt value
                                 strWhere = "";
@@ -924,7 +917,7 @@ namespace Identification
                             #endregion
 
                             #region Delete Tables Space
-                            case 11:
+                            case "حذف جدول خالی":
                                 if (intTableCheck == 0)
                                 {
                                     //  run query
@@ -1320,7 +1313,7 @@ namespace Identification
             string[] strDataType =
                 { "bit", "tinyint", "smallint", "int", "bigint",
                 "char", "nchar", "varchar", "nvarchar",
-                "text", "ntext", "date", "datetime", "real", "float" };
+                "text", "ntext", "date", "datetime","smalldatetime", "real", "float" };
 
 
             for (int i = 0; i < 14; i++)

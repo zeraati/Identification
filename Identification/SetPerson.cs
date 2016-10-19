@@ -279,7 +279,7 @@ namespace Identification
                     if (strFinal.Contains("Done"))
                     {
                         //  report
-                        lstReport.Items.Add(strField + "با موفقیت انجام شد");
+                        lstReport.Items.Add(strField + " با موفقیت انجام شد ");
 
                         //  datagridview combobox column source
                         functions.ComboBoxSource(clmSecond, functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond));
@@ -293,7 +293,7 @@ namespace Identification
                         bEnableCreateClm = false;
 
                         //  report
-                        lstReport.Items.Add("با مشکل مواجه شد " + strField);
+                        lstReport.Items.Add(" با مشکل مواجه شد " + strField);
                     }
 
                     //    
@@ -311,12 +311,12 @@ namespace Identification
                         if (strFinal.Contains("Done"))
                         {
                             //  report
-                            lstReport.Items.Add("با موفقیت انجام شد Description");
+                            lstReport.Items.Add("Description با موفقیت انجام شد ");
 
                             //  datagridview combobox column source
                             functions.ComboBoxSource(clmSecond, functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond));
                         }
-                        else lstReport.Items.Add("با مشکل مواجه شد");
+                        else lstReport.Items.Add(" با مشکل مواجه شد ");
                     }
 
                 }
