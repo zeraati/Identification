@@ -311,12 +311,16 @@ namespace Identification
         }
 
         Label lblOldColumn = new Label();
+        Label lblRowIndex = new Label();
+        Label lblCells = new Label();
 
         private void dgvDesign_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (dgvDesign.Rows[e.RowIndex].Cells[2].Value != null & lblOldColumn.Text == "")
             {
                 lblOldColumn.Text = dgvDesign.Rows[e.RowIndex].Cells[2].Value.ToString();
+
+                lblCells.Text = 2.ToString(); lblRowIndex.Text = e.RowIndex.ToString();
             }
 
         }
@@ -1337,6 +1341,7 @@ namespace Identification
             { b = true; }
             return b;
         }
+
 
         //private void button1_Click(object sender, EventArgs e)
         //{

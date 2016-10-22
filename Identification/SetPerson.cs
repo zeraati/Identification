@@ -402,7 +402,7 @@ namespace Identification
                     }
                     else
                     {
-                        for (int l = 0; l < 12; l++)
+                        for (int l = 0; l < Variable.strArray.Length/3; l++)
                         {
                             if (Variable.strArray[l, 0] == lstColumnNames[j].ToString()
                                 || Variable.strArray[l, 1] == lstColumnNames[j].ToString()
@@ -597,7 +597,7 @@ namespace Identification
             //  add item to checklistbox
             AddItemCheckList(functions.DataTableToList(dtDgv), Variable.strArray, clbEhraz);
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < Variable.strArray.Length/3; i++)
             {
                 for (int o = 0; o < 3; o++)
                 {
@@ -900,8 +900,8 @@ namespace Identification
                         { strWhere += " AND " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null"; }
                         else strWhere += " Where " + b + ".ShenasCode=" + a + ".ShenasCode AND " + b + ".ShenasCode is not null";
 
-                        strDescription += " شماره شناسنامه ";
-                        lstReport.Items.Add(" شماره شناسنامه ");
+                        strDescription += " " + strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
 
                         break;
                     #endregion
@@ -912,8 +912,8 @@ namespace Identification
                         { strWhere += " AND " + b + ".PBirthDate=" + a + ".PBirthDate AND " + b + ".PBirthDate is not null "; }
                         else strWhere += " Where " + b + ".PBirthDate=" + a + ".PBirthDate AND " + b + ".PBirthDate is not null ";
 
-                        strDescription += " سال تولد ";
-                        lstReport.Items.Add(" سال تولد ");
+                        strDescription += " " + strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
                         break;
                     #endregion
 
@@ -923,8 +923,8 @@ namespace Identification
                         { strWhere += " AND " + a + ".CodeMelli=" + b + ".CodeMelli AND " + b + ".CodeMelli is not null "; }
                         else strWhere += " Where " + a + ".CodeMelli=" + b + ".CodeMelli AND " + b + ".CodeMelli is not null ";
 
-                        strDescription += " کد ملی ";
-                        lstReport.Items.Add(" کد ملی ");
+                        strDescription += " " + strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
 
                         break;
                     #endregion
@@ -935,8 +935,8 @@ namespace Identification
                         { strWhere += " and Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')"; }
                         else strWhere += " Where Replace(" + a + ".HomeCity,' ','')=Replace(" + b + ".HomeCity,' ','')";
 
-                        strDescription += " شهر محل تولد ";
-                        lstReport.Items.Add(" شهر محل تولد ");
+                        strDescription += " " + strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
 
                         break;
                     #endregion
@@ -947,30 +947,46 @@ namespace Identification
                         { strWhere += " and Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')"; }
                         else strWhere += " Where Replace(" + a + ".SodorCity,' ','')=Replace(" + b + ".SodorCity,' ','')";
 
-                        strDescription += " شهر محل صدور ";
-                        lstReport.Items.Add(" شهر محل صدور ");
+                        strDescription += " " + strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
 
                         break;
                     #endregion
 
                     #region SodorOstan -> varchar
                     case "استان محل تولد":
+
+                        if (strWhere != "")
+                        { strWhere += " AND " + b + ".HomeOstan=" + a + ".HomeOstan "; }      // AND " + b + ".STID is not null "; }
+                        else strWhere += " Where " + b + ".HomeOstan=" + a + ".HomeOstan ";   // AND " + b + ".STID is not null ";
+
+                        strDescription += " "+ strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
+
                         break;
                     #endregion
 
                     #region HomeOstan -> varchar
                     case "استان محل صدور":
+
+                        if (strWhere != "")
+                        { strWhere += " AND " + b + ".SodorOstan=" + a + ".SodorOstan "; }      // AND " + b + ".STID is not null "; }
+                        else strWhere += " Where " + b + ".SodorOstan=" + a + ".SodorOstan ";   // AND " + b + ".STID is not null ";
+
+                        strDescription += " " + strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
+
                         break;
                     #endregion
 
                     #region Code Modiriat                        
                     case "کد مرکز مدیریت":
                         if (strWhere != "")
-                        { strWhere += " AND " + b + ".STID=" + a + ".STID AND " + b + ".STID is not null "; }
-                        else strWhere += " Where " + b + ".STID=" + a + ".STID AND " + b + ".STID is not null ";
+                        { strWhere += " AND " + b + ".STID=" + a + ".STID "; }      // AND " + b + ".STID is not null "; }
+                        else strWhere += " Where " + b + ".STID=" + a + ".STID ";   // AND " + b + ".STID is not null ";
 
-                        strDescription += " کد مرکز مدیریت ";
-                        lstReport.Items.Add(" کد مرکز مدیریت ");
+                        strDescription += " " + strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
 
                         break;
                     #endregion
@@ -978,14 +994,26 @@ namespace Identification
                     #region Code Khadamat                        
                     case "کد مرکز خدمات":
                         if (strWhere != "")
-                        { strWhere += " AND " + b + ".MKID=" + a + ".MKID AND " + b + ".MKID is not null "; }
-                        else strWhere += " Where " + b + ".MKID=" + a + ".MKID AND " + b + ".MKID is not null ";
+                        { strWhere += " AND " + b + ".MKID=" + a + ".MKID "; }      // AND " + b + ".MKID is not null "; }
+                        else strWhere += " Where " + b + ".MKID=" + a + ".MKID ";   // AND " + b + ".MKID is not null ";
 
-                        strDescription += " کد مرکز خدمات ";
-                        lstReport.Items.Add(" کد مرکز خدمات ");
+                        strDescription += " " + strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
 
                         break;
                     #endregion
+
+                    #region Code Khadamat                        
+                    case "موبایل":
+                        if (strWhere != "")
+                        { strWhere += " AND " + b + ".Mobile=" + a + ".Mobile "; }
+                        else strWhere += " Where " + b + ".Mobile=" + a + ".Mobile ";
+
+                        strDescription += " " + strChecked + " ";
+                        lstReport.Items.Add(" " + strChecked + " ");
+
+                        break;
+                        #endregion
 
                 }
             }
@@ -1193,7 +1221,7 @@ namespace Identification
             clbEhraz.Items.Clear();
             for (int i = 0; i < lstItem.Count; i++)
             {
-                for (int o = 0; o < 12; o++)
+                for (int o = 0; o < strArr.Length/3; o++)
                 {
                     for (int j = 0; j < 3; j++)
                     {

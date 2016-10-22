@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            PresentationControls.CheckBoxProperties checkBoxProperties1 = new PresentationControls.CheckBoxProperties();
-            PresentationControls.CheckBoxProperties checkBoxProperties2 = new PresentationControls.CheckBoxProperties();
-            PresentationControls.CheckBoxProperties checkBoxProperties3 = new PresentationControls.CheckBoxProperties();
             this.clbEhraz = new System.Windows.Forms.CheckedListBox();
             this.lstReport = new System.Windows.Forms.ListBox();
             this.cmbPersentFamily = new System.Windows.Forms.ComboBox();
@@ -72,9 +69,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.cmbMainClmnUniq = new System.Windows.Forms.ComboBox();
             this.chbPBirthNull = new System.Windows.Forms.CheckBox();
-            this.cmbNameLike = new PresentationControls.CheckBoxComboBox();
-            this.cmbFamilyLike = new PresentationControls.CheckBoxComboBox();
-            this.cmbFatherLike = new PresentationControls.CheckBoxComboBox();
             this.dgv = new System.Windows.Forms.DataGridView();
             this.chb = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.clmSN = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -109,6 +103,9 @@
             this.tabReport = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.richTxt = new System.Windows.Forms.RichTextBox();
+            this.cmbNameLike = new System.Windows.Forms.ComboBox();
+            this.cmbFamilyLike = new System.Windows.Forms.ComboBox();
+            this.cmbFatherLike = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSearch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
@@ -537,10 +534,10 @@
             // cmbMainClmnUniq
             // 
             this.cmbMainClmnUniq.FormattingEnabled = true;
-            this.cmbMainClmnUniq.Location = new System.Drawing.Point(30, 98);
+            this.cmbMainClmnUniq.Location = new System.Drawing.Point(64, 98);
             this.cmbMainClmnUniq.Name = "cmbMainClmnUniq";
             this.cmbMainClmnUniq.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.cmbMainClmnUniq.Size = new System.Drawing.Size(179, 21);
+            this.cmbMainClmnUniq.Size = new System.Drawing.Size(145, 21);
             this.cmbMainClmnUniq.TabIndex = 11;
             // 
             // chbPBirthNull
@@ -554,60 +551,6 @@
             this.chbPBirthNull.Text = "تولد یک طرف خالی";
             this.chbPBirthNull.UseVisualStyleBackColor = true;
             this.chbPBirthNull.Visible = false;
-            // 
-            // cmbNameLike
-            // 
-            checkBoxProperties1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmbNameLike.CheckBoxProperties = checkBoxProperties1;
-            this.cmbNameLike.DisplayMemberSingleItem = "";
-            this.cmbNameLike.FormattingEnabled = true;
-            this.cmbNameLike.Items.AddRange(new object[] {
-            "خالی",
-            "سید",
-            "میر",
-            "اله-الله"});
-            this.cmbNameLike.Location = new System.Drawing.Point(139, 361);
-            this.cmbNameLike.Name = "cmbNameLike";
-            this.cmbNameLike.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.cmbNameLike.Size = new System.Drawing.Size(155, 21);
-            this.cmbNameLike.TabIndex = 68;
-            this.cmbNameLike.SelectedIndexChanged += new System.EventHandler(this.cmbNameLike_SelectedIndexChanged);
-            // 
-            // cmbFamilyLike
-            // 
-            checkBoxProperties2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmbFamilyLike.CheckBoxProperties = checkBoxProperties2;
-            this.cmbFamilyLike.DisplayMemberSingleItem = "";
-            this.cmbFamilyLike.FormattingEnabled = true;
-            this.cmbFamilyLike.Items.AddRange(new object[] {
-            "خالی",
-            "سيد",
-            "مير",
-            "اله-الله"});
-            this.cmbFamilyLike.Location = new System.Drawing.Point(139, 388);
-            this.cmbFamilyLike.Name = "cmbFamilyLike";
-            this.cmbFamilyLike.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.cmbFamilyLike.Size = new System.Drawing.Size(155, 21);
-            this.cmbFamilyLike.TabIndex = 69;
-            this.cmbFamilyLike.SelectedIndexChanged += new System.EventHandler(this.cmbFamilyLike_SelectedIndexChanged);
-            // 
-            // cmbFatherLike
-            // 
-            checkBoxProperties3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmbFatherLike.CheckBoxProperties = checkBoxProperties3;
-            this.cmbFatherLike.DisplayMemberSingleItem = "";
-            this.cmbFatherLike.FormattingEnabled = true;
-            this.cmbFatherLike.Items.AddRange(new object[] {
-            "خالی",
-            "سيد",
-            "مير",
-            "اله-الله"});
-            this.cmbFatherLike.Location = new System.Drawing.Point(139, 415);
-            this.cmbFatherLike.Name = "cmbFatherLike";
-            this.cmbFatherLike.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.cmbFatherLike.Size = new System.Drawing.Size(155, 21);
-            this.cmbFatherLike.TabIndex = 70;
-            this.cmbFatherLike.SelectedIndexChanged += new System.EventHandler(this.cmbFatherLike_SelectedIndexChanged);
             // 
             // dgv
             // 
@@ -918,10 +861,14 @@
             // chbUniq
             // 
             this.chbUniq.AutoSize = true;
-            this.chbUniq.Location = new System.Drawing.Point(8, 101);
+            this.chbUniq.Checked = true;
+            this.chbUniq.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chbUniq.Location = new System.Drawing.Point(8, 100);
             this.chbUniq.Name = "chbUniq";
-            this.chbUniq.Size = new System.Drawing.Size(15, 14);
+            this.chbUniq.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.chbUniq.Size = new System.Drawing.Size(50, 17);
             this.chbUniq.TabIndex = 65;
+            this.chbUniq.Text = "خالی";
             this.chbUniq.UseVisualStyleBackColor = true;
             // 
             // textBox2
@@ -964,6 +911,48 @@
             this.richTxt.TabIndex = 0;
             this.richTxt.Text = "";
             // 
+            // cmbNameLike
+            // 
+            this.cmbNameLike.FormattingEnabled = true;
+            this.cmbNameLike.Items.AddRange(new object[] {
+            "",
+            "خالی",
+            "سید",
+            "میر",
+            "اله-الله"});
+            this.cmbNameLike.Location = new System.Drawing.Point(139, 361);
+            this.cmbNameLike.Name = "cmbNameLike";
+            this.cmbNameLike.Size = new System.Drawing.Size(155, 21);
+            this.cmbNameLike.TabIndex = 83;
+            // 
+            // cmbFamilyLike
+            // 
+            this.cmbFamilyLike.FormattingEnabled = true;
+            this.cmbFamilyLike.Items.AddRange(new object[] {
+            "",
+            "خالی",
+            "سيد",
+            "مير",
+            "اله-الله"});
+            this.cmbFamilyLike.Location = new System.Drawing.Point(139, 388);
+            this.cmbFamilyLike.Name = "cmbFamilyLike";
+            this.cmbFamilyLike.Size = new System.Drawing.Size(155, 21);
+            this.cmbFamilyLike.TabIndex = 84;
+            // 
+            // cmbFatherLike
+            // 
+            this.cmbFatherLike.FormattingEnabled = true;
+            this.cmbFatherLike.Items.AddRange(new object[] {
+            "",
+            "خالی",
+            "سيد",
+            "مير",
+            "اله-الله"});
+            this.cmbFatherLike.Location = new System.Drawing.Point(139, 415);
+            this.cmbFatherLike.Name = "cmbFatherLike";
+            this.cmbFatherLike.Size = new System.Drawing.Size(155, 21);
+            this.cmbFatherLike.TabIndex = 85;
+            // 
             // SetPerson
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -971,6 +960,9 @@
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(866, 711);
+            this.Controls.Add(this.cmbFatherLike);
+            this.Controls.Add(this.cmbFamilyLike);
+            this.Controls.Add(this.cmbNameLike);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.btnStepOver);
             this.Controls.Add(this.label18);
@@ -979,9 +971,6 @@
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.cmbFatherLike);
-            this.Controls.Add(this.cmbFamilyLike);
-            this.Controls.Add(this.cmbNameLike);
             this.Controls.Add(this.chbPBirthNull);
             this.Controls.Add(this.dgvSearch);
             this.Controls.Add(this.btnShow);
@@ -1072,9 +1061,6 @@
         private System.Windows.Forms.ComboBox cmbMainClmnUniq;
         private System.Windows.Forms.ToolStripMenuItem جستجوToolStripMenuItem;
         private System.Windows.Forms.CheckBox chbPBirthNull;
-        private PresentationControls.CheckBoxComboBox cmbNameLike;
-        private PresentationControls.CheckBoxComboBox cmbFamilyLike;
-        private PresentationControls.CheckBoxComboBox cmbFatherLike;
         private System.Windows.Forms.Button btnChange;
         private System.Windows.Forms.DataGridView dgv;
         private System.Windows.Forms.TabControl tabControl1;
@@ -1112,5 +1098,8 @@
         private System.Windows.Forms.Button btnNewColumn;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.RichTextBox richTxt;
+        private System.Windows.Forms.ComboBox cmbNameLike;
+        private System.Windows.Forms.ComboBox cmbFamilyLike;
+        private System.Windows.Forms.ComboBox cmbFatherLike;
     }
 }

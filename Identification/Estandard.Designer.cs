@@ -39,8 +39,6 @@
             this.فونتToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnAuto = new System.Windows.Forms.Button();
-            this.btnUpdDesign = new System.Windows.Forms.Button();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.clb2 = new System.Windows.Forms.CheckedListBox();
@@ -50,6 +48,8 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lst1 = new System.Windows.Forms.ListBox();
             this.tpDesign = new System.Windows.Forms.TabPage();
+            this.btnUpdDesign = new System.Windows.Forms.Button();
+            this.btnAuto = new System.Windows.Forms.Button();
             this.dgvDesign = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.txtCopyTableName = new System.Windows.Forms.TextBox();
@@ -59,6 +59,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.cmbTableNameTab1 = new System.Windows.Forms.ComboBox();
             this.btnTBDelete = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.richTxt = new System.Windows.Forms.RichTextBox();
             this.chbDisRec = new System.Windows.Forms.CheckBox();
             this.cbReplace = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -71,8 +73,6 @@
             this.cmbTableName = new System.Windows.Forms.ComboBox();
             this.cmbDBName = new System.Windows.Forms.ComboBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.richTxt = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -180,26 +180,6 @@
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "استاندارد سازی";
-            // 
-            // btnAuto
-            // 
-            this.btnAuto.Location = new System.Drawing.Point(432, 13);
-            this.btnAuto.Name = "btnAuto";
-            this.btnAuto.Size = new System.Drawing.Size(100, 23);
-            this.btnAuto.TabIndex = 76;
-            this.btnAuto.Text = "اصلاح خودکار فیلد";
-            this.btnAuto.UseVisualStyleBackColor = true;
-            this.btnAuto.Click += new System.EventHandler(this.btnAuto_Click);
-            // 
-            // btnUpdDesign
-            // 
-            this.btnUpdDesign.Location = new System.Drawing.Point(280, 13);
-            this.btnUpdDesign.Name = "btnUpdDesign";
-            this.btnUpdDesign.Size = new System.Drawing.Size(85, 23);
-            this.btnUpdDesign.TabIndex = 14;
-            this.btnUpdDesign.Text = "UpdateDesign";
-            this.btnUpdDesign.UseVisualStyleBackColor = true;
-            this.btnUpdDesign.Click += new System.EventHandler(this.btnUpdDesign_Click);
             // 
             // tabControl2
             // 
@@ -318,6 +298,26 @@
             this.tpDesign.Text = "ویرایش فیلدها";
             this.tpDesign.UseVisualStyleBackColor = true;
             // 
+            // btnUpdDesign
+            // 
+            this.btnUpdDesign.Location = new System.Drawing.Point(280, 13);
+            this.btnUpdDesign.Name = "btnUpdDesign";
+            this.btnUpdDesign.Size = new System.Drawing.Size(85, 23);
+            this.btnUpdDesign.TabIndex = 14;
+            this.btnUpdDesign.Text = "UpdateDesign";
+            this.btnUpdDesign.UseVisualStyleBackColor = true;
+            this.btnUpdDesign.Click += new System.EventHandler(this.btnUpdDesign_Click);
+            // 
+            // btnAuto
+            // 
+            this.btnAuto.Location = new System.Drawing.Point(432, 13);
+            this.btnAuto.Name = "btnAuto";
+            this.btnAuto.Size = new System.Drawing.Size(100, 23);
+            this.btnAuto.TabIndex = 76;
+            this.btnAuto.Text = "اصلاح خودکار فیلد";
+            this.btnAuto.UseVisualStyleBackColor = true;
+            this.btnAuto.Click += new System.EventHandler(this.btnAuto_Click);
+            // 
             // dgvDesign
             // 
             this.dgvDesign.AllowUserToDeleteRows = false;
@@ -415,6 +415,24 @@
             this.btnTBDelete.Text = "حذف جدول";
             this.btnTBDelete.UseVisualStyleBackColor = false;
             this.btnTBDelete.Click += new System.EventHandler(this.btnTBDelete_Click);
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.richTxt);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(596, 256);
+            this.tabPage4.TabIndex = 4;
+            this.tabPage4.Text = "کوئری";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // richTxt
+            // 
+            this.richTxt.Location = new System.Drawing.Point(3, 3);
+            this.richTxt.Name = "richTxt";
+            this.richTxt.Size = new System.Drawing.Size(588, 250);
+            this.richTxt.TabIndex = 0;
+            this.richTxt.Text = "";
             // 
             // chbDisRec
             // 
@@ -528,24 +546,6 @@
             this.cmbDBName.Size = new System.Drawing.Size(223, 21);
             this.cmbDBName.TabIndex = 1;
             this.cmbDBName.SelectedIndexChanged += new System.EventHandler(this.cmbDBName_SelectedIndexChanged);
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.richTxt);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(596, 256);
-            this.tabPage4.TabIndex = 4;
-            this.tabPage4.Text = "کوئری";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // richTxt
-            // 
-            this.richTxt.Location = new System.Drawing.Point(3, 3);
-            this.richTxt.Name = "richTxt";
-            this.richTxt.Size = new System.Drawing.Size(588, 250);
-            this.richTxt.TabIndex = 0;
-            this.richTxt.Text = "";
             // 
             // Estandard
             // 

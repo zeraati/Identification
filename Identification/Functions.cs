@@ -28,7 +28,7 @@ namespace Identification
             { "SodorOstan","Sodor","استان محل صدور" },
             { "STID","CodeMarkazModiriat","کد مرکز مدیریت" },
             { "MKID","CodeMarkazKhadamat","کد مرکز خدمات" },
-            { "STID","StudentID", "کد مرکز مدیریت" }
+            {"Mobile","","موبایل" }
             };
 
         #endregion
