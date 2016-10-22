@@ -71,6 +71,8 @@
             this.cmbTableName = new System.Windows.Forms.ComboBox();
             this.cmbDBName = new System.Windows.Forms.ComboBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.richTxt = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -79,6 +81,7 @@
             this.tpDesign.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDesign)).BeginInit();
             this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -158,8 +161,6 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox1.Controls.Add(this.btnAuto);
-            this.groupBox1.Controls.Add(this.btnUpdDesign);
             this.groupBox1.Controls.Add(this.tabControl2);
             this.groupBox1.Controls.Add(this.chbDisRec);
             this.groupBox1.Controls.Add(this.cbReplace);
@@ -182,17 +183,17 @@
             // 
             // btnAuto
             // 
-            this.btnAuto.Location = new System.Drawing.Point(133, 76);
+            this.btnAuto.Location = new System.Drawing.Point(432, 13);
             this.btnAuto.Name = "btnAuto";
             this.btnAuto.Size = new System.Drawing.Size(100, 23);
             this.btnAuto.TabIndex = 76;
-            this.btnAuto.Text = "اصلاح خودکار";
+            this.btnAuto.Text = "اصلاح خودکار فیلد";
             this.btnAuto.UseVisualStyleBackColor = true;
             this.btnAuto.Click += new System.EventHandler(this.btnAuto_Click);
             // 
             // btnUpdDesign
             // 
-            this.btnUpdDesign.Location = new System.Drawing.Point(32, 76);
+            this.btnUpdDesign.Location = new System.Drawing.Point(280, 13);
             this.btnUpdDesign.Name = "btnUpdDesign";
             this.btnUpdDesign.Size = new System.Drawing.Size(85, 23);
             this.btnUpdDesign.TabIndex = 14;
@@ -206,12 +207,13 @@
             this.tabControl2.Controls.Add(this.tabPage2);
             this.tabControl2.Controls.Add(this.tpDesign);
             this.tabControl2.Controls.Add(this.tabPage3);
-            this.tabControl2.Location = new System.Drawing.Point(6, 93);
+            this.tabControl2.Controls.Add(this.tabPage4);
+            this.tabControl2.Location = new System.Drawing.Point(6, 74);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tabControl2.RightToLeftLayout = true;
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(604, 263);
+            this.tabControl2.Size = new System.Drawing.Size(604, 282);
             this.tabControl2.TabIndex = 75;
             // 
             // tabPage1
@@ -223,7 +225,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(596, 237);
+            this.tabPage1.Size = new System.Drawing.Size(596, 256);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "استاندارد کردن";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -289,7 +291,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(596, 237);
+            this.tabPage2.Size = new System.Drawing.Size(596, 256);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "نتیجه عملیات";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -305,11 +307,13 @@
             // 
             // tpDesign
             // 
+            this.tpDesign.Controls.Add(this.btnUpdDesign);
+            this.tpDesign.Controls.Add(this.btnAuto);
             this.tpDesign.Controls.Add(this.dgvDesign);
             this.tpDesign.Location = new System.Drawing.Point(4, 22);
             this.tpDesign.Name = "tpDesign";
             this.tpDesign.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDesign.Size = new System.Drawing.Size(596, 237);
+            this.tpDesign.Size = new System.Drawing.Size(596, 256);
             this.tpDesign.TabIndex = 2;
             this.tpDesign.Text = "ویرایش فیلدها";
             this.tpDesign.UseVisualStyleBackColor = true;
@@ -318,10 +322,10 @@
             // 
             this.dgvDesign.AllowUserToDeleteRows = false;
             this.dgvDesign.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDesign.Location = new System.Drawing.Point(7, 6);
+            this.dgvDesign.Location = new System.Drawing.Point(7, 42);
             this.dgvDesign.Name = "dgvDesign";
             this.dgvDesign.RowHeadersVisible = false;
-            this.dgvDesign.Size = new System.Drawing.Size(583, 228);
+            this.dgvDesign.Size = new System.Drawing.Size(583, 192);
             this.dgvDesign.TabIndex = 0;
             this.dgvDesign.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvDesign_CellMouseClick);
             this.dgvDesign.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDesign_CellValueChanged);
@@ -338,7 +342,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(596, 237);
+            this.tabPage3.Size = new System.Drawing.Size(596, 256);
             this.tabPage3.TabIndex = 3;
             this.tabPage3.Text = "ویرایش جدول";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -475,7 +479,7 @@
             // 
             this.btnUpdate.Location = new System.Drawing.Point(6, 16);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(77, 23);
+            this.btnUpdate.Size = new System.Drawing.Size(77, 52);
             this.btnUpdate.TabIndex = 3;
             this.btnUpdate.Text = "اصلاح";
             this.btnUpdate.UseVisualStyleBackColor = true;
@@ -525,6 +529,24 @@
             this.cmbDBName.TabIndex = 1;
             this.cmbDBName.SelectedIndexChanged += new System.EventHandler(this.cmbDBName_SelectedIndexChanged);
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.richTxt);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(596, 256);
+            this.tabPage4.TabIndex = 4;
+            this.tabPage4.Text = "کوئری";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // richTxt
+            // 
+            this.richTxt.Location = new System.Drawing.Point(3, 3);
+            this.richTxt.Name = "richTxt";
+            this.richTxt.Size = new System.Drawing.Size(588, 250);
+            this.richTxt.TabIndex = 0;
+            this.richTxt.Text = "";
+            // 
             // Estandard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -557,6 +579,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvDesign)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -606,5 +629,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem فونتToolStripMenuItem;
         private System.Windows.Forms.Button btnAuto;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.RichTextBox richTxt;
     }
 }

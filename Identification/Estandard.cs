@@ -104,12 +104,13 @@ namespace Identification
 
             //  dafault value
 
-            // cmbDBName.Text = "Test";
+            cmbDBName.Text = "_Main";
 
             //  set cmbTBName source    // load table names
             loadTbName();
-            
+
             //  dafault value
+            cmbTableName.Text = "TBL_Student_Main_C";
 
             if (cmbDBName.Text != "") cmbDBName.DropDownWidth = Functions.DropDownWidth(cmbDBName);
         }
@@ -198,14 +199,6 @@ namespace Identification
             txtCopyTableName.Text = cmbTableNameTab1.Text + "_copy";
             cmbTableNameTab1.DropDownWidth = Functions.DropDownWidth(cmbTableNameTab1);
         }
-
-
-
-
-
-
-
-
 
         private void dgvDesign_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
@@ -456,7 +449,7 @@ namespace Identification
 
             #region Edit Column Names
 
-            for (int i = 0; i < Variable.strArray.Length/3; i++)
+            for (int i = 0; i < Variable.strArray.Length / 3; i++)
             {
                 for (int j = 0; j < dgvDesign.Rows.Count - 1; j++)
                 {
@@ -590,7 +583,7 @@ namespace Identification
             #region Default Value
 
             for (int i = 0; i < dtColumns.Rows.Count; i++)
-            {   
+            {
                 dgvDesign.Rows.Add(dgvTxBxClmOrd.ToolTipText = dtColumns.Rows[i][0].ToString(),
                 false,
                 dgvTxtBxClm.ToolTipText = dtColumns.Rows[i][1].ToString(),
@@ -637,12 +630,17 @@ namespace Identification
         {
             if (clb2.CheckedIndices.Count != 0)
             {
+                //  richtxt clear
+                richTxt.Text = "";
+
                 Cursor.Current = Cursors.WaitCursor;
                 lst1.Items.Add("--------------------------------------");
+
                 string strFieldName = "", strDataType;
                 string strColumnData;
                 string strQuery = "", strWhere, strFinal = "";
                 int intIncerement, intCount, intTableCount;
+
 
                 //  table records count
                 intTableCount = Functions.SqlRecordCount(cmbTableName.Text, sqlConnection, "*", cmbDBName.Text);
@@ -710,7 +708,7 @@ namespace Identification
                                         if (strDataType.Contains("("))
                                         {
                                             //query
-                                            strQuery = "Update [" + cmbTableName.Text + "] Set [" + strFieldName + "] = Null Where [" + strFieldName + "] = '' or [" + strFieldName + "] = '0' or [" + strFieldName + "] = '-' or [" + strFieldName + "] = ' ' and ISNUMERIC([" + strFieldName + "])<>1";
+                                            strQuery = "Update [" + cmbTableName.Text + "] Set [" + strFieldName + "] = Null Where [" + strFieldName + "] = N'' or [" + strFieldName + "] = N'0' or [" + strFieldName + "] = N'-' or [" + strFieldName + "] = N' ' and ISNUMERIC([" + strFieldName + "])<>1";
                                         }
                                         else
                                         {
@@ -718,6 +716,7 @@ namespace Identification
                                             strQuery = "Update [" + cmbTableName.Text + "] Set [" + strFieldName + "] = Null Where [" + strFieldName + "] = 0 and ISNUMERIC([" + strFieldName + "])<>1";
                                         }
                                         //  run query
+                                        richTxt.Text = (richTxt.Text != "") ? "/r/n" + strQuery : richTxt.Text;
                                         Functions.SqlExcutCommand(strQuery, sqlConnection);
 
                                         //query
@@ -1210,11 +1209,10 @@ namespace Identification
             int intStart = strcolumn.IndexOf("[") + 1;
             int intEnd = strcolumn.IndexOf("]");
 
-            strcolumn = strcolumn.Substring(intStart, intEnd - intStart).Trim();
-            string strNull = strcolumn.Substring(0, strcolumn.IndexOf("-") + 1).Trim();
+            string strNull = strcolumn.Substring(intStart, intEnd - intStart).Trim();
+            strcolumn = strcolumn.Substring(0, strcolumn.IndexOf("-") + 1).Trim();
 
-            return strcolumn.Replace(strNull, "").Trim();
-
+            return strColumnName.Replace(strcolumn, "").Trim();
         }
         #endregion
 
