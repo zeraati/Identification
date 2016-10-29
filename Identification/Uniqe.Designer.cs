@@ -44,6 +44,7 @@
             this.chCreateID = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -133,6 +134,7 @@
             this.button1.TabIndex = 7;
             this.button1.Text = "یکتا کردن";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // lstReport
             // 
@@ -188,11 +190,20 @@
             this.comboBox1.Size = new System.Drawing.Size(195, 21);
             this.comboBox1.TabIndex = 13;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(462, 284);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(238, 80);
+            this.textBox1.TabIndex = 14;
+            // 
             // Uniqe
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(705, 456);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.chCreateID);
@@ -237,5 +248,6 @@
         private System.Windows.Forms.CheckBox chCreateID;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

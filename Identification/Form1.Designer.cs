@@ -210,7 +210,6 @@
             this.یونیکToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
             this.یونیکToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.یونیکToolStripMenuItem.Text = "یکتا سازی";
-            this.یونیکToolStripMenuItem.Visible = false;
             this.یونیکToolStripMenuItem.Click += new System.EventHandler(this.یونیکToolStripMenuItem_Click);
             // 
             // نمایشاطلاعاتخالیToolStripMenuItem

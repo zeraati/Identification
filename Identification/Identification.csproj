@@ -63,6 +63,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -74,8 +75,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="clsSuggest.cs" />
-    <Compile Include="clsUpdate.cs" />
     <Compile Include="CryptorEngine.cs" />
     <Compile Include="DateConvert.cs">
       <SubType>Form</SubType>
@@ -116,7 +115,7 @@
     <Compile Include="SetPerson.Designer.cs">
       <DependentUpon>SetPerson.cs</DependentUpon>
     </Compile>
-    <Compile Include="FunctionsSQL.cs" />
+    <Compile Include="SetPersonFunctions.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SQLDBbackup.cs">
       <SubType>Form</SubType>
@@ -204,24 +203,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Functions\A2Extra.txt" />
-    <Content Include="Functions\Check2Str.txt" />
-    <Content Include="Functions\Check2StrM.txt" />
-    <Content Include="Functions\Ch_Codemelli.txt" />
-    <Content Include="Functions\CM-Check.txt" />
-    <Content Include="Functions\CM-Fix.txt" />
-    <Content Include="Functions\DT-Fix.txt" />
-    <Content Include="Functions\FE_Date.txt" />
-    <Content Include="Functions\FixKY.txt" />
-    <Content Include="Functions\F_Date.txt" />
-    <Content Include="Functions\G2J.txt" />
-    <Content Include="Functions\RemoveDuplicateSpace.txt" />
-    <Content Include="Functions\RemoveZeroWidth.txt" />
-    <Content Include="Functions\UDF_Gregorian_To_Persian.txt" />
-    <Content Include="Functions\UDF_Julian_To_Gregorian.txt" />
-    <Content Include="Functions\UDF_Persian_To_Julian.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

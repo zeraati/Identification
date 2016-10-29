@@ -104,13 +104,13 @@ namespace Identification
 
             //  dafault value
 
-            cmbDBName.Text = "_Main";
+            //cmbDBName.Text = "_Main";
 
             //  set cmbTBName source    // load table names
             loadTbName();
 
             //  dafault value
-            cmbTableName.Text = "TBL_Student_Main_C";
+            //cmbTableName.Text = "TBL_Student_Main_C";
 
             if (cmbDBName.Text != "") cmbDBName.DropDownWidth = Functions.DropDownWidth(cmbDBName);
         }

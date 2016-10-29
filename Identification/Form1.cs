@@ -33,7 +33,7 @@ namespace Identification
             cmbServer.DataSource = Functions.LoadSvrName(strPathLoginFolder);
 
             // defult server
-            cmbServer.Text = "172.20.18.53";
+            //cmbServer.Text = "172.20.18.53";
 
         }
 

@@ -99,6 +99,13 @@ namespace Identification
         {
             Functions.SelectUnselect(clbField, btnAllSelect);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string str = "ssfsdf" + Environment.NewLine +"fgfdgsdf";
+            textBox1.Text = str;
+            lstReport.Items.Add(str);
+        }
         //*****     Functions
 
     }

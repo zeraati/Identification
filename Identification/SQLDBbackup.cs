@@ -17,7 +17,7 @@ namespace Identification
     public partial class SQLDBbackup : Form
     {
         Functions func = new Functions();
-        FunctionsSQL sqldal = new FunctionsSQL();
+        Functions sqldal = new Functions();
         FolderBrowserDialog fbd = new FolderBrowserDialog();
         SqlConnection sqlConn = new SqlConnection();
 
