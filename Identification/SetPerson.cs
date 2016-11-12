@@ -17,6 +17,9 @@ namespace Identification
 
         #region Global
         Functions functions = new Functions();
+        SqlFunctions sqlfunction = new SqlFunctions();
+
+
         SqlConnection sqlConnectionMain = new SqlConnection();
         SqlConnection sqlConnectionSecond = new SqlConnection();
         SetPersonFunctions spf = new SetPersonFunctions();
@@ -135,8 +138,8 @@ namespace Identification
             btnChange.Enabled = btnShow.Enabled = false;
 
             //  load database name source
-            cmbMainDB.DataSource = functions.SqlGetDBName(sqlConnectionMain);
-            cmbSecondDB.DataSource = functions.SqlGetDBName(sqlConnectionSecond);
+            cmbMainDB.DataSource = sqlfunction.SqlGetDBName(sqlConnectionMain);
+            cmbSecondDB.DataSource = sqlfunction.SqlGetDBName(sqlConnectionSecond);
 
 
             //  check exists file event.txt
@@ -165,10 +168,10 @@ namespace Identification
         {
 
             //  change data base name
-            sqlConnectionMain = functions.SqlConnectionChangeDB(cmbMainDB.Text, sqlConnectionMain);
+            sqlConnectionMain = sqlfunction.SqlConnectionChangeDB(cmbMainDB.Text, sqlConnectionMain);
 
             //  load table name
-            cmbMainTbl.DataSource = functions.SqlTableName(sqlConnectionMain);
+            cmbMainTbl.DataSource = sqlfunction.SqlTableName(sqlConnectionMain);
 
 
             //  default value            
@@ -178,10 +181,10 @@ namespace Identification
         private void cmbDBName2_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  change data base name
-            sqlConnectionSecond = functions.SqlConnectionChangeDB(cmbSecondDB.Text, sqlConnectionSecond);
+            sqlConnectionSecond = sqlfunction.SqlConnectionChangeDB(cmbSecondDB.Text, sqlConnectionSecond);
 
             //  load table name
-            cmbSecondTbl.DataSource = functions.SqlTableName(sqlConnectionSecond);
+            cmbSecondTbl.DataSource = sqlfunction.SqlTableName(sqlConnectionSecond);
 
             //  default value
             //cmbSecondTbl.Text = "TBL_MKsarparast";
@@ -190,10 +193,10 @@ namespace Identification
         private void cmbTBNameMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  load cmb field source
-            cmbMainClmnUniq.DataSource = functions.DataTableToList(functions.SqlColumnNames(cmbMainTbl.Text, sqlConnectionSecond));
+            cmbMainClmnUniq.DataSource = functions.DataTableToList(sqlfunction.SqlColumnNames(cmbMainTbl.Text, sqlConnectionSecond));
 
             //  load column name to list                          
-            lstMainClmns.DataSource = functions.DataTableToList(functions.SqlColumns(cmbMainTbl.Text, sqlConnectionMain, cmbMainDB.Text), 1);
+            lstMainClmns.DataSource = functions.DataTableToList(sqlfunction.SqlColumns(cmbMainTbl.Text, sqlConnectionMain, cmbMainDB.Text), 1);
 
 
             //  enable btn barresi
@@ -203,7 +206,7 @@ namespace Identification
 
         private void cmbSecondTbl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lstSecndClmns.DataSource = functions.DataTableToList(functions.SqlColumns(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text), 1);
+            lstSecndClmns.DataSource = functions.DataTableToList(sqlfunction.SqlColumns(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text), 1);
         }
 
 
@@ -225,13 +228,32 @@ namespace Identification
             List<string> lstSqlFunction = new List<string>();
 
             //  check sql functions
-            lstSqlFunction = functions.CheckSqlFunctions(strFunctionsFile, cmbMainDB.Text, sqlConnectionMain);
 
-            //  report from functions
-            if (lstSqlFunction.Count != 0)
+            List<string> lstSqlFile = new List<string>();
+            bool bol = false;
+
+
+            //  change data base name
+            sqlConnectionMain = sqlfunction.SqlConnectionChangeDB(cmbMainDB.Text, sqlConnectionMain);
+
+            //  list functions files to sql
+            lstSqlFile = lstSqlFile = functions.DataTableToList(sqlfunction.SqlFunctionsFiles(sqlConnectionMain));
+
+            //  list functions files is not sql
+
+            //  check sql functions
+            string[] files = Directory.GetFiles(strFunctionsFile, "*.txt");
+            foreach (string file in files)
             {
-                for (int j = 0; j < lstSqlFunction.Count; j++)
-                { richtxtReport.Text = lstSqlFunction[j] + Environment.NewLine; }
+                bol = false;
+                for (int i = 0; i < lstSqlFile.Count; i++)
+                {
+                    if (Path.GetFileNameWithoutExtension(file) == lstSqlFile[i])
+                    { bol = true; break; }
+                }
+
+                //  create function is not sql
+                if (bol == false) { sqlfunction.SqlExcutCommand(File.ReadAllText(file), sqlConnectionMain); richtxtReport.Text = "Create Function Is Sql : " + Path.GetFileNameWithoutExtension(file) + Environment.NewLine; ; }
             }
 
             #endregion
@@ -253,25 +275,25 @@ namespace Identification
             #region Data Bases Info
 
             ////  table main record count
-            //intCount = functions.SqlRecordCount(cmbMainTbl.Text, sqlConnectionMain);
+            //intCount = sqlfunction.SqlRecordCount(cmbMainTbl.Text, sqlConnectionMain);
 
             ////  report count
             //richtxtReport.Text+="تعداد رکورد جدول از بانک اصلی : " + functions.StrNum(intCount)+Environment.NewLine;
 
             ////  table second count
-            //intCount = functions.SqlRecordCount(cmbSecondTbl.Text, sqlConnectionSecond);
+            //intCount = sqlfunction.SqlRecordCount(cmbSecondTbl.Text, sqlConnectionSecond);
 
             ////  report count
             //richtxtReport.Text+="تعداد رکورد جدول از بانک فرعی : " + functions.StrNum(intCount) + Environment.NewLine;
 
             ////  cmb main join cmb second and total
-            //intCount = functions.SqlJoin(cmbMainTbl.Text, cmbSecondTbl.Text, cmbMainClmnJoin.Text, cmbSecndClmnJoin.Text, sqlConnectionMain, cmbMainDB.Text, cmbSecondDB.Text).Rows.Count;
+            //intCount = sqlfunction.SqlJoin(cmbMainTbl.Text, cmbSecondTbl.Text, cmbMainClmnJoin.Text, cmbSecndClmnJoin.Text, sqlConnectionMain, cmbMainDB.Text, cmbSecondDB.Text).Rows.Count;
 
             ////  report count
             //richtxtReport.Text+="تعداد کل رکورد ها : " + functions.StrNum(intCount) + Environment.NewLine;
 
             ////  cmb main join cmb second and filter
-            //intCount = functions.SqlJoin(cmbMainTbl.Text, cmbSecondTbl.Text, cmbMainClmnJoin.Text, cmbSecndClmnJoin.Text, sqlConnectionMain, cmbMainDB.Text, cmbSecondDB.Text, "").Rows.Count;
+            //intCount = sqlfunction.SqlJoin(cmbMainTbl.Text, cmbSecondTbl.Text, cmbMainClmnJoin.Text, cmbSecndClmnJoin.Text, sqlConnectionMain, cmbMainDB.Text, cmbSecondDB.Text, "").Rows.Count;
 
             ////  report count
             //richtxtReport.Text+="تعداد کل رکورد ها از بین دو بانک فوق : " + functions.StrNum(intCount) + Environment.NewLine;
@@ -281,7 +303,7 @@ namespace Identification
             //*****         END
 
             //  datagridview combobox column source
-            functions.ComboBoxSource(clmSecond, functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text));
+            functions.ComboBoxSource(clmSecond, sqlfunction.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text));
 
 
 
@@ -298,7 +320,7 @@ namespace Identification
             DataTable dtDgv = new DataTable();
 
             //  column names
-            dtDgv = functions.SqlColumnNames(cmbMainTbl.Text, sqlConnectionMain, cmbMainDB.Text, "فیلد جدول اصلی");
+            dtDgv = sqlfunction.SqlColumnNames(cmbMainTbl.Text, sqlConnectionMain, cmbMainDB.Text, "فیلد جدول اصلی");
 
 
             //  add item to checklistbox
@@ -334,7 +356,7 @@ namespace Identification
             #endregion
 
 
-            dtDgv = functions.SqlColumns(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text);
+            dtDgv = sqlfunction.SqlColumns(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text);
             //clmSecond.Items.Clear();
             clmSecond.HeaderText = "فیلد جدول فرعی";
             #endregion
@@ -343,7 +365,7 @@ namespace Identification
             #region Defualt Value
 
             //  column names to list
-            List<string> lstColumnNames = functions.DataTableToList(functions.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text));
+            List<string> lstColumnNames = functions.DataTableToList(sqlfunction.SqlColumnNames(cmbSecondTbl.Text, sqlConnectionSecond, cmbSecondDB.Text));
             //  test list
             List<string> lsttest = new List<string>();
             bool bBreak = false;
@@ -363,7 +385,7 @@ namespace Identification
                     }
                     else
                     {
-                        for (int l = 0; l < Variable.strArray.Length / 3; l++)
+                        for (int l = 0; l < Variable.strArray.Length / 4; l++)
                         {
                             if (Variable.strArray[l, 0] == lstColumnNames[j].ToString()
                                 || Variable.strArray[l, 1] == lstColumnNames[j].ToString()
@@ -392,7 +414,7 @@ namespace Identification
 
 
             //  check table log
-            intCheck = functions.ListFind(functions.SqlTableName(sqlConnectionSecond, cmbSecondDB.Text), "LogFile");
+            intCheck = functions.ListFind(sqlfunction.SqlTableName(sqlConnectionSecond, cmbSecondDB.Text), "LogFile");
 
             if (intCheck == -1)
             {
@@ -401,7 +423,7 @@ namespace Identification
 
                 //  create table log
                 //  run query
-                strFinal = functions.SqlExcutCommand(strQuery, sqlConnectionSecond);
+                strFinal = sqlfunction.SqlExcutCommand(strQuery, sqlConnectionSecond);
 
                 //  report
                 if (strFinal.Contains("Done"))
@@ -457,14 +479,12 @@ namespace Identification
             main();
 
 
-            //  create query
-
-
             //  datagridview run query2
-            dgvSearch.DataSource = functions.SqlDataAdapter(strQuery, sqlConnectionMain);
+            dgvSearch.DataSource = sqlfunction.SqlDataAdapter(strQuery, sqlConnectionMain);
 
             //  report counter
             richtxtReport.Text += "رکورد نتیجه: " + functions.StrNum(dgvSearch.RowCount - 1) + Environment.NewLine;
+
 
 
             Cursor.Current = Cursors.Default;
@@ -490,13 +510,13 @@ namespace Identification
             File.WriteAllText(@"../Command2.txt", query);
 
             //  report
-            //richtxtReport.Text += "رکورد نتیجه : " + functions.SqlRunQuery(query, sqlConnectionSecond) + Environment.NewLine;
+            //richtxtReport.Text += "رکورد نتیجه : " + sqlfunction.SqlRunQuery(query, sqlConnectionSecond) + Environment.NewLine;
 
             //  default value
             int ResultCount = 0;
 
             //  count not used
-            //ResultCount = functions.SqlCountColumn(cmbSecondTbl.Text, sqlConnectionSecond, "[" + cmbMainClmnUniq.Text + "_vld] is null");
+            //ResultCount = sqlfunction.SqlCountColumn(cmbSecondTbl.Text, sqlConnectionSecond, "[" + cmbMainClmnUniq.Text + "_vld] is null");
 
             //  report
             //richtxtReport.Text += "رکورد مانده : " + functions.StrNum(ResultCount) + Environment.NewLine;
@@ -516,7 +536,7 @@ namespace Identification
                 strQuery = "UPDATE [" + cmbSecondDB.Text + "].dbo.[" + cmbSecondTbl.Text + "] SET [" + cmbMainClmnUniq.Text + "_vld] = " + dgvSearch.Rows[e.RowIndex].Cells[1].Value.ToString() +
                             " , [Description]=N'" + strDescription + " , آپدیت دستی'" + " WHERE STID =" + dgvSearch.Rows[e.RowIndex].Cells[2].Value.ToString() + " AND [" + cmbMainClmnUniq.Text + "_vld] IS NULL SELECT @@ROWCOUNT";
 
-                richtxtReport.Text += "رکورد نتیجه: " + functions.SqlRunQuery(strQuery, sqlConnectionSecond, cmbSecondDB.Text) + Environment.NewLine;
+                richtxtReport.Text += "رکورد نتیجه: " + sqlfunction.SqlRunQuery(strQuery, sqlConnectionSecond, cmbSecondDB.Text) + Environment.NewLine;
 
                 dgvSearch.Rows.Remove(dgvSearch.Rows[e.RowIndex]);
             }
@@ -527,12 +547,12 @@ namespace Identification
             DataTable dtDgv = new DataTable();
 
             //  column names
-            dtDgv = functions.SqlColumnNames(cmbMainTbl.Text, sqlConnectionMain, cmbMainDB.Text, "فیلد جدول اصلی");
+            dtDgv = sqlfunction.SqlColumnNames(cmbMainTbl.Text, sqlConnectionMain, cmbMainDB.Text, "فیلد جدول اصلی");
 
             //  add item to checklistbox
             AddItemCheckList(functions.DataTableToList(dtDgv), Variable.strArray, clbEhraz);
 
-            for (int i = 0; i < Variable.strArray.Length / 3; i++)
+            for (int i = 0; i < Variable.strArray.Length / 4; i++)
             {
                 for (int o = 0; o < 3; o++)
                 {
@@ -587,7 +607,7 @@ namespace Identification
 
         private void btnStepOver_Click(object sender, EventArgs e)
         {
-            textBox1.Text = ClmPersent.ValueMember;
+
             intStepOver++;
         }
 
@@ -911,7 +931,7 @@ namespace Identification
                     strReturn = "Where (dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" +// + cmbPersent.Items[cmbPersent.].ToString() +
                                   " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<";// + cmbPersent.Items[cmbPersent.SelectedIndex - 1].ToString() + ")";
 
-                    if (strWhere != "") strReturn = strWhere + "AND (dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>="+// + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
+                    if (strWhere != "") strReturn = strWhere + "AND (dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))>=" +// + cmbPersent.Items[cmbPersent.SelectedIndex].ToString() +
                                         " AND dbo.GetPercentageOfTwoStringMatching(REPLACE(" + strLblA + ".[" + strType + "],' ',''),REPLACE(" + strLblB + ".[" + strType + "],' ',''))<";// + cmbPersent.Items[].ToString() + ")";
                 }
             }
@@ -953,7 +973,6 @@ namespace Identification
 
 
 
-
         private string DeleteFreeSpace(string strItem)
         { return "Replace(" + strItem + ", ' ', '')"; }
 
@@ -962,9 +981,9 @@ namespace Identification
             clbEhraz.Items.Clear();
             for (int i = 0; i < lstItem.Count; i++)
             {
-                for (int o = 0; o < strArr.Length / 3; o++)
+                for (int o = 0; o < strArr.Length / 4; o++)
                 {
-                    for (int j = 0; j < 3; j++)
+                    for (int j = 0; j < 4; j++)
                     {
                         if (lstItem[i].ToUpper() == strArr[o, j].ToUpper())
                         {

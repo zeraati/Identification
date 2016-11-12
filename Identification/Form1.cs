@@ -17,6 +17,8 @@ namespace Identification
     public partial class Form1 : Form
     {
         Functions Functions = new Functions();
+        SqlFunctions sqlfunction = new SqlFunctions();
+
 
         Boolean EnableFrm;
         SqlConnection sqlConnection = new SqlConnection();
@@ -41,7 +43,7 @@ namespace Identification
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             //  change database
-            sqlConnection = (cmbDBNames.Text != "") ? Functions.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection) : sqlConnection;
+            sqlConnection = (cmbDBNames.Text != "") ? sqlfunction.SqlConnectionChangeDB(cmbDBNames.Text, sqlConnection) : sqlConnection;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -50,7 +52,7 @@ namespace Identification
         }
 
         private void btnConnect_Enter(object sender, KeyEventArgs e)
-        {if (e.KeyData == Keys.Enter) btnConnect_Click(null, null);}
+        { if (e.KeyData == Keys.Enter) btnConnect_Click(null, null); }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
@@ -64,10 +66,10 @@ namespace Identification
 
 
             //  create sql connection            
-            sqlConnection = Functions.SqlConnect(strServer, strUser, strPass);
+            sqlConnection = sqlfunction.SqlConnect(strServer, strUser, strPass);
 
             //  test sql connection
-            if (Functions.SqlConnectionTest(sqlConnection))
+            if (sqlfunction.SqlConnectionTest(sqlConnection))
             {
 
                 #region save login info with encrypt pass
@@ -108,7 +110,7 @@ namespace Identification
 
 
                 //  load database name  // set source cmbDBNames 
-                cmbDBNames.DataSource = Functions.SqlGetDBName(sqlConnection);
+                cmbDBNames.DataSource = sqlfunction.SqlGetDBName(sqlConnection);
 
                 // set btnConnect text
                 btnConnect.Text = "اتصال مجدد";
@@ -224,6 +226,12 @@ namespace Identification
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void گزارشازکلبانکToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DataBasesReport frmDBR = new DataBasesReport(sqlConnection);
+            frmDBR.ShowDialog();
         }
 
         private void پشتیبانگیریToolStripMenuItem_Click(object sender, EventArgs e)

@@ -54,6 +54,11 @@
     <Reference Include="CheckBoxComboBox">
       <HintPath>..\..\..\DLL\CheckBoxComboBox.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>bin\Debug\Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="Persia">
       <HintPath>..\..\..\persia\Persia.dll</HintPath>
     </Reference>
@@ -75,7 +80,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="CryptorEngine.cs" />
+    <Compile Include="DataBasesReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataBasesReport.Designer.cs">
+      <DependentUpon>DataBasesReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="DateConvert.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +135,7 @@
     <Compile Include="SQLDBbackup.Designer.cs">
       <DependentUpon>SQLDBbackup.cs</DependentUpon>
     </Compile>
+    <Compile Include="SqlFunctions.cs" />
     <Compile Include="Substring.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +148,9 @@
     <Compile Include="Uniqe.Designer.cs">
       <DependentUpon>Uniqe.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="DataBasesReport.resx">
+      <DependentUpon>DataBasesReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DateConvert.resx">
       <DependentUpon>DateConvert.cs</DependentUpon>
     </EmbeddedResource>

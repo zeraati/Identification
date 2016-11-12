@@ -55,6 +55,12 @@
             this.dgvSearch = new System.Windows.Forms.DataGridView();
             this.btnUpdate = new System.Windows.Forms.DataGridViewButtonColumn();
             this.dgv = new System.Windows.Forms.DataGridView();
+            this.chb = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmSN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmSecond = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.txtSecound = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmPersent = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.ClmFilter = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.chbUniq = new System.Windows.Forms.CheckBox();
@@ -73,7 +79,6 @@
             this.btnEvent = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tabReport = new System.Windows.Forms.TabPage();
-            this.richtxtReport = new System.Windows.Forms.RichTextBox();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.label19 = new System.Windows.Forms.Label();
             this.richtxtUpdQuery = new System.Windows.Forms.RichTextBox();
@@ -85,12 +90,7 @@
             this.label18 = new System.Windows.Forms.Label();
             this.btnStepOver = new System.Windows.Forms.Button();
             this.directoryEntry1 = new System.DirectoryServices.DirectoryEntry();
-            this.chb = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmSN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmSecond = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.txtSecound = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClmPersent = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.ClmFilter = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.richtxtReport = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSearch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
@@ -99,7 +99,6 @@
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            this.tabReport.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.SuspendLayout();
@@ -371,13 +370,72 @@
             this.txtSecound,
             this.ClmPersent,
             this.ClmFilter});
-            this.dgv.Location = new System.Drawing.Point(8, 52);
+            this.dgv.Location = new System.Drawing.Point(260, 52);
             this.dgv.Name = "dgv";
             this.dgv.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.dgv.RowHeadersVisible = false;
-            this.dgv.Size = new System.Drawing.Size(715, 173);
+            this.dgv.Size = new System.Drawing.Size(463, 173);
             this.dgv.TabIndex = 73;
             this.dgv.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellContentClick);
+            // 
+            // chb
+            // 
+            this.chb.FillWeight = 5F;
+            this.chb.Frozen = true;
+            this.chb.HeaderText = "";
+            this.chb.Name = "chb";
+            this.chb.Width = 30;
+            // 
+            // clmSN
+            // 
+            this.clmSN.Frozen = true;
+            this.clmSN.HeaderText = "ردیف";
+            this.clmSN.Name = "clmSN";
+            this.clmSN.ReadOnly = true;
+            this.clmSN.ToolTipText = "ردیف";
+            this.clmSN.Width = 30;
+            // 
+            // clmSecond
+            // 
+            this.clmSecond.HeaderText = "Column1";
+            this.clmSecond.Name = "clmSecond";
+            this.clmSecond.ToolTipText = "فیلد جدول فرعی";
+            // 
+            // txtSecound
+            // 
+            this.txtSecound.HeaderText = "نامگذاری";
+            this.txtSecound.Name = "txtSecound";
+            this.txtSecound.ToolTipText = "نامگذاری";
+            this.txtSecound.Width = 50;
+            // 
+            // ClmPersent
+            // 
+            this.ClmPersent.HeaderText = "درصد";
+            this.ClmPersent.Items.AddRange(new object[] {
+            "",
+            "100",
+            "95",
+            "90",
+            "85",
+            "80",
+            "70",
+            "60",
+            "50"});
+            this.ClmPersent.Name = "ClmPersent";
+            this.ClmPersent.Width = 50;
+            // 
+            // ClmFilter
+            // 
+            this.ClmFilter.HeaderText = "فیلتر";
+            this.ClmFilter.Items.AddRange(new object[] {
+            "",
+            "=",
+            "Join",
+            "خالی",
+            "سيد",
+            "مير",
+            "اله-الله"});
+            this.ClmFilter.Name = "ClmFilter";
             // 
             // tabControl1
             // 
@@ -398,6 +456,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.richtxtReport);
             this.tabPage1.Controls.Add(this.chbUniq);
             this.tabPage1.Controls.Add(this.textBox2);
             this.tabPage1.Controls.Add(this.cmbMainClmnUniq);
@@ -562,7 +621,6 @@
             // 
             // tabReport
             // 
-            this.tabReport.Controls.Add(this.richtxtReport);
             this.tabReport.Location = new System.Drawing.Point(4, 22);
             this.tabReport.Name = "tabReport";
             this.tabReport.Padding = new System.Windows.Forms.Padding(3);
@@ -570,14 +628,6 @@
             this.tabReport.TabIndex = 4;
             this.tabReport.Text = "گزارش";
             this.tabReport.UseVisualStyleBackColor = true;
-            // 
-            // richtxtReport
-            // 
-            this.richtxtReport.Location = new System.Drawing.Point(84, 9);
-            this.richtxtReport.Name = "richtxtReport";
-            this.richtxtReport.Size = new System.Drawing.Size(572, 152);
-            this.richtxtReport.TabIndex = 31;
-            this.richtxtReport.Text = "";
             // 
             // tabPage8
             // 
@@ -684,64 +734,13 @@
             this.btnStepOver.Click += new System.EventHandler(this.btnStepOver_Click);
             this.btnStepOver.Enter += new System.EventHandler(this.btnStepOver_Click);
             // 
-            // chb
+            // richtxtReport
             // 
-            this.chb.FillWeight = 5F;
-            this.chb.Frozen = true;
-            this.chb.HeaderText = "";
-            this.chb.Name = "chb";
-            this.chb.Width = 30;
-            // 
-            // clmSN
-            // 
-            this.clmSN.Frozen = true;
-            this.clmSN.HeaderText = "ردیف";
-            this.clmSN.Name = "clmSN";
-            this.clmSN.ReadOnly = true;
-            this.clmSN.ToolTipText = "ردیف";
-            this.clmSN.Width = 30;
-            // 
-            // clmSecond
-            // 
-            this.clmSecond.HeaderText = "Column1";
-            this.clmSecond.Name = "clmSecond";
-            this.clmSecond.ToolTipText = "فیلد جدول فرعی";
-            // 
-            // txtSecound
-            // 
-            this.txtSecound.HeaderText = "نامگذاری";
-            this.txtSecound.Name = "txtSecound";
-            this.txtSecound.ToolTipText = "نامگذاری";
-            this.txtSecound.Width = 50;
-            // 
-            // ClmPersent
-            // 
-            this.ClmPersent.HeaderText = "درصد";
-            this.ClmPersent.Items.AddRange(new object[] {
-            "",
-            "100",
-            "95",
-            "90",
-            "85",
-            "80",
-            "70",
-            "60",
-            "50"});
-            this.ClmPersent.Name = "ClmPersent";
-            this.ClmPersent.Width = 50;
-            // 
-            // ClmFilter
-            // 
-            this.ClmFilter.HeaderText = "فیلتر";
-            this.ClmFilter.Items.AddRange(new object[] {
-            "",
-            "=",
-            "Join",
-            "خالی",
-            "سيد",
-            "مير",
-            "اله-الله"});
-            this.ClmFilter.Name = "ClmFilter";
+            this.richtxtReport.Location = new System.Drawing.Point(6, 52);
+            this.richtxtReport.Name = "richtxtReport";
+            this.richtxtReport.Size = new System.Drawing.Size(248, 173);
+            this.richtxtReport.TabIndex = 103;
+            this.richtxtReport.Text = "";
             // 
             // SetPerson
             // 
@@ -787,7 +786,6 @@
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
-            this.tabReport.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
             this.tabPage8.PerformLayout();
             this.tabPage5.ResumeLayout(false);
@@ -842,7 +840,6 @@
         private System.Windows.Forms.Button btnStepOver;
         private System.Windows.Forms.ToolStripMenuItem فعالکردنبررسیToolStripMenuItem;
         private System.Windows.Forms.RichTextBox richTxtQuery;
-        private System.Windows.Forms.RichTextBox richtxtReport;
         private System.DirectoryServices.DirectoryEntry directoryEntry1;
         private System.Windows.Forms.TabPage tabReport;
         private System.Windows.Forms.TabPage tabPage8;
@@ -860,5 +857,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn txtSecound;
         private System.Windows.Forms.DataGridViewComboBoxColumn ClmPersent;
         private System.Windows.Forms.DataGridViewComboBoxColumn ClmFilter;
+        private System.Windows.Forms.RichTextBox richtxtReport;
     }
 }

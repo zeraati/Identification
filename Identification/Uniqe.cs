@@ -14,6 +14,8 @@ namespace Identification
     public partial class Uniqe : Form
     {
         Functions Functions = new Functions();
+        SqlFunctions sqlfunctions = new SqlFunctions();
+
         SqlConnection sqlConnection = new SqlConnection();
 
         string strQuery;
@@ -29,7 +31,7 @@ namespace Identification
             this.Text = "یکتا سازی" + "  -  نام سرور = " + sqlConnection.DataSource;
 
             //  load database name of source
-            cmbDBName.DataSource = Functions.SqlGetDBName(sqlConnection);
+            cmbDBName.DataSource = sqlfunctions.SqlGetDBName(sqlConnection);
             
         }
 
@@ -43,9 +45,9 @@ namespace Identification
         private void cmbTBName_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  load cmb field source
-            cmbField.DataSource = Functions.SqlColumnNames(cmbTBName.Text, sqlConnection);
+            cmbField.DataSource = sqlfunctions.SqlColumnNames(cmbTBName.Text, sqlConnection);
 
-            Functions.LoadColumnInfo(cmbTBName.Text, clbField, sqlConnection);
+            Functions.LoadColumnInfo(cmbTBName.Text, clbField, sqlConnection, sqlfunctions.SqlColumns(cmbTBName.Text, sqlConnection,cmbDBName.Text));
 
             btnAllSelect.Text = "انتخاب همه";
         }

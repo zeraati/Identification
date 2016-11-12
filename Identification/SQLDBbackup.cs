@@ -16,8 +16,10 @@ namespace Identification
 {
     public partial class SQLDBbackup : Form
     {
-        Functions func = new Functions();
-        Functions sqldal = new Functions();
+        Functions functions = new Functions();
+        SqlFunctions sqlfunctions = new SqlFunctions();
+
+
         FolderBrowserDialog fbd = new FolderBrowserDialog();
         SqlConnection sqlConn = new SqlConnection();
 
@@ -34,7 +36,7 @@ namespace Identification
             lblConnect.Text = "نام سرور : " + sqlConn.DataSource + " - نام بانک : " + sqlConn.Database;
             Persia.SolarDate solarDate = Persia.Calendar.ConvertToPersian(DateTime.Now);
             lblDate.Text = solarDate.ToString("yyyyMMdd");
-            func.ChlbDB(sqlConn, chlbDB);
+            functions.ChlbDB(chlbDB, sqlfunctions.SqlGetDBName(sqlConn));
             txtName.Enabled = false;
             lblFinish.Visible = false;
             if (txtFilePath.Text == "")
@@ -271,7 +273,7 @@ namespace Identification
         private void btnAllSelect_Click(object sender, EventArgs e)
         {
 
-            func.SelectUnselect(chlbDB, btnAllSelect);
+            functions.SelectUnselect(chlbDB, btnAllSelect);
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -16,6 +16,7 @@ namespace Identification
     {
 
         Functions functions = new Functions();
+        SqlFunctions sqlfunction = new SqlFunctions();
 
 
         #region Create New Field
@@ -32,7 +33,7 @@ namespace Identification
             //  new field
             strColumn = cmbColumnUniq + "_vld";
             //  check new field
-            intCheck = CheckField(functions.SqlColumnNames(strCmbSecondTbl, sqlConnectionSecond), strColumn);
+            intCheck = CheckField(sqlfunction.SqlColumnNames(strCmbSecondTbl, sqlConnectionSecond), strColumn);
 
             if (intCheck == 0)
             {
@@ -40,7 +41,7 @@ namespace Identification
                 if (dr == DialogResult.Yes)
                 {
                     //  add new field
-                    strFinal = functions.SqlAddNewColumn(strCmbSecondTbl, strColumn, "INT", "NULL", sqlConnectionSecond);
+                    strFinal = sqlfunction.SqlAddNewColumn(strCmbSecondTbl, strColumn, "INT", "NULL", sqlConnectionSecond);
 
                     if (strFinal.Contains("Done"))
                     {
@@ -48,7 +49,7 @@ namespace Identification
                         strReturn = strColumn + " با موفقیت انجام شد " + Environment.NewLine;
 
                         //  datagridview combobox column source
-                        functions.ComboBoxSource(clmSecondTbl, functions.SqlColumnNames(strCmbSecondTbl, sqlConnectionSecond));
+                        functions.ComboBoxSource(clmSecondTbl, sqlfunction.SqlColumnNames(strCmbSecondTbl, sqlConnectionSecond));
 
                     }
                     else
@@ -61,12 +62,12 @@ namespace Identification
                     intCheck = 0;
 
                     //  check field "Description"
-                    intCheck = CheckField(functions.SqlColumnNames(strCmbSecondTbl, sqlConnectionSecond), "Description");
+                    intCheck = CheckField(sqlfunction.SqlColumnNames(strCmbSecondTbl, sqlConnectionSecond), "Description");
 
                     if (intCheck == 0)
                     {
                         // add column   
-                        strFinal = functions.SqlAddNewColumn(strCmbSecondTbl, "Description", "NVARCHAR(MAX)", "NULL", sqlConnectionSecond);
+                        strFinal = sqlfunction.SqlAddNewColumn(strCmbSecondTbl, "Description", "NVARCHAR(MAX)", "NULL", sqlConnectionSecond);
 
                         if (strFinal.Contains("Done"))
                         {
@@ -74,7 +75,7 @@ namespace Identification
                             strReturn += "Description با موفقیت انجام شد " + Environment.NewLine;
 
                             //  datagridview combobox column source
-                            functions.ComboBoxSource(clmSecondTbl, functions.SqlColumnNames(strCmbSecondTbl, sqlConnectionSecond));
+                            functions.ComboBoxSource(clmSecondTbl, sqlfunction.SqlColumnNames(strCmbSecondTbl, sqlConnectionSecond));
                         }
                         else strReturn += " با مشکل مواجه شد " + Environment.NewLine;
                     }

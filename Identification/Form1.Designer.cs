@@ -55,6 +55,7 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.txtMsg = new System.Windows.Forms.TextBox();
             this.chbRemember = new System.Windows.Forms.CheckBox();
+            this.گزارشازکلبانکToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -169,6 +170,7 @@
             this.یونیکToolStripMenuItem,
             this.نمایشاطلاعاتخالیToolStripMenuItem,
             this.پیداکردنتکراریToolStripMenuItem,
+            this.گزارشازکلبانکToolStripMenuItem,
             this.خروجToolStripMenuItem});
             this.پروندهToolStripMenuItem.Name = "پروندهToolStripMenuItem";
             this.پروندهToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
@@ -185,14 +187,14 @@
             // احرازمکانToolStripMenuItem
             // 
             this.احرازمکانToolStripMenuItem.Name = "احرازمکانToolStripMenuItem";
-            this.احرازمکانToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.احرازمکانToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
             this.احرازمکانToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.احرازمکانToolStripMenuItem.Text = "احراز موقعیت جغرافیایی";
             // 
             // احرازهویتToolStripMenuItem
             // 
             this.احرازهویتToolStripMenuItem.Name = "احرازهویتToolStripMenuItem";
-            this.احرازهویتToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            this.احرازهویتToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4;
             this.احرازهویتToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.احرازهویتToolStripMenuItem.Text = "احراز هویت اشخاص";
             this.احرازهویتToolStripMenuItem.Click += new System.EventHandler(this.احرازهویتToolStripMenuItem_Click);
@@ -200,14 +202,14 @@
             // ثبتتلفنToolStripMenuItem
             // 
             this.ثبتتلفنToolStripMenuItem.Name = "ثبتتلفنToolStripMenuItem";
-            this.ثبتتلفنToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4;
+            this.ثبتتلفنToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
             this.ثبتتلفنToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.ثبتتلفنToolStripMenuItem.Text = "ثبت تلفن ها";
             // 
             // یونیکToolStripMenuItem
             // 
             this.یونیکToolStripMenuItem.Name = "یونیکToolStripMenuItem";
-            this.یونیکToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
+            this.یونیکToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F7;
             this.یونیکToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.یونیکToolStripMenuItem.Text = "یکتا سازی";
             this.یونیکToolStripMenuItem.Click += new System.EventHandler(this.یونیکToolStripMenuItem_Click);
@@ -215,7 +217,7 @@
             // نمایشاطلاعاتخالیToolStripMenuItem
             // 
             this.نمایشاطلاعاتخالیToolStripMenuItem.Name = "نمایشاطلاعاتخالیToolStripMenuItem";
-            this.نمایشاطلاعاتخالیToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F7;
+            this.نمایشاطلاعاتخالیToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
             this.نمایشاطلاعاتخالیToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.نمایشاطلاعاتخالیToolStripMenuItem.Text = "نمایش تعداد رکوردها";
             this.نمایشاطلاعاتخالیToolStripMenuItem.Click += new System.EventHandler(this.نمایشاطلاعاتخالیToolStripMenuItem_Click);
@@ -223,7 +225,7 @@
             // پیداکردنتکراریToolStripMenuItem
             // 
             this.پیداکردنتکراریToolStripMenuItem.Name = "پیداکردنتکراریToolStripMenuItem";
-            this.پیداکردنتکراریToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
+            this.پیداکردنتکراریToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F9;
             this.پیداکردنتکراریToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.پیداکردنتکراریToolStripMenuItem.Text = "پیدا کردن تکراری";
             this.پیداکردنتکراریToolStripMenuItem.Click += new System.EventHandler(this.پیداکردنتکراریToolStripMenuItem_Click);
@@ -300,6 +302,14 @@
             this.chbRemember.Text = "به خاطر سپردن رمز";
             this.chbRemember.UseVisualStyleBackColor = true;
             // 
+            // گزارشازکلبانکToolStripMenuItem
+            // 
+            this.گزارشازکلبانکToolStripMenuItem.Name = "گزارشازکلبانکToolStripMenuItem";
+            this.گزارشازکلبانکToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            this.گزارشازکلبانکToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.گزارشازکلبانکToolStripMenuItem.Text = "گزارش از کل بانک";
+            this.گزارشازکلبانکToolStripMenuItem.Click += new System.EventHandler(this.گزارشازکلبانکToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnConnect;
@@ -363,6 +373,7 @@
         private System.Windows.Forms.ToolStripMenuItem نمایشاطلاعاتخالیToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem پشتیبانگیریToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem پیداکردنتکراریToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem گزارشازکلبانکToolStripMenuItem;
     }
 }
 

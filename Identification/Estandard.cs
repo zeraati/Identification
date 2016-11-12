@@ -18,6 +18,8 @@ namespace Identification
     public partial class Estandard : Form
     {
         Functions Functions = new Functions();
+        SqlFunctions sqlfunction = new SqlFunctions();
+
         SqlConnection sqlConnection = new SqlConnection();
 
         FontDialog FD = new FontDialog();
@@ -41,7 +43,7 @@ namespace Identification
             this.Text = "استاندارد سازی" + "   -   " + sqlConnection.DataSource;
 
             //  load dbname
-            cmbDBName.DataSource = Functions.SqlGetDBName(sqlConnection);
+            cmbDBName.DataSource = sqlfunction.SqlGetDBName(sqlConnection);
 
             //  defualt value
             cmbDBName.Text = "Ehraz";
@@ -75,31 +77,36 @@ namespace Identification
 
         private void cmbDBName_SelectedIndexChanged(object sender, EventArgs e)
         {
-            List<string> lstRtn = new List<string>();
+            
+            List<string> lstSqlFile = new List<string>();
+            bool bol = false;
+
+
             //  change data base name
-            sqlConnection = Functions.SqlConnectionChangeDB(cmbDBName.Text, sqlConnection);
+            sqlConnection = sqlfunction.SqlConnectionChangeDB(cmbDBName.Text, sqlConnection);
+
+            //  list functions files to sql
+            lstSqlFile = lstSqlFile = Functions.DataTableToList(sqlfunction.SqlFunctionsFiles(sqlConnection));
+
+            //  list functions files is not sql
 
             //  check sql functions
-            lstRtn = Functions.CheckSqlFunctions(strFunctionsFile, cmbDBName.Text, sqlConnection);
-
-            //  report
-            if (lstRtn.Count != 0)
+            string[] files = Directory.GetFiles(strFunctionsFile, "*.txt");
+            foreach (string file in files)
             {
-                for (int k = 0; k < lstRtn.Count; k++)
+                bol = false;
+                for (int i = 0; i < lstSqlFile.Count; i++)
                 {
-                    lst1.Items.Add(lstRtn[k]);
+                    if (Path.GetFileNameWithoutExtension(file) == lstSqlFile[i])
+                    { bol = true; break; }
                 }
-                //  select tabcontrol report
-                tabControl2.SelectedTab = tabControl2.TabPages[1];
+
+                //  create function is not sql
+                if (bol == false) { sqlfunction.SqlExcutCommand(File.ReadAllText(file), sqlConnection); lst1.Items.Add("Create Function Is Sql : " + Path.GetFileNameWithoutExtension(file)); }
             }
 
-
-
-            //  create table log    //  table name,
-
-
-
-
+            //  select tabcontrol report
+            tabControl2.SelectedTab = tabControl2.TabPages[1];
 
 
             //  dafault value
@@ -144,7 +151,7 @@ namespace Identification
             string strFinal;
 
             //  change table name
-            strFinal = Functions.SqlEditTableName(cmbTableNameTab1.Text, txtNewTableName.Text, sqlConnection, true);
+            strFinal = sqlfunction.SqlEditTableName(cmbTableNameTab1.Text, txtNewTableName.Text, sqlConnection, true);
 
             //  conclude final
             lstReport(" TableName => [" + txtNewTableName.Text + "] => " + strFinal);
@@ -161,7 +168,7 @@ namespace Identification
             string strFinal;
 
             //  copy table data
-            strFinal = Functions.SqlCopyTable(cmbTableNameTab1.Text, txtCopyTableName.Text, sqlConnection);
+            strFinal = sqlfunction.SqlCopyTable(cmbTableNameTab1.Text, txtCopyTableName.Text, sqlConnection);
 
             //  conclude final
             lstReport(strFinal);
@@ -181,7 +188,7 @@ namespace Identification
             if (DR == DialogResult.Yes)
             {
                 //  drop table
-                strFinal = Functions.SqlDropTable(cmbTableNameTab1.Text, sqlConnection);
+                strFinal = sqlfunction.SqlDropTable(cmbTableNameTab1.Text, sqlConnection);
 
                 //  conclude final
                 lstReport(strFinal);
@@ -232,14 +239,14 @@ namespace Identification
             Cursor.Current = Cursors.WaitCursor;
             //lst1.Items.Clear();
 
-            DataTable dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection, cmbDBName.Text);
+            DataTable dtColumns = sqlfunction.SqlColumns(cmbTableName.Text, sqlConnection, cmbDBName.Text);
 
             //List<string> lstTest = Functions.DataTableToList(dtColumns,1);
             string strFieldName;
             int intCount;
 
             //  record table
-            intCount = Functions.SqlRecordCount(cmbTableName.Text, sqlConnection);
+            intCount = sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection);
 
 
             //  add item
@@ -267,7 +274,7 @@ namespace Identification
                     else
                     {
                         //  count columns record
-                        intCount = Functions.SqlRecordCount(cmbTableName.Text, sqlConnection, strFieldName, cmbDBName.Text);
+                        intCount = sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, strFieldName, cmbDBName.Text);
                         lst1.Items.Add(strFieldName + " => " + intCount + " Record");
                     }
 
@@ -289,7 +296,7 @@ namespace Identification
             if (check == -1)
             {
 
-                if (Functions.SqlCreateReport(sqlConnection) == " => Done!")
+                if (sqlfunction.SqlCreateReport(sqlConnection) == " => Done!")
                 {
 
                     //  set cmbTBName source    // load table names
@@ -360,7 +367,7 @@ namespace Identification
                             {
 
                                 //  create new column
-                                strFinal = Functions.SqlAddNewColumn
+                                strFinal = sqlfunction.SqlAddNewColumn
                                     (
                                     cmbTableName.Text,                              //  table name
                                     dgvDesign.Rows[i].Cells[2].Value.ToString(),    //  column name
@@ -390,7 +397,7 @@ namespace Identification
                                 if (dgvDesign.Rows[i].Cells[6].Value.ToString() == "ویرایش")
                                 {
 
-                                    strFinal = Functions.SqlEditColumn
+                                    strFinal = sqlfunction.SqlEditColumn
                                                                     (
                                                                     cmbTableName.Text,
                                                                     lblOldColumn.Text,
@@ -407,7 +414,7 @@ namespace Identification
                                     DialogResult DR = MessageBox.Show("؟آیا می خواهید فیلدها را حذف کنید", "!هشدار", MessageBoxButtons.YesNo);
                                     if (DR == DialogResult.Yes)
                                     {
-                                        strFinal = Functions.SqlDropColumn
+                                        strFinal = sqlfunction.SqlDropColumn
                                                                     (cmbTableName.Text,
                                                                     dgvDesign.Rows[i].Cells[2].Value.ToString(),
                                                                     sqlConnection,
@@ -453,7 +460,7 @@ namespace Identification
 
             #region Edit Column Names
 
-            for (int i = 0; i < Variable.strArray.Length / 3; i++)
+            for (int i = 0; i < Variable.strArray.Length / 4; i++)
             {
                 for (int j = 0; j < dgvDesign.Rows.Count - 1; j++)
                 {
@@ -465,10 +472,11 @@ namespace Identification
 
                     if (dgvDesign.Rows[j].Cells[2].Value.ToString().ToUpper().Replace(" ", "") == Variable.strArray[i, 0].ToUpper().Replace(" ", "") ||
                         dgvDesign.Rows[j].Cells[2].Value.ToString().ToUpper().Replace(" ", "") == Variable.strArray[i, 1].ToUpper().Replace(" ", "") ||
-                        dgvDesign.Rows[j].Cells[2].Value.ToString().ToUpper().Replace(" ", "") == Variable.strArray[i, 2].ToUpper().Replace(" ", ""))
+                        dgvDesign.Rows[j].Cells[2].Value.ToString().ToUpper().Replace(" ", "") == Variable.strArray[i, 2].ToUpper().Replace(" ", "") ||
+                        dgvDesign.Rows[j].Cells[2].Value.ToString().ToUpper().Replace(" ", "") == Variable.strArray[i, 3].ToUpper().Replace(" ", ""))
                     {
                         lsttest.Add(Variable.strArray[i, 0] + " , " + j.ToString());
-                        lstReport(Functions.SqlRename("COLUMN", dgvDesign.Rows[j].Cells[2].Value.ToString(), Variable.strArray[i, 0], sqlConnection, cmbTableName.Text));
+                        lstReport(sqlfunction.SqlRename("COLUMN", dgvDesign.Rows[j].Cells[2].Value.ToString(), Variable.strArray[i, 0], sqlConnection, cmbTableName.Text));
                         break;
                     }
                 }
@@ -491,10 +499,15 @@ namespace Identification
             dgvDesign.Columns.Clear();
             chlstbxColumn.Items.Clear();
 
+            DataTable dtColumns = new DataTable();
+            //  list count is not null
+            List<string> lstCount = new List<string>();
+            //  list count is null
+            List<string> lstCountNull = new List<string>();
+
             #region DataGridView Design
 
-            DataTable dtColumns = new DataTable();
-            List<string> lstCount = new List<string>();
+            //  datagrid columns
             DataGridViewTextBoxColumn dgvTxBxClmOrd = new DataGridViewTextBoxColumn();
             DataGridViewCheckBoxColumn dgvChBxClm = new DataGridViewCheckBoxColumn();
             DataGridViewTextBoxColumn dgvTxtBxClm = new DataGridViewTextBoxColumn();
@@ -503,6 +516,7 @@ namespace Identification
             DataGridViewTextBoxColumn dgvTxtClmLen = new DataGridViewTextBoxColumn();
             DataGridViewComboBoxColumn dgvCmBxClmEvent = new DataGridViewComboBoxColumn(); // copy , delete
             DataGridViewTextBoxColumn dgvTxtClmCount = new DataGridViewTextBoxColumn(); //  count columns
+            DataGridViewTextBoxColumn dgvTxtClmCountNull = new DataGridViewTextBoxColumn(); //  count columns is null
 
             #endregion
 
@@ -515,14 +529,16 @@ namespace Identification
             dgvTxtBxClm.ToolTipText = "نام فیلد";
             dgvCmBxClmNull.HeaderText = "Nullable";
             dgvCmBxClmNull.ToolTipText = "Nullable";
-            dgvCmBxClmType.HeaderText = "DataType";
-            dgvCmBxClmType.ToolTipText = "DataType";
+            dgvCmBxClmType.HeaderText = "نوع";
+            dgvCmBxClmType.ToolTipText = "نوع";
             dgvTxtClmLen.HeaderText = "Lenth";
             dgvTxtClmLen.ToolTipText = "Lenth";
             dgvCmBxClmEvent.HeaderText = "عملیات";
             dgvCmBxClmEvent.ToolTipText = "عملیات";
-            dgvTxtClmCount.HeaderText = "تعداد رکورد فیلد";
-            dgvTxtClmCount.ToolTipText = "تعداد رکورد فیلد";
+            dgvTxtClmCount.HeaderText = "تعداد رکورد پر";
+            dgvTxtClmCount.ToolTipText = "تعداد رکورد پر";
+            dgvTxtClmCountNull.HeaderText = "رکورد خالی";
+            dgvTxtClmCountNull.ToolTipText = "رکورد خالی";
 
             #endregion
 
@@ -541,10 +557,13 @@ namespace Identification
             //*******************************     
 
             //  load columns info            
-            dtColumns = Functions.SqlColumns(cmbTableName.Text, sqlConnection, cmbDBName.Text);
+            dtColumns = sqlfunction.SqlColumns(cmbTableName.Text, sqlConnection, cmbDBName.Text);
 
             //  count columns to list
-            lstCount = Functions.SqlRecordCountColumn(cmbTableName.Text, sqlConnection, cmbDBName.Text);
+            lstCount = sqlfunction.SqlRecordCountColumn(cmbTableName.Text, sqlConnection, cmbDBName.Text, " IS NOT NULL ");
+
+            //  count columns is null to list
+            lstCountNull = sqlfunction.SqlRecordCountColumn(cmbTableName.Text, sqlConnection, cmbDBName.Text);
 
             //  list type test
             List<string> lsttype = Functions.DataTableToList(dtColumns, 3);
@@ -553,11 +572,15 @@ namespace Identification
             #region Add Column & Default Value
 
             #region Width
+
             dgvTxBxClmOrd.Width = 30;
             dgvChBxClm.Width = 30;
             dgvTxtClmLen.Width = 40;
             dgvCmBxClmEvent.Width = 60;
             dgvTxtClmCount.Width = 50;
+            dgvCmBxClmNull.Width = 70;
+            dgvTxtClmCountNull.Width = 50;
+
             #endregion
 
             #region Add
@@ -580,7 +603,9 @@ namespace Identification
             dgvDesign.Columns.Add(dgvCmBxClmEvent);
             //  add column count
             dgvDesign.Columns.Add(dgvTxtClmCount);
-            dgvTxtClmCount.ReadOnly = true;
+            //  add column count is null
+            dgvDesign.Columns.Add(dgvTxtClmCountNull);
+
             #endregion
 
             //  default value
@@ -595,7 +620,7 @@ namespace Identification
                 dgvCmBxClmType.DisplayMember = dtColumns.Rows[i][3].ToString(),
                 dgvTxtClmLen.ToolTipText = dtColumns.Rows[i][4].ToString().Replace("(", "").Replace(")", ""),
                 dgvCmBxClmEvent.ToolTipText = "ویرایش",
-                lstCount[i]);
+                lstCount[i], lstCountNull[i]);
 
                 chlstbxColumn.Items.Add
                     (
@@ -623,8 +648,8 @@ namespace Identification
         #region load TbName
         private void loadTbName()
         {
-            cmbTableName.DataSource = Functions.SqlTableName(sqlConnection);
-            cmbTableNameTab1.DataSource = Functions.SqlTableName(sqlConnection);
+            cmbTableName.DataSource = sqlfunction.SqlTableName(sqlConnection);
+            cmbTableNameTab1.DataSource = sqlfunction.SqlTableName(sqlConnection);
         }
 
         #endregion
@@ -647,7 +672,7 @@ namespace Identification
 
 
                 //  table records count
-                intTableCount = Functions.SqlRecordCount(cmbTableName.Text, sqlConnection, "*", cmbDBName.Text);
+                intTableCount = sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, "*", cmbDBName.Text);
 
                 lst1.Items.Add("تعداد فیلد : " + chlstbxColumn.Items.Count.ToString());
                 lst1.Items.Add("تعداد رکورد جدول : " + Functions.StrNum(intTableCount));
@@ -675,8 +700,8 @@ namespace Identification
 
                             //  update column
                             if (txtNew.Text.ToUpper() == "NULL" | txtNew.Text.ToUpper() == "=NULL")
-                            { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, "[" + strFieldName + "] = N'" + txtBefore.Text + "'", ""); }
-                            else { strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace (" + strFieldName + "),N'" + txtBefore.Text + "',N'" + txtNew.Text + "')", sqlConnection); }
+                            { strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, "[" + strFieldName + "] = N'" + txtBefore.Text + "'", ""); }
+                            else { strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace (" + strFieldName + "),N'" + txtBefore.Text + "',N'" + txtNew.Text + "')", sqlConnection); }
 
                             //  report
                             if (strFinal.Contains("Done")) { lstReport("Replace" + strFinal); }
@@ -721,13 +746,13 @@ namespace Identification
                                         }
                                         //  run query
                                         richTxt.Text = (richTxt.Text != "") ? "/r/n" + strQuery : richTxt.Text;
-                                        Functions.SqlExcutCommand(strQuery, sqlConnection);
+                                        sqlfunction.SqlExcutCommand(strQuery, sqlConnection);
 
                                         //query
                                         strQuery = "update [" + cmbTableName.Text + "] Set [" + strFieldName + "] =LTRIM(RTRIM([" + strFieldName + "]))";
 
                                         //  run query
-                                        lst1.Items.Add("حذف مقادیر تهی و نا معتبر" + strFieldName + ": " + Functions.SqlExcutCommand(strQuery, sqlConnection));
+                                        lst1.Items.Add("حذف مقادیر تهی و نا معتبر" + strFieldName + ": " + sqlfunction.SqlExcutCommand(strQuery, sqlConnection));
                                         strQuery = "";
                                     }
                                 }
@@ -749,7 +774,7 @@ namespace Identification
                                     strFieldName = ColumnName(chlstbxColumn.Items[j].ToString());
 
                                     //  run query
-                                    strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " dbo.FixKY([" + strFieldName + "])", sqlConnection, strFieldName);
+                                    strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " dbo.FixKY([" + strFieldName + "])", sqlConnection, strFieldName);
 
                                     //  report
                                     if (strFinal.Contains("Done"))
@@ -775,7 +800,7 @@ namespace Identification
                                 #region Delete Character Not Numeric
 
                                 //  update character not numeric
-                                strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, strColumnData, sqlConnection);
+                                strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, strColumnData, sqlConnection);
 
                                 //  report
                                 lstReport("Delete Character Not Numeric => " + strFieldName + strFinal);
@@ -784,7 +809,7 @@ namespace Identification
 
                                 #region ShenasCode With Len > 7 To CodeMelli
                                 //  query
-                                strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli", "RIGHT('00'+ " + strColumnData + ",10)," + strFieldName + "= NULL ", sqlConnection, strFieldName, "LEN(" + strColumnData + ")>7 and CodeMelli is null", "");
+                                strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli", "RIGHT('00'+ " + strColumnData + ",10)," + strFieldName + "= NULL ", sqlConnection, strFieldName, "LEN(" + strColumnData + ")>7 and CodeMelli is null", "");
 
                                 //  report
                                 lstReport("ShenasCode With Len > 7 To CodeMelli => " + strFieldName + ": " + strFinal);
@@ -800,7 +825,7 @@ namespace Identification
                                 strWhere = strFieldName + "='0' or " + strFieldName + "=' ' or LEN(" + strFieldName + ")>7";
 
                                 //  update
-                                strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, strWhere, "");
+                                strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "NULL", sqlConnection, strWhere, "");
 
                                 //  report
                                 lstReport("Delete ShenasCode Not Valid => " + strFieldName + ": " + strFinal);
@@ -820,25 +845,25 @@ namespace Identification
 
                                         #region Standard Formated Date
                                         //  sql update query
-                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'-','/')", sqlConnection);
-                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'_','/')", sqlConnection);
-                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'.','/')", sqlConnection);
-                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],',','/')", sqlConnection);
+                                        sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'-','/')", sqlConnection);
+                                        sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'_','/')", sqlConnection);
+                                        sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],'.','/')", sqlConnection);
+                                        sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "Replace ([" + strFieldName + "],',','/')", sqlConnection);
 
                                         //  run query                                    
                                         lst1.Items.Add(" Ltrim & Rtrim " +
-                                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "ltrim(rtrim([" + strFieldName + "]))", sqlConnection)
+                                                        sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "ltrim(rtrim([" + strFieldName + "]))", sqlConnection)
                                                         );
                                         //  run query
                                         lst1.Items.Add(" Standard Date " +
-                                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "dbo.[FE_Date]([" + strFieldName + "]) where [" + strFieldName + "] IS NOT NULL", sqlConnection)
+                                                        sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, "dbo.[FE_Date]([" + strFieldName + "]) where [" + strFieldName + "] IS NOT NULL", sqlConnection)
                                                         );
                                         #endregion
 
                                         #region Delete Not Valid Date
                                         //  run query
                                         lst1.Items.Add(" Delete Not Valid Date " +
-                                                        Functions.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " NULL where dbo.[CM-Fix]([" + strFieldName + "])= 0 ", sqlConnection)
+                                                        sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strFieldName, " NULL where dbo.[CM-Fix]([" + strFieldName + "])= 0 ", sqlConnection)
                                                         );
                                         #endregion
 
@@ -872,7 +897,7 @@ namespace Identification
                                         strFieldName = ColumnName(chlstbxColumn.Items[j].ToString());
 
                                         //  run query
-                                        strFinal = Functions.SqlDropColumnSpace(cmbTableName.Text, strFieldName, sqlConnection);
+                                        strFinal = sqlfunction.SqlDropColumnSpace(cmbTableName.Text, strFieldName, sqlConnection);
 
                                         //  report
                                         if (strFinal.Contains("Done"))
@@ -902,12 +927,12 @@ namespace Identification
                                 }
 
                                 //  count rows where is null
-                                intCount = Functions.SqlCountColumn(cmbTableName.Text, sqlConnection, strWhere);
+                                intCount = sqlfunction.SqlCountColumn(cmbTableName.Text, sqlConnection, strWhere);
 
                                 if (intCount != 0)
                                 {
                                     //  run query
-                                    strFinal = Functions.SqlDropRows(cmbTableName.Text, sqlConnection, strWhere);
+                                    strFinal = sqlfunction.SqlDropRows(cmbTableName.Text, sqlConnection, strWhere);
 
                                     //  report
                                     if (strFinal.Contains("Done"))
@@ -924,7 +949,7 @@ namespace Identification
                                 if (intTableCheck == 0)
                                 {
                                     //  run query
-                                    strFinal = Functions.SqlDropTableSpace(cmbTableName.Text, sqlConnection);
+                                    strFinal = sqlfunction.SqlDropTableSpace(cmbTableName.Text, sqlConnection);
 
                                     //  report
                                     if (strFinal.Contains("Done")) { lstReport(strFinal); }
@@ -964,7 +989,7 @@ namespace Identification
         if (cmbType.SelectedIndex == 15 | cmbType.SelectedIndex == 16)
         {
             strQuery = "Alter Table " + com + " Alter Column [" + cmbField.Text + "] DECIMAL";  
-            if (Functions.SqlExcutCommand(strQuery, sqlConn) == true)
+            if (sqlfunction.SqlExcutCommand(strQuery, sqlConn) == true)
             {
                 if (cmbType.SelectedIndex == 15)
                 {
@@ -974,28 +999,28 @@ namespace Identification
                 {
                     strQuery = "Alter Table " + com + " Alter Column [" + cmbField.Text + "] varchar(max)";
                 }
-                if (Functions.SqlExcutCommand(strQuery, sqlConn) == true)
+                if (sqlfunction.SqlExcutCommand(strQuery, sqlConn) == true)
                 {
                     lst1.Items.Add("تغییر نوع فیلد : " + cmbField.Text + "انجام شد");
                 }
                 else
                 {
                     strQuery = "Alter Table " + com + " Alter Column [" + cmbField.Text + "] SMALLINT";
-                    if (Functions.SqlExcutCommand(strQuery, sqlConn) == true)
+                    if (sqlfunction.SqlExcutCommand(strQuery, sqlConn) == true)
                     {
                         lst1.Items.Add("تغییر نوع فیلد : " + cmbField.Text + "انجام شد");
                     }
                     else
                     {
                         strQuery = "Alter Table " + com + " Alter Column [" + cmbField.Text + "] INT";
-                        if (Functions.SqlExcutCommand(strQuery, sqlConn) == true)
+                        if (sqlfunction.SqlExcutCommand(strQuery, sqlConn) == true)
                         {
                             lst1.Items.Add("تغییر نوع فیلد : " + cmbField.Text + "انجام شد");
                         }
                         else
                         {
                             strQuery = "Alter Table " + com + " Alter Column [" + cmbField.Text + "] VARCHAR(max)";
-                            lst1.Items.Add("تغییر نوع فیلد " + Functions.SqlExcutCommand(strQuery, sqlConn) + " : " + cmbField.Text);
+                            lst1.Items.Add("تغییر نوع فیلد " + sqlfunction.SqlExcutCommand(strQuery, sqlConn) + " : " + cmbField.Text);
                         }
                     }
 
@@ -1009,7 +1034,7 @@ namespace Identification
         else
         {
             strQuery = "Alter Table " + com + " Alter Column [" + cmbField.Text + "] " + type; //ALTER TABLE dbo.pp ALTER COLUMN k NVARCHAR(13)  
-            lst1.Items.Add("تغییر نوع فیلد " + Functions.SqlExcutCommand(strQuery, sqlConn) + " : " + cmbField.Text);
+            lst1.Items.Add("تغییر نوع فیلد " + sqlfunction.SqlExcutCommand(strQuery, sqlConn) + " : " + cmbField.Text);
         }
         Functions.LoadColumnNew(sqlConn, cmbTB.Text, chlstbxField);
     }
@@ -1028,7 +1053,7 @@ namespace Identification
 
         strQuery = "SELECT * INTO dbo.[" + strTBName + "] FROM dbo.[" + cmbTB2.Text + "]";
 
-        OK = Functions.SqlExcutCommand(strQuery, sqlConn);
+        OK = sqlfunction.SqlExcutCommand(strQuery, sqlConn);
         if (OK == true)
         {
             MessageBox.Show("جدول " + strTBName + " ساخته شد");
@@ -1066,18 +1091,18 @@ namespace Identification
             //  query
             strQuery = "SELECT name,[object_id] FROM sys.tables WHERE name<>N'___Report'";
             //  run query
-            dtTable = Functions.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text);
+            dtTable = sqlfunction.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text);
 
             for (int u = 0; u < dtTable.Rows.Count; u++)
             {
 
                 //  record count
-                intCountRecord = Functions.SqlRecordCount(dtTable.Rows[u][0].ToString(), sqlConnection);
+                intCountRecord = sqlfunction.SqlRecordCount(dtTable.Rows[u][0].ToString(), sqlConnection);
 
                 //  query
                 strQuery = "SELECT COUNT(*) FROM sys.columns WHERE [object_id]=" + dtTable.Rows[u][1].ToString();
                 //  run query
-                intCountColumn = Functions.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text).Rows.Count;
+                intCountColumn = sqlfunction.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text).Rows.Count;
 
                 //**************    Insert Fields    Tables ,[Relation 1] ,[Relation 2] ,Description ,TedadRecord ,TedadField ,ShenasNameBank)   
                 //  query
@@ -1086,7 +1111,7 @@ namespace Identification
                   "VALUES('" + dtTable.Rows[u][0].ToString() + "',NULL,NULL,NULL," + intCountRecord.ToString() + "," + intCountColumn.ToString() + ",NULL)";
 
                 //  run query
-                lst1.Items.Add("جدول " + dtTable.Rows[u][0].ToString() + " : " + Functions.SqlExcutCommand(strQuery, sqlConnection));
+                lst1.Items.Add("جدول " + dtTable.Rows[u][0].ToString() + " : " + sqlfunction.SqlExcutCommand(strQuery, sqlConnection));
             }
         }
 
@@ -1109,7 +1134,7 @@ namespace Identification
                     strDataType = ColumnDataType(chlstbxColumn.Items[k].ToString());
 
                     //  run query                    
-                    strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strColumnName, "LTRIM(RTRIM(REPLACE([" + strColumnName + "],CHAR(160),'')))", sqlConnection);
+                    strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strColumnName, "LTRIM(RTRIM(REPLACE([" + strColumnName + "],CHAR(160),'')))", sqlConnection);
 
                     //  report
                     lst1.Items.Add(strColumnName + " : " + strFinal);
@@ -1127,7 +1152,7 @@ namespace Identification
                         else if (strDataType == "ntext")
                         {
                             //  run query
-                            strFinal = Functions.SqlEditDataTypeColumn(cmbTableName.Text, strColumnName, "Null", " VARCHAR(max) ", sqlConnection, cmbDBName.Text);
+                            strFinal = sqlfunction.SqlEditDataTypeColumn(cmbTableName.Text, strColumnName, "Null", " VARCHAR(max) ", sqlConnection, cmbDBName.Text);
 
                             //  report
                             lstReport("sqlEditDataTypeColumn " + strColumnName + strFinal);
@@ -1135,12 +1160,12 @@ namespace Identification
                         else
                         {
                             //  max len column data
-                            maxlen = Convert.ToInt32(Functions.SqlMaxLenColumnData(cmbTableName.Text, strColumnName, sqlConnection));
+                            maxlen = Convert.ToInt32(sqlfunction.SqlMaxLenColumnData(cmbTableName.Text, strColumnName, sqlConnection));
 
                             if (maxlen > 0)
                             {
                                 //  edit data type column
-                                strFinal = Functions.SqlEditDataTypeColumn(cmbTableName.Text, strColumnName, "VARCHAR(" + maxlen + ")", "Null", sqlConnection, cmbDBName.Text);
+                                strFinal = sqlfunction.SqlEditDataTypeColumn(cmbTableName.Text, strColumnName, "VARCHAR(" + maxlen + ")", "Null", sqlConnection, cmbDBName.Text);
 
                                 //  report
                                 lstReport("SqlEditDataTypeColumn => " + strColumnName + strFinal);
@@ -1232,12 +1257,12 @@ namespace Identification
             strQuery = "SELECT name FROM sys.columns WHERE object_id=(SELECT object_id FROM sys.tables WHERE name=N'" + cmbTableName.Text + "')";
 
             //  check column
-            int intCheckColumn = Functions.CheckField(Functions.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text), "CodeMelli2");
+            int intCheckColumn = Functions.CheckField(sqlfunction.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text), "CodeMelli2");
 
             if (intCheckColumn == 0)
             {
                 //  create codemelli2
-                strFinal = Functions.SqlAddNewColumn(cmbTableName.Text, "CodeMelli2", "varchar(10)", "Null", sqlConnection, cmbDBName.Text);
+                strFinal = sqlfunction.SqlAddNewColumn(cmbTableName.Text, "CodeMelli2", "varchar(10)", "Null", sqlConnection, cmbDBName.Text);
 
                 //  report
                 lstReport("Create CodeMelli2 " + strFinal);
@@ -1248,7 +1273,7 @@ namespace Identification
             #region Delete Not Valid
 
             //  delete not valid  
-            strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, strColumnNameInput, strColumnData, sqlConnection);
+            strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strColumnNameInput, strColumnData, sqlConnection);
 
             //  report
             lstReport("Delete Not Valid " + strColumnNameInput + strFinal);
@@ -1262,7 +1287,7 @@ namespace Identification
                      + " and CodeMelli2 is null and dbo.Ch_Codemelli(RIGHT('00'+ " + strColumnNameInput + ",10))=1";
 
             //  run query
-            strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli2", "RIGHT('00'+ " + strColumnNameInput + ",10)", sqlConnection, strWhere, "");
+            strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli2", "RIGHT('00'+ " + strColumnNameInput + ",10)", sqlConnection, strWhere, "");
 
             //  report
             lstReport("Valid Codemellis (Lens = 8,9,10) " + strFinal);
@@ -1275,7 +1300,7 @@ namespace Identification
             strWhere = " len(" + strColumnData + ") between 11 and 12 and dbo.Ch_Codemelli(LEFT(" + strColumnData + ",10)) = 1 and CodeMelli2 is null";
 
             //  update column data - LEFT
-            strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli2", "LEFT(" + strColumnData + ",10)", sqlConnection, strWhere, "");
+            strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli2", "LEFT(" + strColumnData + ",10)", sqlConnection, strWhere, "");
 
             //  report
             lstReport("LEFT CodeMellis With Len = 11,12 " + strColumnNameInput + ": " + strFinal);
@@ -1284,7 +1309,7 @@ namespace Identification
             strWhere = " len(" + strColumnData + ") between 11 and 12 and dbo.Ch_Codemelli(RIGHT(" + strColumnData + ",10)) = 1 and CodeMelli2 is null";
 
             //  update column data - RIGHT
-            strFinal = Functions.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli2", "RIGHT(" + strColumnData + ",10)", sqlConnection, strWhere, "");
+            strFinal = sqlfunction.SqlUpdateColumnData(cmbTableName.Text, "CodeMelli2", "RIGHT(" + strColumnData + ",10)", sqlConnection, strWhere, "");
 
             //  report
             lstReport("RIGHT CodeMellis With Len = 11,12 " + strColumnNameInput + ": " + strFinal);
@@ -1295,13 +1320,13 @@ namespace Identification
 
             //  report & update data
             lstReport("CodeMelli2 To CodeMelli " +
-                            Functions.SqlUpdateColumnData(cmbTableName.Text, strColumnNameInput, "CodeMelli2", sqlConnection));
+                            sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strColumnNameInput, "CodeMelli2", sqlConnection));
 
             //  edit column data type
-            lstReport("CodeMelli Data Type " + Functions.SqlEditColumn(cmbTableName.Text, strColumnNameInput, sqlConnection, strColumnNameInput, "VARCHAR", "10"));
+            lstReport("CodeMelli Data Type " + sqlfunction.SqlEditColumn(cmbTableName.Text, strColumnNameInput, sqlConnection, strColumnNameInput, "VARCHAR", "10"));
 
             //  drop column     'CodeMelli2'
-            Functions.SqlDropColumn(cmbTableName.Text, "CodeMelli2", sqlConnection);
+            sqlfunction.SqlDropColumn(cmbTableName.Text, "CodeMelli2", sqlConnection);
 
             #endregion
         }
@@ -1345,7 +1370,7 @@ namespace Identification
 
         //private void button1_Click(object sender, EventArgs e)
         //{
-        //    DataTable dt = Functions.SqlColumnNames(cmbTableName.Text, sqlConnection, cmbDBName.Text);
+        //    DataTable dt = sqlfunction.SqlColumnNames(cmbTableName.Text, sqlConnection, cmbDBName.Text);
         //    string[] arr = new string[dt.Rows.Count];
 
         //    for (int i = 0; i < dt.Rows.Count; i++)

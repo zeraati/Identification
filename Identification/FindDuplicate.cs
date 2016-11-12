@@ -18,6 +18,8 @@ namespace Identification
     public partial class FindDuplicate : Form
     {
         Functions Functions = new Functions();
+        SqlFunctions sqlfunction = new SqlFunctions();
+
         SqlConnection sqlConnection = new SqlConnection();
 
         public FindDuplicate(SqlConnection sqlCon)
@@ -29,22 +31,22 @@ namespace Identification
         private void FindDuplicate_Load(object sender, EventArgs e)
         {
             //  load dbname
-            cmbDBName.DataSource = Functions.SqlGetDBName(sqlConnection);
+            cmbDBName.DataSource = sqlfunction.SqlGetDBName(sqlConnection);
         }
 
         private void cmbDBName_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  change data base name
-            sqlConnection = Functions.SqlConnectionChangeDB(cmbDBName.Text, sqlConnection);
+            sqlConnection = sqlfunction.SqlConnectionChangeDB(cmbDBName.Text, sqlConnection);
 
             //  load table name
-            cmbTableName.DataSource = Functions.SqlTableName(sqlConnection);
+            cmbTableName.DataSource = sqlfunction.SqlTableName(sqlConnection);
         }
 
         private void cmbTableName_SelectedIndexChanged(object sender, EventArgs e)
         {
             //  load column name
-            cmbColumnName.DataSource = Functions.DataTableToList(Functions.SqlColumnNames(cmbTableName.Text, sqlConnection, cmbDBName.Text));
+            cmbColumnName.DataSource = Functions.DataTableToList(sqlfunction.SqlColumnNames(cmbTableName.Text, sqlConnection, cmbDBName.Text));
         }
 
         private void btnRun_Click(object sender, EventArgs e)
@@ -67,7 +69,7 @@ namespace Identification
 
             richTextBox1.Text = strQuery;
 
-            dgvSearch.DataSource = Functions.SqlDataAdapter(strQuery, sqlConnection);
+            dgvSearch.DataSource = sqlfunction.SqlDataAdapter(strQuery, sqlConnection);
 
             #region Default Value
             for (int j = 0; j < dgvSearch.Rows.Count; j++)

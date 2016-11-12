@@ -14,6 +14,9 @@ namespace Identification
     public partial class InfoColumns : Form
     {
         Functions Functions = new Functions();
+        SqlFunctions sqlfunction = new SqlFunctions();
+
+
         SqlConnection sqlConnection = new SqlConnection();
 
 
@@ -44,10 +47,10 @@ namespace Identification
             #endregion
 
             //  column names
-            List<string> lstClmName = Functions.DataTableToList(Functions.SqlColumnNames(cmbTableName.Text, sqlConnection, cmbDBName.Text));
+            List<string> lstClmName = Functions.DataTableToList(sqlfunction.SqlColumnNames(cmbTableName.Text, sqlConnection, cmbDBName.Text));
 
             //  count total
-            int intCountTotal = Functions.SqlRecordCount(cmbTableName.Text, sqlConnection);
+            int intCountTotal = sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection);
 
             //  header text
             #region HeadersText & ToolTipText
@@ -90,7 +93,7 @@ namespace Identification
 
             for (int i = 0; i < lstClmName.Count; i++)
             {
-                if (intCountTotal != 0) dbPercent = Convert.ToDouble((Convert.ToDouble(Functions.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i], "")) / Convert.ToDouble(intCountTotal)) * 100);
+                if (intCountTotal != 0) dbPercent = Convert.ToDouble((Convert.ToDouble(sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i], "")) / Convert.ToDouble(intCountTotal)) * 100);
                 //intpercent = (intCountTotal != 0) ? Convert.ToInt32(lstCountColumn[i]) / intCountTotal * 100 : 0;
 
                 DGVSearch.Rows.Add
@@ -98,8 +101,8 @@ namespace Identification
                     i,
                     lstClmName[i],
                     intCountTotal,
-                    Functions.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i], ""),
-                    Functions.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i]),
+                    sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i], ""),
+                    sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i]),
                     dbPercent.ToString("###")
                     );
 
@@ -116,7 +119,7 @@ namespace Identification
             this.Text = "جستجوی اطلاعات خالی" + "  -  نام سرور = " + sqlConnection.DataSource;
 
             //  load database name of source
-            cmbDBName.DataSource = Functions.SqlGetDBName(sqlConnection);
+            cmbDBName.DataSource = sqlfunction.SqlGetDBName(sqlConnection);
 
             //  dafault value
             cmbDBName.Text = "Ehraz";
@@ -128,10 +131,10 @@ namespace Identification
         {
 
             //  change data base name
-            sqlConnection = Functions.SqlConnectionChangeDB(cmbDBName.Text, sqlConnection);
+            sqlConnection = sqlfunction.SqlConnectionChangeDB(cmbDBName.Text, sqlConnection);
 
             //  load table name
-            cmbTableName.DataSource = Functions.SqlTableName(sqlConnection);
+            cmbTableName.DataSource = sqlfunction.SqlTableName(sqlConnection);
 
             //  dafault value
             cmbTableName.Text = "TBL_MKsarparast_95-02-21";
@@ -150,7 +153,7 @@ namespace Identification
 
         private void cmbTBName_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Column2.DataSource = Functions.SqlColumnNames(cmbTableName.Text, sqlConnection);
+            //Column2.DataSource = sqlfunction.SqlColumnNames(cmbTableName.Text, sqlConnection);
         }
     }
 }
