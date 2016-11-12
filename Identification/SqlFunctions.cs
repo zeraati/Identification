@@ -899,8 +899,8 @@ namespace Identification
         public string SqlRunQuery(string strQuery, SqlConnection sqlConnection, string strDBName = "")
         {
             //  change sqlconnection new database name
-            if (strDBName != "")
-            { sqlConnection = SqlConnectionChangeDB(strDBName, sqlConnection); }
+            sqlConnection = (strDBName != "") ? SqlConnectionChangeDB(strDBName, sqlConnection) : sqlConnection;
+
 
             SqlCommand sqlCmd = new SqlCommand(strQuery, sqlConnection);
             string strExecute;
@@ -909,6 +909,8 @@ namespace Identification
             sqlCmd.CommandTimeout = 3600;
             strExecute = (sqlCmd.ExecuteScalar().ToString() == null) ? "NULL" : sqlCmd.ExecuteScalar().ToString();
             sqlCmd.Connection.Close();
+
+
             return strExecute;
         }
 
@@ -1081,6 +1083,21 @@ namespace Identification
 
         #endregion
 
+        //  Sql Repeat
+        public int SqlRepeatCount(string strColumn, SqlConnection sqlconnection, string strDBName = "")
+        {
+            int intRtn = 0;
+
+
+            string strQuery = "SELECT COUNT(*),[" + strColumn + "] FROM dbo.PersonTest_New GROUP BY[" + strColumn + "] HAVING COUNT(*) > 1";
+
+            sqlconnection = (strDBName != "") ? SqlConnectionChangeDB(strDBName, sqlconnection) : sqlconnection;
+
+            intRtn = SqlDataAdapter(strQuery, sqlconnection).Rows.Count;
+
+
+            return intRtn;
+        }
 
     }
 }

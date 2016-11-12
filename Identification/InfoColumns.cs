@@ -30,8 +30,11 @@ namespace Identification
         {
             Cursor.Current = Cursors.WaitCursor;
 
+            //
+            string switch_on = "";
+
             //  percent
-            double dbPercent =0;
+            double dbPercent = 0;
             //  clear item
             DGVSearch.Columns.Clear();
 
@@ -43,6 +46,9 @@ namespace Identification
             DataGridViewTextBoxColumn dgvTxtBxClmUsed = new DataGridViewTextBoxColumn();
             DataGridViewTextBoxColumn dgvTxtBxClmSpace = new DataGridViewTextBoxColumn();
             DataGridViewTextBoxColumn dgvTxtBxClmPercent = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn dgvTxtBxClmValid = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn dgvTxtBxClmNotValid = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn dgvTxtBxClmRepeatCount = new DataGridViewTextBoxColumn();
 
             #endregion
 
@@ -67,6 +73,12 @@ namespace Identification
             dgvTxtBxClmSpace.ToolTipText = "رکورد خالی";
             dgvTxtBxClmPercent.HeaderText = "درصد";
             dgvTxtBxClmPercent.ToolTipText = "درصد";
+            dgvTxtBxClmValid.HeaderText = "تعداد معتبر";
+            dgvTxtBxClmValid.ToolTipText = "تعداد معتبر";
+            dgvTxtBxClmNotValid.HeaderText = "تعداد نامعتبر";
+            dgvTxtBxClmNotValid.ToolTipText = "تعداد نامعتبر";
+            dgvTxtBxClmRepeatCount.HeaderText = "تعداد تکراری";
+            dgvTxtBxClmRepeatCount.ToolTipText = "تعداد تکراری";
 
             #endregion
 
@@ -85,8 +97,39 @@ namespace Identification
             dgvTxtBxClmSpace.ReadOnly = true;
             DGVSearch.Columns.Add(dgvTxtBxClmPercent);
             dgvTxtBxClmPercent.ReadOnly = true;
+            DGVSearch.Columns.Add(dgvTxtBxClmValid);
+            dgvTxtBxClmValid.ReadOnly = true;
+            DGVSearch.Columns.Add(dgvTxtBxClmNotValid);
+            dgvTxtBxClmNotValid.ReadOnly = true;
+            DGVSearch.Columns.Add(dgvTxtBxClmRepeatCount);
+            dgvTxtBxClmRepeatCount.ReadOnly = true;
+            #endregion
+
+            #region Advanced
+
+            for (int q = 0; q < lstClmName.Count; q++)
+            {
+                switch_on = dgvColumn.Rows[q].Cells[1].Value.ToString();
+
+                switch (switch_on)
+                {
+                    case "نام،فامیل،نام پدر":
+                        break;
+                    case "کدملی":
+                        break;
+                    case "شماره شناسنامه":
+                        break;
+                    case "تاریخ میلادی":
+                        break;
+                    case "تاریخ شمسی":
+                        break;
+                    case "عددی":
+                        break;
+                }
+            }
 
             #endregion
+
 
             //  default value
             #region Default Value
@@ -109,6 +152,10 @@ namespace Identification
             }
 
             #endregion
+
+
+
+
 
             Cursor.Current = Cursors.Default;
         }
@@ -153,7 +200,89 @@ namespace Identification
 
         private void cmbTBName_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Column2.DataSource = sqlfunction.SqlColumnNames(cmbTableName.Text, sqlConnection);
+
+            dgvColumn.Columns.Clear();
+            DataTable dtColumn = sqlfunction.SqlColumnNames(cmbTableName.Text, sqlConnection, cmbDBName.Text);
+
+            DataGridViewTextBoxColumn dgvTxBxClm = new DataGridViewTextBoxColumn();
+            DataGridViewComboBoxColumn dgvCmBxClm = new DataGridViewComboBoxColumn();
+
+            //  header text
+            #region HeadersText & ToolTipText
+            dgvTxBxClm.HeaderText = "نام فیلد";
+            dgvTxBxClm.ToolTipText = "نام فیلد";
+            dgvCmBxClm.HeaderText = "نوع";
+            dgvCmBxClm.ToolTipText = "نوع";
+            #endregion
+
+            //  readonly
+            dgvTxBxClm.ReadOnly = true;
+
+            dgvCmBxClm.Width = 100;
+
+            //  combobox items
+            #region Items
+            dgvCmBxClm.Items.Add("هیچکدام");
+            dgvCmBxClm.Items.Add("نام،فامیل،نام پدر");
+            dgvCmBxClm.Items.Add("کدملی");
+            dgvCmBxClm.Items.Add("شماره شناسنامه");
+            dgvCmBxClm.Items.Add("تاریخ میلادی");
+            dgvCmBxClm.Items.Add("تاریخ شمسی");
+            dgvCmBxClm.Items.Add("عددی");
+            #endregion
+
+
+            //  add
+            dgvColumn.Columns.Add(dgvTxBxClm);
+            dgvColumn.Columns.Add(dgvCmBxClm);
+
+
+            for (int i = 0; i < dtColumn.Rows.Count; i++)
+            {
+                dgvColumn.Rows.Add(dtColumn.Rows[i][0].ToString(), dgvCmBxClm.DisplayMember = "هیچکدام");
+            }
+
+
         }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            Microsoft.Office.Interop.Excel._Application app = new Microsoft.Office.Interop.Excel.Application();
+            Microsoft.Office.Interop.Excel._Workbook workbook = app.Workbooks.Add(Type.Missing);
+            Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
+
+
+            app.Visible = true;
+            worksheet = workbook.ActiveSheet;
+            worksheet.Name = "Sheet1";
+
+            #region First Cells
+            worksheet.Cells[1, 1] = "ID";
+            worksheet.Cells[1, 2] = "نام فیلد";
+            worksheet.Cells[1, 3] = "کل رکورد";
+            worksheet.Cells[1, 4] = "رکورد پر";
+            worksheet.Cells[1, 5] = "رکورد خالی";
+            worksheet.Cells[1, 6] = "درصد";
+            worksheet.Cells[1, 7] = "تعداد معتبر";
+            worksheet.Cells[1, 8] = "تعداد نامعتبر";
+            worksheet.Cells[1, 9] = "تعداد تکراری";
+            #endregion
+
+
+            for (int k = 2; k < DGVSearch.RowCount + 2; k++)
+            {
+                for (int j = 0; j < DGVSearch.ColumnCount; j++)
+                {
+                    worksheet.Cells[k, j + 1] = (DGVSearch.Rows[k - 2].Cells[j].Value == null) ? "Null" : DGVSearch.Rows[k - 2].Cells[j].Value.ToString();
+                }
+            }
+
+            Cursor.Current = Cursors.Default;
+        }
+
+
+
     }
 }

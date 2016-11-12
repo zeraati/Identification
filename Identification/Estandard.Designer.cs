@@ -230,7 +230,7 @@
             "حذف جدول خالی"});
             this.clb2.Location = new System.Drawing.Point(461, 35);
             this.clb2.Name = "clb2";
-            this.clb2.Size = new System.Drawing.Size(129, 196);
+            this.clb2.Size = new System.Drawing.Size(129, 212);
             this.clb2.TabIndex = 29;
             // 
             // btnselectALL2
@@ -262,7 +262,7 @@
             this.chlstbxColumn.Location = new System.Drawing.Point(6, 35);
             this.chlstbxColumn.Name = "chlstbxColumn";
             this.chlstbxColumn.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.chlstbxColumn.Size = new System.Drawing.Size(449, 196);
+            this.chlstbxColumn.Size = new System.Drawing.Size(449, 212);
             this.chlstbxColumn.TabIndex = 28;
             // 
             // tabPage2
@@ -280,9 +280,9 @@
             // 
             this.lst1.FormattingEnabled = true;
             this.lst1.HorizontalScrollbar = true;
-            this.lst1.Location = new System.Drawing.Point(6, 6);
+            this.lst1.Location = new System.Drawing.Point(6, 8);
             this.lst1.Name = "lst1";
-            this.lst1.Size = new System.Drawing.Size(584, 225);
+            this.lst1.Size = new System.Drawing.Size(584, 238);
             this.lst1.TabIndex = 31;
             // 
             // tpDesign
@@ -325,7 +325,7 @@
             this.dgvDesign.Location = new System.Drawing.Point(7, 42);
             this.dgvDesign.Name = "dgvDesign";
             this.dgvDesign.RowHeadersVisible = false;
-            this.dgvDesign.Size = new System.Drawing.Size(583, 192);
+            this.dgvDesign.Size = new System.Drawing.Size(583, 211);
             this.dgvDesign.TabIndex = 0;
             this.dgvDesign.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvDesign_CellMouseClick);
             this.dgvDesign.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDesign_CellValueChanged);
