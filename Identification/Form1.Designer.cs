@@ -47,6 +47,7 @@
             this.یونیکToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.نمایشاطلاعاتخالیToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.پیداکردنتکراریToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.گزارشازکلبانکToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.خروجToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ابزارهاToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.اتصالToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +56,6 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.txtMsg = new System.Windows.Forms.TextBox();
             this.chbRemember = new System.Windows.Forms.CheckBox();
-            this.گزارشازکلبانکToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -230,6 +230,14 @@
             this.پیداکردنتکراریToolStripMenuItem.Text = "پیدا کردن تکراری";
             this.پیداکردنتکراریToolStripMenuItem.Click += new System.EventHandler(this.پیداکردنتکراریToolStripMenuItem_Click);
             // 
+            // گزارشازکلبانکToolStripMenuItem
+            // 
+            this.گزارشازکلبانکToolStripMenuItem.Name = "گزارشازکلبانکToolStripMenuItem";
+            this.گزارشازکلبانکToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            this.گزارشازکلبانکToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.گزارشازکلبانکToolStripMenuItem.Text = "گزارش از کل بانک";
+            this.گزارشازکلبانکToolStripMenuItem.Click += new System.EventHandler(this.گزارشازکلبانکToolStripMenuItem_Click);
+            // 
             // خروجToolStripMenuItem
             // 
             this.خروجToolStripMenuItem.Name = "خروجToolStripMenuItem";
@@ -302,14 +310,6 @@
             this.chbRemember.Text = "به خاطر سپردن رمز";
             this.chbRemember.UseVisualStyleBackColor = true;
             // 
-            // گزارشازکلبانکToolStripMenuItem
-            // 
-            this.گزارشازکلبانکToolStripMenuItem.Name = "گزارشازکلبانکToolStripMenuItem";
-            this.گزارشازکلبانکToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
-            this.گزارشازکلبانکToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.گزارشازکلبانکToolStripMenuItem.Text = "گزارش از کل بانک";
-            this.گزارشازکلبانکToolStripMenuItem.Click += new System.EventHandler(this.گزارشازکلبانکToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AcceptButton = this.btnConnect;
@@ -336,7 +336,6 @@
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RightToLeftLayout = true;
             this.Text = "اتصال به بانک";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

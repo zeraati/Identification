@@ -172,75 +172,46 @@ namespace Identification
 
         }
 
-        private void lstDatabase_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            if (sqlConnection.Database == "")
-            {
-                sqlConnection = sqlfunction.SqlConnectionChangeDB("master", sqlConnection);
-                sqlConnection = sqlfunction.SqlConnectionChangeDB(lstDatabase.Text, sqlConnection);
-            }
-
-            TableSelectedIndexChanged(sqlConnection, lstDatabase, lstTableName);
-
-        }
-
-        #region TableSelectedIndexChanged
-
-        private void TableSelectedIndexChanged(SqlConnection sqlConnection, ListBox lstbxDataBase, ListBox lstbxTable)
-        {
-            //string strWork = lstbxWorks.GetItemText(lstbxWorks.SelectedItem);
-            string strDataBase = lstbxDataBase.GetItemText(lstbxDataBase.SelectedItem);
-
-
-            // lstbxTable source
-            sqlfunction.SqlTableName(sqlConnection, lstbxTable, strDataBase);
-
-        }
-
-        #endregion
-
-        private void lstTableName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string strTableName = lstTableName.GetItemText(lstTableName.SelectedItem);
-
-
-            //  lstbxColumnName
-            functions.DataTableToListbox(sqlfunction.SqlColumnNames(strTableName, sqlConnection, lstDatabase.Text), lstColumnName);
-
-
-        }
 
         private void DataBasesReport_Load(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.Default;
+
             string strQuery = "SELECT [name] [نام بانک] FROM sys.databases";
+            List<string> lstDatabase = functions.DataTableToList(sqlfunction.SqlDataAdapter(strQuery, sqlConnection));
+            List<string> lstTableName = new List<string>();
+            List<string> lstColumnName = new List<string>();
 
-            functions.DataTableToListbox(sqlfunction.SqlDataAdapter(strQuery, sqlConnection), lstDatabase);
+            //  node main
+            string strDatasurce = (sqlConnection.DataSource == ".") ? "Local" : sqlConnection.DataSource;
+            trvDatabase.Nodes.Add(strDatasurce);
 
-        }
+            //  server set image
+            trvDatabase.Nodes[0].ImageIndex = 0;
 
-        private void lstDatabase_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (lstDatabase.Items.Count != 0)
+
+            for (int i = 0; i < lstDatabase.Count; i++)
             {
-                //string strMain = lstDatabase.GetItemText(lstDatabase.SelectedItem);
-                if (lstDatabase.Items.Count != 0) lstbxMain.Items.Add(lstDatabase.GetItemText(lstDatabase.SelectedItem));
+                trvDatabase.Nodes[0].Nodes.Add(lstDatabase[i].ToString());
+                trvDatabase.Nodes[0].Nodes[i].ImageIndex = 1;
+                lstTableName = sqlfunction.SqlTableName(sqlConnection, lstDatabase[i].ToString());
+                for (int j = 0; j < lstTableName.Count; j++)
+                {
+                    trvDatabase.Nodes[0].Nodes[i].Nodes.Add(lstTableName[j].ToString());
+                    trvDatabase.Nodes[0].Nodes[i].Nodes[j].ImageIndex = 2;
 
-                if (lstDatabase.SelectedIndex != -1) { lstDatabase.Items.RemoveAt(lstDatabase.SelectedIndex); }
+                    lstColumnName = functions.DataTableToList(sqlfunction.SqlColumnNames(lstTableName[j].ToString(), sqlConnection, lstDatabase[i].ToString()));
+                    for (int k = 0; k < lstColumnName.Count; k++)
+                    {
+                        trvDatabase.Nodes[0].Nodes[i].Nodes[j].Nodes.Add(lstColumnName[k].ToString());
+                        trvDatabase.Nodes[0].Nodes[i].Nodes[j].Nodes[k].ImageIndex = 3;
+                    }
+
+                }
             }
+
         }
 
-        private void lstbxMain_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (lstbxMain.Items.Count != 0)
-            {
-
-                if (lstbxMain.Items.Count != 0) lstDatabase.Items.Add(lstbxMain.GetItemText(lstbxMain.SelectedItem));
-
-                if (lstbxMain.SelectedIndex != -1) { lstbxMain.Items.RemoveAt(lstbxMain.SelectedIndex); }
-
-            }
-        }
 
         #region CreateTable
 
@@ -328,5 +299,78 @@ namespace Identification
             return dr;
         }
 
+        private void btnAddToList_Click(object sender, EventArgs e)
+        {
+            bool bEnable = false;
+            string strSelectNode = "";
+
+
+            if (trvDatabase.SelectedNode.Level == 1)
+            {
+                strSelectNode = trvDatabase.SelectedNode.Text;
+
+                for (int j = 0; j < lstbxMain.Items.Count; j++)
+                {
+                    if (lstbxMain.Items[j].ToString() == strSelectNode)
+                    { bEnable = true; break; }
+                }
+
+                if (bEnable == false) { lstbxMain.Items.Add(strSelectNode); bEnable = true; }
+            }
+        }
+
+        private void btnDelFromList_Click(object sender, EventArgs e)
+        {
+            if (lstbxMain.SelectedIndex != -1) { lstbxMain.Items.RemoveAt(lstbxMain.SelectedIndex); }
+        }
+
+        private void btnAddToList_KeyDown(object sender, KeyEventArgs e)
+        {
+            string s = e.ToString();
+            if (e.Modifiers == Keys.Alt)
+            {
+                //Show the form
+            }
+        }
+
+        private void DataBasesReport_KeyDown(object sender, KeyEventArgs e)
+        {
+            string s = e.ToString();
+            if (e.KeyCode == Keys.A && e.Modifiers == Keys.Alt)
+            {
+                //Show the form
+            }
+        }
+
+        private void tvDatabase_DragDrop(object sender, DragEventArgs e)
+        {
+            TreeNode nodeToDropIn = this.trvDatabase.GetNodeAt(this.trvDatabase.PointToClient(new Point(e.X, e.Y)));
+            if (nodeToDropIn == null) { return; }
+            if (nodeToDropIn.Level == 1)
+            {
+                nodeToDropIn = nodeToDropIn.Parent;
+            }
+
+            object data = e.Data.GetData(typeof(DateTime));
+            if (data == null) { return; }
+            nodeToDropIn.Nodes.Add(data.ToString());
+            this.lstbxMain.Items.Add(data);
+        }
+
+        private void lstbxMain_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void tvDatabase_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+
+        private void trvDatabase_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
     }
 }

@@ -223,16 +223,15 @@ namespace Identification
             frmfd.ShowDialog();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void گزارشازکلبانکToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
             DataBasesReport frmDBR = new DataBasesReport(sqlConnection);
             frmDBR.ShowDialog();
+            Cursor.Current = Cursors.Default;
         }
+
 
         private void پشتیبانگیریToolStripMenuItem_Click(object sender, EventArgs e)
         {
