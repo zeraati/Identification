@@ -480,7 +480,7 @@ namespace Identification
 
 
             //  datagridview run query2
-            dgvSearch.DataSource = sqlfunction.SqlDataAdapter(strQuery, sqlConnectionMain);
+            dgvSearch.DataSource = sqlfunction.SqlDataAdapter(strQuery, sqlConnectionMain,"");
 
             //  report counter
             richtxtReport.Text += "رکورد نتیجه: " + functions.StrNum(dgvSearch.RowCount - 1) + Environment.NewLine;

@@ -146,9 +146,9 @@
             // dgvColumn
             // 
             this.dgvColumn.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvColumn.Location = new System.Drawing.Point(360, 6);
+            this.dgvColumn.Location = new System.Drawing.Point(394, 6);
             this.dgvColumn.Name = "dgvColumn";
-            this.dgvColumn.Size = new System.Drawing.Size(361, 282);
+            this.dgvColumn.Size = new System.Drawing.Size(327, 282);
             this.dgvColumn.TabIndex = 0;
             // 
             // tabPage2

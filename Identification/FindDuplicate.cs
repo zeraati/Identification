@@ -69,7 +69,7 @@ namespace Identification
 
             richTextBox1.Text = strQuery;
 
-            dgvSearch.DataSource = sqlfunction.SqlDataAdapter(strQuery, sqlConnection);
+            dgvSearch.DataSource = sqlfunction.SqlDataAdapter(strQuery, sqlConnection, cmbDBName.Text);
 
             #region Default Value
             for (int j = 0; j < dgvSearch.Rows.Count; j++)

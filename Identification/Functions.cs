@@ -35,7 +35,7 @@ namespace Identification
         #endregion
     }
 
-    
+
     public class Functions
     {
         //SqlFunctions sqlfunctions = new SqlFunctions();
@@ -71,7 +71,7 @@ namespace Identification
         /// <param name="DBName">نام دیتابیس</param>
         /// <param name="cmbxTbl">کمبو لیست نام جداول</param>
         /// <param name="ChkLstBx">چک لیست باکس</param>
-        public void LoadColumnInfo(string strTableName, CheckedListBox ChkLstBx, SqlConnection sqlConnection,DataTable dtSqlColumns)
+        public void LoadColumnInfo(string strTableName, CheckedListBox ChkLstBx, SqlConnection sqlConnection, DataTable dtSqlColumns)
         {
             ChkLstBx.Items.Clear();
             List<string> lstColumns = DataTypeToList(dtSqlColumns);
@@ -199,9 +199,9 @@ namespace Identification
 
         #region LoadColumn==> In CheckListBox For DBName
 
-        public void ChlbDB( CheckedListBox ChhLstBx,List<string> lstGetDBName)
+        public void ChlbDB(CheckedListBox ChhLstBx, List<string> lstGetDBName)
         {
-            ChhLstBx.Items.Clear();            
+            ChhLstBx.Items.Clear();
 
             for (int i = 0; i < lstGetDBName.Count; i++)
             {
@@ -254,10 +254,12 @@ namespace Identification
             return retInt;
         }
 
-
-
-
-        public string StrNum(int Number) { string ret = string.Format("{0:n0}", Number); return ret; }
+        public string StrNum(int Number)
+        {
+            string ret = "";
+            ret = (Number != 0) ? string.Format("{0:n0}", Number) : "0";
+            return ret;
+        }
 
         public int DropDownWidth(ComboBox myCombo)
         {
@@ -322,6 +324,24 @@ namespace Identification
 
         #endregion
 
+        #region String To Int
+        public int StringToInt(string strString, string strSeperator)
+        {
+            string str1 = "", str2 = "";
+            if (strString.Contains(strSeperator) == true)
+            {
+                str1 = strString;
+                while (str1.Contains(strSeperator) == true)
+                {
+                    str2 = str1.Substring(0, str1.IndexOf(strSeperator));
+
+                }
+            }
+
+            return 0;
+        }
+
+        #endregion
 
         #region ComboBoxSource
         /// <summary>
@@ -1150,7 +1170,6 @@ namespace Identification
 
 
 
-        
 
 
 
@@ -1183,7 +1202,8 @@ namespace Identification
 
 
 
-    
+
+
 
 
 

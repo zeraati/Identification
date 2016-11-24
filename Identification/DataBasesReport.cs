@@ -178,7 +178,7 @@ namespace Identification
             Cursor.Current = Cursors.Default;
 
             string strQuery = "SELECT [name] [نام بانک] FROM sys.databases";
-            List<string> lstDatabase = functions.DataTableToList(sqlfunction.SqlDataAdapter(strQuery, sqlConnection));
+            List<string> lstDatabase = functions.DataTableToList(sqlfunction.SqlDataAdapter(strQuery, sqlConnection,""));
             List<string> lstTableName = new List<string>();
             List<string> lstColumnName = new List<string>();
 
@@ -324,53 +324,6 @@ namespace Identification
             if (lstbxMain.SelectedIndex != -1) { lstbxMain.Items.RemoveAt(lstbxMain.SelectedIndex); }
         }
 
-        private void btnAddToList_KeyDown(object sender, KeyEventArgs e)
-        {
-            string s = e.ToString();
-            if (e.Modifiers == Keys.Alt)
-            {
-                //Show the form
-            }
-        }
 
-        private void DataBasesReport_KeyDown(object sender, KeyEventArgs e)
-        {
-            string s = e.ToString();
-            if (e.KeyCode == Keys.A && e.Modifiers == Keys.Alt)
-            {
-                //Show the form
-            }
-        }
-
-        private void tvDatabase_DragDrop(object sender, DragEventArgs e)
-        {
-            TreeNode nodeToDropIn = this.trvDatabase.GetNodeAt(this.trvDatabase.PointToClient(new Point(e.X, e.Y)));
-            if (nodeToDropIn == null) { return; }
-            if (nodeToDropIn.Level == 1)
-            {
-                nodeToDropIn = nodeToDropIn.Parent;
-            }
-
-            object data = e.Data.GetData(typeof(DateTime));
-            if (data == null) { return; }
-            nodeToDropIn.Nodes.Add(data.ToString());
-            this.lstbxMain.Items.Add(data);
-        }
-
-        private void lstbxMain_DragOver(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-        }
-
-        private void tvDatabase_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-        }
-
-
-        private void trvDatabase_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-
-        }
     }
 }

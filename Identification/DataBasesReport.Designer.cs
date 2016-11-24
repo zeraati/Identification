@@ -75,7 +75,6 @@
             this.lstbxMain.Name = "lstbxMain";
             this.lstbxMain.Size = new System.Drawing.Size(256, 173);
             this.lstbxMain.TabIndex = 17;
-            this.lstbxMain.DragOver += new System.Windows.Forms.DragEventHandler(this.lstbxMain_DragOver);
             // 
             // tabControl1
             // 
@@ -98,9 +97,6 @@
             this.trvDatabase.SelectedImageIndex = 0;
             this.trvDatabase.Size = new System.Drawing.Size(262, 173);
             this.trvDatabase.TabIndex = 23;
-            this.trvDatabase.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.trvDatabase_AfterSelect);
-            this.trvDatabase.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvDatabase_DragDrop);
-            this.trvDatabase.DragEnter += new System.Windows.Forms.DragEventHandler(this.tvDatabase_DragEnter);
             // 
             // imageList1
             // 
@@ -120,7 +116,6 @@
             this.btnAddToList.Text = "اضافه کردن (alt+a)";
             this.btnAddToList.UseVisualStyleBackColor = true;
             this.btnAddToList.Click += new System.EventHandler(this.btnAddToList_Click);
-            this.btnAddToList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btnAddToList_KeyDown);
             // 
             // btnDelFromList
             // 
@@ -187,7 +182,6 @@
             this.RightToLeftLayout = true;
             this.Text = "DataBasesReport";
             this.Load += new System.EventHandler(this.DataBasesReport_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataBasesReport_KeyDown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

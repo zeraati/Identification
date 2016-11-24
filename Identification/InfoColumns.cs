@@ -18,7 +18,9 @@ namespace Identification
 
 
         SqlConnection sqlConnection = new SqlConnection();
-
+        private string intInValid;
+        private string intValid;
+        private string intRepeat;
 
         public InfoColumns(SqlConnection sqlCon)
         {
@@ -30,11 +32,16 @@ namespace Identification
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            //
-            string switch_on = "";
+            List<int> lstInt = new List<int>();
 
+            //
+            string strSwitch = "";
+            int intValid = 0, intInValid = 0, intRepeat = 0;
+            int intCountTotal = 0, intCount = 0, intCountNull = 0;
             //  percent
             double dbPercent = 0;
+
+
             //  clear item
             DGVSearch.Columns.Clear();
 
@@ -56,7 +63,7 @@ namespace Identification
             List<string> lstClmName = Functions.DataTableToList(sqlfunction.SqlColumnNames(cmbTableName.Text, sqlConnection, cmbDBName.Text));
 
             //  count total
-            int intCountTotal = sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection);
+            intCountTotal = sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection);
 
             //  header text
             #region HeadersText & ToolTipText
@@ -105,59 +112,75 @@ namespace Identification
             dgvTxtBxClmRepeatCount.ReadOnly = true;
             #endregion
 
-            #region Advanced
-
-            for (int q = 0; q < lstClmName.Count; q++)
-            {
-                switch_on = dgvColumn.Rows[q].Cells[1].Value.ToString();
-
-                switch (switch_on)
-                {
-                    case "نام،فامیل،نام پدر":
-                        break;
-                    case "کدملی":
-                        break;
-                    case "شماره شناسنامه":
-                        break;
-                    case "تاریخ میلادی":
-                        break;
-                    case "تاریخ شمسی":
-                        break;
-                    case "عددی":
-                        break;
-                }
-            }
-
-            #endregion
-
 
             //  default value
             #region Default Value
 
             for (int i = 0; i < lstClmName.Count; i++)
             {
-                if (intCountTotal != 0) dbPercent = Convert.ToDouble((Convert.ToDouble(sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i], "")) / Convert.ToDouble(intCountTotal)) * 100);
-                //intpercent = (intCountTotal != 0) ? Convert.ToInt32(lstCountColumn[i]) / intCountTotal * 100 : 0;
+                intCount = sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i], "");
+                intCountNull = sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i]);
+
+                dbPercent = (intCountTotal != 0) ? Convert.ToDouble((Convert.ToDouble(intCount) / Convert.ToDouble(intCountTotal)) * 100) : 0;
+                string strPercent = (dbPercent != 0) ? dbPercent.ToString("###.##") : "0";
+
+                strSwitch = dgvColumn.Rows[i].Cells[1].Value.ToString();
+
+                //  validator function
+                lstInt = Validator(strSwitch, lstClmName[i]);
+
 
                 DGVSearch.Rows.Add
                     (
                     i,
                     lstClmName[i],
-                    intCountTotal,
-                    sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i], ""),
-                    sqlfunction.SqlRecordCount(cmbTableName.Text, sqlConnection, lstClmName[i]),
-                    dbPercent.ToString("###")
+                    Functions.StrNum(intCountTotal),
+                    Functions.StrNum(intCount),
+                    intCountNull,
+                    strPercent,
+                    Functions.StrNum(lstInt[0]),
+                    Functions.StrNum(lstInt[1]),
+                    Functions.StrNum(lstInt[2])
                     );
 
             }
 
-            #endregion
-
-
-
+            #endregion            
 
 
             Cursor.Current = Cursors.Default;
+        }
+
+        //  valid , invalid , repeat
+        private List<int> Validator(string strSwitch, string strClmName)
+        {
+            List<int> lstInt = new List<int>();
+
+
+            switch (strSwitch)
+            {
+                case "هیچکدام":
+                    sqlfunction.SqlValidatorCount(sqlConnection, 0, strClmName, cmbTableName.Text, lstInt, cmbDBName.Text);
+                    break;
+                case "نام،فامیل،نام پدر":
+                    sqlfunction.SqlValidatorCount(sqlConnection, 1, strClmName, cmbTableName.Text, lstInt, cmbDBName.Text);
+                    break;
+                case "کدملی":
+                    sqlfunction.SqlValidatorCount(sqlConnection, 2, strClmName, cmbTableName.Text, lstInt, cmbDBName.Text);
+                    break;
+                case "شماره شناسنامه":
+                    sqlfunction.SqlValidatorCount(sqlConnection, 3, strClmName, cmbTableName.Text, lstInt, cmbDBName.Text);
+                    break;
+                case "تاریخ میلادی":
+                    break;
+                case "تاریخ شمسی":
+                    break;
+                case "عددی":
+                    sqlfunction.SqlValidatorCount(sqlConnection, 6, strClmName, cmbTableName.Text, lstInt, cmbDBName.Text);
+                    break;
+            }
+
+            return lstInt;
         }
 
         private void NullSearch_Load(object sender, EventArgs e)

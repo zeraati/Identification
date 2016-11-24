@@ -100,9 +100,7 @@ namespace Identification
         {
             string strQuery = "SELECT [name] +' = '+ CAST([value] AS NVARCHAR(max)) FROM sys.extended_properties WHERE minor_id = 0 AND major_id = 0";
 
-            sqlconnection = (strDb != "") ? SqlConnectionChangeDB(strDb, sqlconnection) : sqlconnection;
-
-            return SqlDataAdapter(strQuery, sqlconnection);
+            return SqlDataAdapter(strQuery, sqlconnection, strDb);
         }
 
         #endregion
@@ -118,7 +116,7 @@ namespace Identification
             strQuery = (strLabel != "") ? "SELECT name FROM [" + sqlconnection.Database + "].sys.objects [" + strLabel + "] WHERE type='FN'" :
                 "SELECT name FROM [" + sqlconnection.Database + "].sys.objects WHERE type='FN'";
 
-            return SqlDataAdapter(strQuery, sqlconnection);
+            return SqlDataAdapter(strQuery, sqlconnection, "");
         }
         #endregion
 
@@ -195,10 +193,9 @@ namespace Identification
             if (strLabel != "")
             { strQuery = "SELECT TABLE_NAME [" + strLabel + "] FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'"; }
 
-            sqlConnection = (strDbName != "") ? SqlConnectionChangeDB(strDbName, sqlConnection) : sqlConnection;
 
             List<string> lstReturn = new List<string>();
-            DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection);
+            DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection, strDbName);
 
             for (int i = 0; i < dtAdapter.Rows.Count; i++)
             {
@@ -218,10 +215,9 @@ namespace Identification
             if (strLabel != "")
             { strQuery = "SELECT TABLE_NAME [" + strLabel + "] FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'"; }
 
-            sqlConnection = (strDbName != "") ? SqlConnectionChangeDB(strDbName, sqlConnection) : sqlConnection;
 
 
-            DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection);
+            DataTable dtAdapter = SqlDataAdapter(strQuery, sqlConnection, strDbName);
 
             for (int i = 0; i < dtAdapter.Rows.Count; i++)
             {
@@ -237,10 +233,9 @@ namespace Identification
                             "ON a.object_id = b.major_id " +
                             "WHERE b.major_id <> 0 AND b.minor_id = 0 AND a.name = '" + strTable + "'";
 
-            sqlConnection = (strDbName != "") ? SqlConnectionChangeDB(strDbName, sqlConnection) : sqlConnection;
 
 
-            return SqlDataAdapter(strQuery, sqlConnection);
+            return SqlDataAdapter(strQuery, sqlConnection, strDbName);
 
         }
         #endregion
@@ -482,6 +477,66 @@ namespace Identification
         #endregion
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sqlConnection"></param>
+        /// <param name="intSwitch"></param>
+        /// <param name="strClm"></param>
+        /// <param name="strTable"></param>
+        /// <param name="strQuery1">Valid</param>
+        /// <param name="intQuery2">InValid</param>
+        /// <param name="intQuery3">Repeat</param>
+        /// <param name="strDbName"></param>
+        //Sql CodeMelli
+        public void SqlValidatorCount(SqlConnection sqlConnection, int intSwitch, string strClm, string strTable, List<int> lstInt, string strDbName = "")
+        {
+            int int1 = 0, int2 = 0, int3 = 0;
+            string strQuery3 = "";
+
+            #region Queries
+            switch (intSwitch)
+            {
+                case 0:
+                    #region Any
+
+                    #endregion
+                    break;
+                case 1:
+                    #region Name,Family,Father
+
+                    #endregion
+                    break;                
+                case 2:
+                    #region CodeMelli Count
+                    int1 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.Ch_Codemelli(dbo.[CM-Check]([" + strClm + "])) = 1 ");
+                    int2 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.Ch_Codemelli(dbo.[CM-Check]([" + strClm + "])) = 0 ");
+
+                    strQuery3 = "SELECT COUNT(*) b_count " +
+                                "FROM dbo.[" + strTable + "] " +
+                                "WHERE [" + strClm + "] IS NOT NULL AND dbo.Ch_Codemelli(dbo.[CM-Check]([" + strClm + "]))=1 " +
+                                "GROUP BY [" + strClm + "] HAVING COUNT(*)>1 SELECT @@ROWCOUNT ";
+                    int3 = SqlDataAdapter(strQuery3, sqlConnection, strDbName).Rows.Count;
+                    #endregion
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+            }
+
+            #endregion
+
+            //  repeat
+            //strQuery3 = SqlRunQuery(strQuery3, sqlConnection, strDbName);
+
+            lstInt.Add(int1);
+            lstInt.Add(int2);
+            lstInt.Add(int3);
+
+        }
+
+
         #endregion
 
 
@@ -537,12 +592,10 @@ namespace Identification
         {
             string strQuery = " SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'";
 
-            sqlConnection = (strDbName != "") ? SqlConnectionChangeDB(strDbName, sqlConnection) : sqlConnection;
 
             strQuery = (strLable != "") ? " SELECT COLUMN_NAME [" + strLable + "] FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=N'" + strTableName + "'" : strQuery;
 
-
-            return SqlDataAdapter(strQuery, sqlConnection);
+            return SqlDataAdapter(strQuery, sqlConnection, strDbName);
 
         }
 
@@ -560,10 +613,8 @@ namespace Identification
                             ") d ON c.[object_id]=d.a_object_id WHERE c.[name]='" + strTable + "'AND d.a_name='" + strColumn + "'";
 
 
-            sqlConnection = (strDbName != "") ? SqlConnectionChangeDB(strDbName, sqlConnection) : sqlConnection;
 
-
-            return SqlDataAdapter(strQuery, sqlConnection);
+            return SqlDataAdapter(strQuery, sqlConnection, strDbName);
         }
 
         //  SqlDropColumn
@@ -915,6 +966,7 @@ namespace Identification
         }
 
         #endregion
+
         //SqlCreateReport
         #region SqlCreateReport
 
@@ -937,6 +989,7 @@ namespace Identification
         }
 
         #endregion
+
         //  SqlDropRows
         #region SqlDropRows
         public string SqlDropRows(string strTableName, SqlConnection sqlConnection, string strWhere = "")
@@ -949,12 +1002,15 @@ namespace Identification
             return SqlExcutCommand(strQuery, sqlConnection, " DropRows ");
         }
         #endregion
+
         //  SqlDataAdapter
         #region SqlDataAdapter
-        public DataTable SqlDataAdapter(string strQuery, SqlConnection sqlConnection, string strTable = "", string strNumberTop = "")
+        public DataTable SqlDataAdapter(string strQuery, SqlConnection sqlConnection, string strDbName, string strTable = "", string strNumberTop = "")
         {
             DataTable dt = new DataTable();
 
+            //  sql connection change dbname
+            sqlConnection = (strDbName != "") ? SqlConnectionChangeDB(strDbName, sqlConnection) : sqlConnection;
 
             if (strNumberTop != "" && strTable != "")
             { strQuery = "SELECT TOP 100 * FROM [" + strTable + "]"; }
@@ -1091,9 +1147,8 @@ namespace Identification
 
             string strQuery = "SELECT COUNT(*),[" + strColumn + "] FROM dbo.PersonTest_New GROUP BY[" + strColumn + "] HAVING COUNT(*) > 1";
 
-            sqlconnection = (strDBName != "") ? SqlConnectionChangeDB(strDBName, sqlconnection) : sqlconnection;
 
-            intRtn = SqlDataAdapter(strQuery, sqlconnection).Rows.Count;
+            intRtn = SqlDataAdapter(strQuery, sqlconnection, strDBName).Rows.Count;
 
 
             return intRtn;
