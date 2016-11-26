@@ -499,12 +499,18 @@ namespace Identification
             {
                 case 0:
                     #region Any
-
+                    int1 = 0; int2 = 0; int3 = 0;
                     #endregion
                     break;
                 case 1:
                     #region Name,Family,Father
-
+                    int1 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.AlphasOnly([" + strClm + "])<>'0' ");
+                    int2 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.AlphasOnly([" + strClm + "])='0' ");
+                    strQuery3 = "SELECT COUNT(*) b_count " +
+                                "FROM dbo.[" + strTable + "] " +
+                                "WHERE [" + strClm + "] IS NOT NULL AND dbo.AlphasOnly([" + strClm + "])<>'0' " +
+                                "GROUP BY [" + strClm + "] HAVING COUNT(*)>1 ";
+                    int3 = SqlDataAdapter(strQuery3, sqlConnection, strDbName).Rows.Count;
                     #endregion
                     break;                
                 case 2:
@@ -515,13 +521,31 @@ namespace Identification
                     strQuery3 = "SELECT COUNT(*) b_count " +
                                 "FROM dbo.[" + strTable + "] " +
                                 "WHERE [" + strClm + "] IS NOT NULL AND dbo.Ch_Codemelli(dbo.[CM-Check]([" + strClm + "]))=1 " +
-                                "GROUP BY [" + strClm + "] HAVING COUNT(*)>1 SELECT @@ROWCOUNT ";
+                                "GROUP BY [" + strClm + "] HAVING COUNT(*)>1 ";
                     int3 = SqlDataAdapter(strQuery3, sqlConnection, strDbName).Rows.Count;
                     #endregion
                     break;
                 case 3:
+                    #region ShenasCode
+                    int1 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND LEN(dbo.[CM-Check]([" + strClm + "])) < 8 ");
+                    int2 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND (LEN(dbo.[CM-Check]([" + strClm + "])) > 7 OR CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) = 0 ) ");
+
+                    strQuery3 = "SELECT COUNT(*) b_count FROM dbo.[" + strTable + "] " +
+                                "WHERE [" + strClm + "] IS NOT NULL AND LEN(dbo.[CM - Check]([" + strClm + "])) < 8 AND CAST(dbo.[CM - Check]([" + strClm + "]) AS BIGINT)<> 0  " +
+                                "GROUP BY [" + strClm + "] HAVING COUNT(*)> 1";
+                    int3 = SqlDataAdapter(strQuery3, sqlConnection, strDbName).Rows.Count;
+                    #endregion
                     break;
                 case 4:
+                    #region Numberic
+                    int1 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) <> 0 ");
+                    int2 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) = 0 ");
+
+                    strQuery3 = "SELECT COUNT(*) b_count FROM dbo.[" + strTable + "] " +
+                                "WHERE [" + strClm + "] IS NOT NULL AND CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) <> 0 " +
+                                "GROUP BY [" + strClm + "] HAVING COUNT(*)> 1";
+                    int3 = SqlDataAdapter(strQuery3, sqlConnection, strDbName).Rows.Count;
+                    #endregion
                     break;
             }
 

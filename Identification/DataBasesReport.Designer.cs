@@ -35,12 +35,12 @@
             this.lstbxMain = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.trvDatabase = new System.Windows.Forms.TreeView();
+            this.imageListTreeView = new System.Windows.Forms.ImageList(this.components);
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btnAddToList = new System.Windows.Forms.Button();
             this.btnDelFromList = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.imageListTreeView = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -98,6 +98,15 @@
             this.trvDatabase.Size = new System.Drawing.Size(262, 173);
             this.trvDatabase.TabIndex = 23;
             // 
+            // imageListTreeView
+            // 
+            this.imageListTreeView.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTreeView.ImageStream")));
+            this.imageListTreeView.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListTreeView.Images.SetKeyName(0, "database.png");
+            this.imageListTreeView.Images.SetKeyName(1, "");
+            this.imageListTreeView.Images.SetKeyName(2, "table.png");
+            this.imageListTreeView.Images.SetKeyName(3, "column.png");
+            // 
             // imageList1
             // 
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
@@ -113,7 +122,7 @@
             this.btnAddToList.Name = "btnAddToList";
             this.btnAddToList.Size = new System.Drawing.Size(50, 53);
             this.btnAddToList.TabIndex = 26;
-            this.btnAddToList.Text = "اضافه کردن (alt+a)";
+            this.btnAddToList.Text = "اضافه کردن";
             this.btnAddToList.UseVisualStyleBackColor = true;
             this.btnAddToList.Click += new System.EventHandler(this.btnAddToList_Click);
             // 
@@ -123,7 +132,7 @@
             this.btnDelFromList.Name = "btnDelFromList";
             this.btnDelFromList.Size = new System.Drawing.Size(50, 49);
             this.btnDelFromList.TabIndex = 27;
-            this.btnDelFromList.Text = "حذف از لیست (alt+d)";
+            this.btnDelFromList.Text = "حذف از لیست";
             this.btnDelFromList.UseVisualStyleBackColor = true;
             this.btnDelFromList.Click += new System.EventHandler(this.btnDelFromList_Click);
             // 
@@ -156,15 +165,6 @@
             this.groupBox1.Size = new System.Drawing.Size(324, 181);
             this.groupBox1.TabIndex = 29;
             this.groupBox1.TabStop = false;
-            // 
-            // imageListTreeView
-            // 
-            this.imageListTreeView.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTreeView.ImageStream")));
-            this.imageListTreeView.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListTreeView.Images.SetKeyName(0, "database.png");
-            this.imageListTreeView.Images.SetKeyName(1, "");
-            this.imageListTreeView.Images.SetKeyName(2, "table.png");
-            this.imageListTreeView.Images.SetKeyName(3, "column.png");
             // 
             // DataBasesReport
             // 

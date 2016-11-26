@@ -136,7 +136,7 @@ namespace Identification
                     lstClmName[i],
                     Functions.StrNum(intCountTotal),
                     Functions.StrNum(intCount),
-                    intCountNull,
+                    Functions.StrNum(intCountNull),
                     strPercent,
                     Functions.StrNum(lstInt[0]),
                     Functions.StrNum(lstInt[1]),
@@ -147,6 +147,8 @@ namespace Identification
 
             #endregion            
 
+            if (chkBx.CheckState == CheckState.Checked)
+            { tabControl1.SelectTab(1); }
 
             Cursor.Current = Cursors.Default;
         }
@@ -171,12 +173,8 @@ namespace Identification
                 case "شماره شناسنامه":
                     sqlfunction.SqlValidatorCount(sqlConnection, 3, strClmName, cmbTableName.Text, lstInt, cmbDBName.Text);
                     break;
-                case "تاریخ میلادی":
-                    break;
-                case "تاریخ شمسی":
-                    break;
                 case "عددی":
-                    sqlfunction.SqlValidatorCount(sqlConnection, 6, strClmName, cmbTableName.Text, lstInt, cmbDBName.Text);
+                    sqlfunction.SqlValidatorCount(sqlConnection, 4, strClmName, cmbTableName.Text, lstInt, cmbDBName.Text);
                     break;
             }
 
@@ -194,7 +192,6 @@ namespace Identification
             //  dafault value
             cmbDBName.Text = "Ehraz";
 
-            btnDelField.Enabled = false;
         }
 
         private void cmbDBName_SelectedIndexChanged(object sender, EventArgs e)
@@ -207,18 +204,8 @@ namespace Identification
             cmbTableName.DataSource = sqlfunction.SqlTableName(sqlConnection);
 
             //  dafault value
-            cmbTableName.Text = "TBL_MKsarparast_95-02-21";
+            cmbTableName.Text = "tblmksarparast";
 
-        }
-
-        private void btnDelField_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void DGVSearch_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            textBox1.Text = DGVSearch.Rows[e.RowIndex].Cells[2].Value.ToString();
         }
 
         private void cmbTBName_SelectedIndexChanged(object sender, EventArgs e)
@@ -249,8 +236,6 @@ namespace Identification
             dgvCmBxClm.Items.Add("نام،فامیل،نام پدر");
             dgvCmBxClm.Items.Add("کدملی");
             dgvCmBxClm.Items.Add("شماره شناسنامه");
-            dgvCmBxClm.Items.Add("تاریخ میلادی");
-            dgvCmBxClm.Items.Add("تاریخ شمسی");
             dgvCmBxClm.Items.Add("عددی");
             #endregion
 
@@ -305,7 +290,10 @@ namespace Identification
             Cursor.Current = Cursors.Default;
         }
 
+        private void InfoColumns_SizeChanged(object sender, EventArgs e)
+        {
 
-
+            panel1.AutoSize = true;
+        }
     }
 }

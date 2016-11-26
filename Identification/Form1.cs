@@ -23,6 +23,10 @@ namespace Identification
         Boolean EnableFrm;
         SqlConnection sqlConnection = new SqlConnection();
 
+
+        int frmSize_W = 0, frmSize_H = 0;
+
+
         string strUser, strPass, str, Alltext;
         string strPathLoginFolder = @"../Login.pos";
 
@@ -232,6 +236,16 @@ namespace Identification
             Cursor.Current = Cursors.Default;
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            frmSize_W = ClientSize.Width;
+            frmSize_H = ClientSize.Height;
+            label4.Text = frmSize_W.ToString() + " h :" + frmSize_H.ToString();
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+        }
 
         private void پشتیبانگیریToolStripMenuItem_Click(object sender, EventArgs e)
         {
