@@ -21,10 +21,10 @@ namespace Identification
 
         SqlConnection sqlConnection = new SqlConnection();
 
-        string strTableName="";
+        string strTableName = "";
 
         #endregion
-        public DateConvert(SqlConnection sqlCon,string strTBLName)
+        public DateConvert(SqlConnection sqlCon, string strTBLName)
         {
             InitializeComponent();
             sqlConnection = sqlCon;
@@ -77,25 +77,25 @@ namespace Identification
 
                 #region Standard Formated Date
                 //  sql update query
-                sqlfunction.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],'-','/')", sqlConnection);
-                sqlfunction.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],'_','/')", sqlConnection);
-                sqlfunction.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],'.','/')", sqlConnection);
-                sqlfunction.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],',','/')", sqlConnection);
+                sqlfunction.SqlUpdateData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],'-','/')", "", sqlConnection);
+                sqlfunction.SqlUpdateData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],'_','/')", "", sqlConnection);
+                sqlfunction.SqlUpdateData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],'.','/')", "", sqlConnection);
+                sqlfunction.SqlUpdateData(cmbTableName.Text, cmbConvertion.Text, "Replace ([" + cmbConvertion.Text + "],',','/')", "", sqlConnection);
 
                 //  run query                                    
                 lstReport.Items.Add(" Ltrim & Rtrim " +
-                                sqlfunction.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "ltrim(rtrim([" + cmbConvertion.Text + "]))", sqlConnection)
+                                sqlfunction.SqlUpdateData(cmbTableName.Text, cmbConvertion.Text, "ltrim(rtrim([" + cmbConvertion.Text + "]))", "", sqlConnection)
                                 );
                 //  run query
                 lstReport.Items.Add(" Standard Date " +
-                                sqlfunction.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, "dbo.[FE_Date]([" + cmbConvertion.Text + "]) where [" + cmbConvertion.Text + "] IS NOT NULL", sqlConnection)
+                                sqlfunction.SqlUpdateData(cmbTableName.Text, cmbConvertion.Text, "dbo.[FE_Date]([" + cmbConvertion.Text + "]) where [" + cmbConvertion.Text + "] IS NOT NULL", "", sqlConnection)
                                 );
                 #endregion
 
                 #region Delete Not Valid Date
                 //  run query
                 lstReport.Items.Add(" Delete Not Valid Date " +
-                                sqlfunction.SqlUpdateColumnData(cmbTableName.Text, cmbConvertion.Text, " NULL where dbo.[CM-Fix]([" + cmbConvertion.Text + "])= 0 ", sqlConnection)
+                                sqlfunction.SqlUpdateData(cmbTableName.Text, cmbConvertion.Text, " NULL where dbo.[CM-Fix]([" + cmbConvertion.Text + "])= 0 ", "", sqlConnection)
                                 );
                 #endregion
 
@@ -152,20 +152,20 @@ namespace Identification
             {
                 //  report
                 lstReport.Items.Add(
-                    //  save only year of persion date
-                                    sqlfunction.SqlUpdateCharacter(cmbTableName.Text, strPersion, 7, 4, sqlConnection, "SqlUpdateCharacter ")
+                                    //  save only year of persion date
+                                    sqlfunction.SqlUpdateCharacter(cmbTableName.Text, strPersion, 7, 4, sqlConnection)
                                     );
 
                 //  report
                 lstReport.Items.Add(
-                    //  convert column persion varchar to smallint
+                                    //  convert column persion varchar to smallint
                                     "SqlEditDataTypeColumn " + sqlfunction.SqlEditDataTypeColumn(cmbTableName.Text, strPersion, " smallint ", " NULL ", sqlConnection, sqlConnection.Database)
                                     );
 
                 //  report
                 lstReport.Items.Add(
-                    //  standard column persion
-                                    sqlfunction.SqlUpdateColumnData(cmbTableName.Text, strPersion, "NULL", sqlConnection, " < 1300 ", " Nullable Date<1300 ").Replace("Error", "does not have")
+                                    //  standard column persion
+                                    sqlfunction.SqlUpdateData(cmbTableName.Text, strPersion, "NULL", "", sqlConnection, " < 1300 ", " Nullable Date<1300 ").Replace("Error", "does not have")
                                     );
 
             }
@@ -179,8 +179,8 @@ namespace Identification
         public bool checkDataType(string strColumn, string strType)
         {
             bool bolReturn = false;
-            List<string> lst = Functions.DataTableToList(sqlfunction.SqlColumns(cmbTableName.Text, sqlConnection,"", strColumn));
-            if (sqlfunction.SqlColumns(cmbTableName.Text, sqlConnection, "",strColumn).Rows[0][2].ToString().ToUpper().Contains(strType.ToUpper())) bolReturn = true;
+            List<string> lst = Functions.DataTableToList(sqlfunction.SqlColumns(cmbTableName.Text, sqlConnection, "", strColumn));
+            if (sqlfunction.SqlColumns(cmbTableName.Text, sqlConnection, "", strColumn).Rows[0][2].ToString().ToUpper().Contains(strType.ToUpper())) bolReturn = true;
             return bolReturn;
         }
         #endregion

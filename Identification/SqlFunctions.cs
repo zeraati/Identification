@@ -124,39 +124,80 @@ namespace Identification
         #region Sql Upadte Functions
 
         // Sql Update Character Save
-        public string SqlUpdateCharacter(string strTableName, string strColumnName, int intStartIndex, int intLength, SqlConnection sqlConnection, string strState = "")
+        public string SqlUpdateCharacter(string strTableName, string strColumnName, int intStartIndex, int intLength, SqlConnection sqlConnection)
         {
             string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "] = SUBSTRING([" + strColumnName + "]," + intStartIndex + "," + intLength + ") WHERE [" + strColumnName + "] IS NOT NULL ";
 
-            return SqlExcutCommand(strQuery, sqlConnection, strState);
+            return SqlExcutCommand(strQuery, sqlConnection, " SqlUpdateCharacter ");
         }
 
         //SqlUpdateColumn
         #region SqlUpdateColumn
 
-        public string SqlUpdateColumnData(string strTableName, string strColumnName, string strData, SqlConnection sqlConnection)
+        public string SqlUpdateData(string strTableName, string strColumnName, string strData, string strDbName, SqlConnection sqlConnection, string strWhereQuery = "", string strState = "")
         {
-            string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]= " + strData;
-            return SqlExcutCommand(strQuery, sqlConnection, "UpdateColumn");
-        }
-        public string SqlUpdateColumnData(string strTableName, string strColumnName, string strColumnData, SqlConnection sqlConnection, string strState = "")
-        {
-            string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]=[" + strColumnData + "]";
-            return SqlExcutCommand(strQuery, sqlConnection, strState);
-        }
-        public string SqlUpdateColumnData(string strTableName, string strColumnName, string strColumnData, SqlConnection sqlConnection, string strWhereQuery = "", string strState = "")
-        {
-            string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]=" + strColumnData + " Where " + strWhereQuery;
-            return SqlExcutCommand(strQuery, sqlConnection, strState);
-        }
-        public string SqlUpdateColumnData(string strTableName, string strColumnName, string strColumnData, SqlConnection sqlConnection, string strWhereColumn = "", string strWhere = "", string strState = "")
-        {
-            string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]=" + strColumnData + " Where " + strWhere;
-            return SqlExcutCommand(strQuery, sqlConnection, strState);
+            string strQuery = "";
+            strQuery = (strWhereQuery == "") ? "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]= " + strData :
+                "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]= " + strData + " Where " + strWhereQuery;
+
+
+            return SqlExcutCommand(strQuery, sqlConnection, "UpdateColumn " + strState, strDbName);
         }
 
+        /// <summary>
+        /// Update Column From Other Column | Can be provided
+        /// </summary>
+        /// <param name="strTableName"></param>
+        /// <param name="strColumnName">Column Name</param>
+        /// <param name="strColumnData">Column Name Data</param>
+        /// <param name="strDbName">Data Base Name</param>
+        /// <param name="sqlConnection"></param>
+        /// <param name="strState"></param>
+        /// <param name="strWhereQuery">Where</param>
+        /// <returns></returns>
+        public string SqlUpdateColumn(string strTableName, string strColumnName, string strColumnData, string strDbName, SqlConnection sqlConnection, string strWhereQuery = "", string strState = "")
+        {
+            string strQuery = "";
+            strQuery = (strWhereQuery != "") ? "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]=[" + strColumnData + "]" :
+                "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]=" + strColumnData + " Where " + strWhereQuery;
+
+
+            return SqlExcutCommand(strQuery, sqlConnection, strState, strDbName);
+        }
 
         #endregion
+
+        #region Sql AlphasOnly
+
+        public List<string> SqlAlphasOnly(string strTable, string strColumn, SqlConnection sqlConnection, string strDbName = "")
+        {
+            string strQuery = "UPDATE dbo.[" + strTable + "] SET [" + strColumn + "]=dbo.AlphasOnly([" + strColumn + "]) WHERE [" + strColumn + "] IS NOT NULL SELECT @@ROWCOUNT";
+
+            List<string> lstRtn = new List<string>();
+
+            lstRtn.Add(SqlExecuteScalar(strQuery, sqlConnection, " SqlAlphasOnly ", strDbName).ToString());
+
+
+            return lstRtn;
+        }
+
+        #endregion
+
+        #region Sql Numberic
+
+        public List<string> SqlNumberic(string strTable, string strColumn, SqlConnection sqlConnection, string strDbName = "")
+        {
+            string strQuery = "UPDATE dbo.[" + strTable + "] SET [" + strColumn + "]=dbo.[CM-Check]([" + strColumn + "]) WHERE [" + strColumn + "] IS NOT NULL SELECT @@ROWCOUNT";
+
+            List<string> lstRtn = new List<string>();
+
+            lstRtn.Add(SqlExecuteScalar(strQuery, sqlConnection, " SqlNumberic ", strDbName).ToString());
+
+            return lstRtn;
+        }
+
+        #endregion
+
 
         #endregion
 
@@ -512,7 +553,7 @@ namespace Identification
                                 "GROUP BY [" + strClm + "] HAVING COUNT(*)>1 ";
                     int3 = SqlDataAdapter(strQuery3, sqlConnection, strDbName).Rows.Count;
                     #endregion
-                    break;                
+                    break;
                 case 2:
                     #region CodeMelli Count
                     int1 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.Ch_Codemelli(dbo.[CM-Check]([" + strClm + "])) = 1 ");
@@ -655,7 +696,7 @@ namespace Identification
         #endregion
 
         //  SqlCopyColumn
-        public string SqlCopyColumn(string strTableName, string strColumnName, SqlConnection sqlConnection)
+        public string SqlCopyColumn(string strTableName, string strColumnName,string strDbName, SqlConnection sqlConnection)
         {
             DataTable dtClmInfo = SqlColumns(strTableName, sqlConnection, strColumnName);
 
@@ -668,7 +709,7 @@ namespace Identification
             { SqlAddNewColumn(strTableName, strColumnName + "_Copy", dtClmInfo.Rows[0][3].ToString() + dtClmInfo.Rows[0][4].ToString(), dtClmInfo.Rows[0][2].ToString(), sqlConnection); }
 
             //  copy column
-            return SqlUpdateColumnData(strTableName, strColumnName + "_Copy", strColumnName, sqlConnection, "CopyColumn");
+            return SqlUpdateColumn(strTableName, strColumnName + "_Copy", strColumnName, strDbName, sqlConnection, "CopyColumn ");
 
         }
 
@@ -799,7 +840,7 @@ namespace Identification
         /// <param name="sqlConnection"></param>
         /// <param name="str">Field Or DataType</param>
         /// <returns></returns>
-        public string SqlEditColumn(string strTableName, string strOldColumn, SqlConnection sqlConnection, string strNewColumn = "", string strDataType = "", string strLen = "")
+        public string SqlEditColumn(string strTableName, string strOldColumn, SqlConnection sqlConnection, string strNewColumn = "", string strDataType = "", string strLen = "", string strDbName = "")
         {
             string strQuery = "";
             int intSelect = 0;
@@ -818,7 +859,7 @@ namespace Identification
                     {
                         string[] strArrType = { "bit", "tinyint", "smallint", "int", "bigint", "char(200)", "nchar(200)", "varchar(max)", "nvarchar(max)", "text", "ntext", "date", "datetime", "real", "float" };
 
-                        while (SqlExcutCommand(strQuery, sqlConnection, "EditField") == " => Error!")
+                        while (SqlExcutCommand(strQuery, sqlConnection, "EditField", strDbName) == " => Error!")
                         {
 
                             strQuery = "Alter Table [" + strTableName + "] Alter Column [" + strOldColumn + "] " + strArrType[intSelect];
@@ -872,10 +913,15 @@ namespace Identification
         #endregion
 
         #region Sql Execute
+
         //  SqlExecuteScalar
         #region SqlExecuteScalar
-        public int SqlExecuteScalar(string strQuery, SqlConnection sqlConnection, string strState = "")
+        public int SqlExecuteScalar(string strQuery, SqlConnection sqlConnection, string strState = "", string strDbName = "")
         {
+            //  connection change db
+            sqlConnection = (strDbName != "") ? SqlConnectionChangeDB(strDbName, sqlConnection) : sqlConnection;
+
+
             SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
             int intCount;
             cmd.Connection.Close();
@@ -887,10 +933,14 @@ namespace Identification
         }
 
         #endregion
+
         //  SqlExcutCommand
         #region SqlExcutCommand
-        public string SqlExcutCommand(string strQuery, SqlConnection sqlConnection, string strState = "")
+        public string SqlExcutCommand(string strQuery, SqlConnection sqlConnection, string strState = "", string strDbName = "")
         {
+            //  connection change db
+            sqlConnection = (strDbName != "") ? SqlConnectionChangeDB(strDbName, sqlConnection) : sqlConnection;
+
 
             SqlCommand cmd = new SqlCommand(strQuery, sqlConnection);
             try
@@ -913,6 +963,7 @@ namespace Identification
         }
 
         #endregion
+
         //  SqlExcutCommandWithGO
         #region SqlExcutCommandWithGO
         public List<string> SqlExcutCommandWithGO(SqlConnection sqlConnection, string strQuery, string strState = "")
@@ -965,8 +1016,6 @@ namespace Identification
         #endregion
 
         #endregion
-
-
 
         //  SqlRunQuery
         #region SqlRunQuery

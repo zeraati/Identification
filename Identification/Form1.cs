@@ -240,7 +240,6 @@ namespace Identification
         {
             frmSize_W = ClientSize.Width;
             frmSize_H = ClientSize.Height;
-            label4.Text = frmSize_W.ToString() + " h :" + frmSize_H.ToString();
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
