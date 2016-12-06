@@ -76,8 +76,9 @@ namespace Identification
             #region Delete Not Valid
 
             //  delete not valid  
-            sqlfunction.SqlUpdateData(strTableName, strColumnName, strColumnData, strDbName, sqlconnection);
-
+            lstRtn.Add(
+                        sqlfunction.SqlUpdateData(strTableName, strColumnName, strColumnData, strDbName, sqlconnection)
+                        );
             #endregion
 
             #region Valid Codemellis (Lens = 8,9,10)
@@ -90,7 +91,7 @@ namespace Identification
             lstRtn.Add(
                         sqlfunction.SqlUpdateColumn(strTableName,
                                                     "CodeMelli2",
-                                                    "RIGHT('00'+ " + strColumnName + ",10)",
+                                                    "RIGHT('00'+ [" + strColumnName + "],10)",
                                                     strDbName,
                                                     sqlconnection,
                                                     strWhere,
@@ -137,7 +138,7 @@ namespace Identification
             lstRtn.Add("Edit Column Datatype VARCHAR(10)");
 
             //  drop column     'CodeMelli2'
-            sqlfunction.SqlDropColumn(strTableName, "CodeMelli2", sqlconnection, strDbName);
+            sqlfunction.SqlDropColumn(strTableName, "CodeMelli2", strDbName, sqlconnection);
 
             #endregion
 
@@ -152,7 +153,7 @@ namespace Identification
         {
             List<string> lstRtn = new List<string>();
 
-            strColumnName = "[" + strColumnName + "]";
+            //strColumnName = "[" + strColumnName + "]";
             string strColumnData = "dbo.[CM-Fix](" + strColumnName + ")", strWhere = "";
 
             #region Delete Character Not Numeric
@@ -200,5 +201,8 @@ namespace Identification
             return lstRtn;
         }
         #endregion
+
+
+
     }
 }

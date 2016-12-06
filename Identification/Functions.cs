@@ -261,29 +261,10 @@ namespace Identification
             return ret;
         }
 
-        public int DropDownWidth(ComboBox myCombo)
-        {
-            int maxWidth = 0;
-            int temp = 0;
-            Label label1 = new Label();
-
-            foreach (var obj in myCombo.Items)
-            {
-                label1.Text = obj.ToString();
-                temp = label1.PreferredWidth;
-                if (temp > maxWidth)
-                {
-                    maxWidth = temp;
-                }
-            }
-            label1.Dispose();
-            return maxWidth;
-        }
 
         #region functions
 
         //**************    functions
-
 
         #region DataTypeToList
         public List<string> DataTypeToList(DataTable dt)
@@ -297,6 +278,7 @@ namespace Identification
             return lst;
         }
         #endregion
+
 
         #region DataTableToList
 
@@ -324,6 +306,7 @@ namespace Identification
 
         #endregion
 
+
         #region String To Int
         public int StringToInt(string strString, string strSeperator)
         {
@@ -342,6 +325,7 @@ namespace Identification
         }
 
         #endregion
+
 
         #region ComboBoxSource
         /// <summary>

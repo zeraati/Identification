@@ -126,9 +126,9 @@ namespace Identification
         // Sql Update Character Save
         public string SqlUpdateCharacter(string strTableName, string strColumnName, int intStartIndex, int intLength, SqlConnection sqlConnection)
         {
-            string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "] = SUBSTRING([" + strColumnName + "]," + intStartIndex + "," + intLength + ") WHERE [" + strColumnName + "] IS NOT NULL ";
+            string strQuery = "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "] = SUBSTRING([" + strColumnName + "]," + intStartIndex + "," + intLength + ") WHERE [" + strColumnName + "] IS NOT NULL SELECT @@ROWCOUNT";
 
-            return SqlExcutCommand(strQuery, sqlConnection, " SqlUpdateCharacter ");
+            return SqlExecuteScalar(strQuery, sqlConnection, "", " SqlUpdateCharacter ").ToString();
         }
 
         //SqlUpdateColumn
@@ -137,11 +137,11 @@ namespace Identification
         public string SqlUpdateData(string strTableName, string strColumnName, string strData, string strDbName, SqlConnection sqlConnection, string strWhereQuery = "", string strState = "")
         {
             string strQuery = "";
-            strQuery = (strWhereQuery == "") ? "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]= " + strData :
-                "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]= " + strData + " Where " + strWhereQuery;
+            strQuery = (strWhereQuery == "") ? "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]= " + strData + " SELECT @@ROWCOUNT" :
+                "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]= " + strData + " Where " + strWhereQuery + " SELECT @@ROWCOUNT ";
 
 
-            return SqlExcutCommand(strQuery, sqlConnection, "UpdateColumn " + strState, strDbName);
+            return SqlExecuteScalar(strQuery, sqlConnection, strDbName, "UpdateColumn " + strState).ToString();
         }
 
         /// <summary>
@@ -158,11 +158,11 @@ namespace Identification
         public string SqlUpdateColumn(string strTableName, string strColumnName, string strColumnData, string strDbName, SqlConnection sqlConnection, string strWhereQuery = "", string strState = "")
         {
             string strQuery = "";
-            strQuery = (strWhereQuery != "") ? "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]=[" + strColumnData + "]" :
-                "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]=" + strColumnData + " Where " + strWhereQuery;
+            strQuery = (strWhereQuery == "") ? "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]=" + strColumnData + " SELECT @@ROWCOUNT" :
+                "UPDATE dbo.[" + strTableName + "] SET [" + strColumnName + "]=" + strColumnData + " Where " + strWhereQuery + " SELECT @@ROWCOUNT";
 
 
-            return SqlExcutCommand(strQuery, sqlConnection, strState, strDbName);
+            return SqlExecuteScalar(strQuery, sqlConnection, strDbName, strState).ToString();
         }
 
         #endregion
@@ -509,7 +509,7 @@ namespace Identification
             for (int i = 0; i < lstClm.Count; i++)
             {
                 strQuery = "select COUNT(*) from dbo.[" + strTableName + "] WHERE [" + lstClm[i] + "] IS NULL";
-                lstRtn.Add(functions.StrNum(SqlExecuteScalar(strQuery, sqlConnection)));
+                lstRtn.Add(functions.StrNum(SqlExecuteScalar(strQuery, sqlConnection, strDbName)));
             }
 
             return lstRtn;
@@ -545,8 +545,8 @@ namespace Identification
                     break;
                 case 1:
                     #region Name,Family,Father
-                    int1 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.AlphasOnly([" + strClm + "])<>'0' ");
-                    int2 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.AlphasOnly([" + strClm + "])='0' ");
+                    int1 = SqlCountColumn(strTable, strDbName, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.AlphasOnly([" + strClm + "])<>'0' ");
+                    int2 = SqlCountColumn(strTable, strDbName, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.AlphasOnly([" + strClm + "])='0' ");
                     strQuery3 = "SELECT COUNT(*) b_count " +
                                 "FROM dbo.[" + strTable + "] " +
                                 "WHERE [" + strClm + "] IS NOT NULL AND dbo.AlphasOnly([" + strClm + "])<>'0' " +
@@ -556,8 +556,8 @@ namespace Identification
                     break;
                 case 2:
                     #region CodeMelli Count
-                    int1 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.Ch_Codemelli(dbo.[CM-Check]([" + strClm + "])) = 1 ");
-                    int2 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.Ch_Codemelli(dbo.[CM-Check]([" + strClm + "])) = 0 ");
+                    int1 = SqlCountColumn(strTable, strDbName, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.Ch_Codemelli(dbo.[CM-Check]([" + strClm + "])) = 1 ");
+                    int2 = SqlCountColumn(strTable, strDbName, sqlConnection, " [" + strClm + "] IS NOT NULL AND dbo.Ch_Codemelli(dbo.[CM-Check]([" + strClm + "])) = 0 ");
 
                     strQuery3 = "SELECT COUNT(*) b_count " +
                                 "FROM dbo.[" + strTable + "] " +
@@ -568,8 +568,8 @@ namespace Identification
                     break;
                 case 3:
                     #region ShenasCode
-                    int1 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND LEN(dbo.[CM-Check]([" + strClm + "])) < 8 ");
-                    int2 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND (LEN(dbo.[CM-Check]([" + strClm + "])) > 7 OR CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) = 0 ) ");
+                    int1 = SqlCountColumn(strTable, strDbName, sqlConnection, " [" + strClm + "] IS NOT NULL AND LEN(dbo.[CM-Check]([" + strClm + "])) < 8 ");
+                    int2 = SqlCountColumn(strTable, strDbName, sqlConnection, " [" + strClm + "] IS NOT NULL AND (LEN(dbo.[CM-Check]([" + strClm + "])) > 7 OR CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) = 0 ) ");
 
                     strQuery3 = "SELECT COUNT(*) b_count FROM dbo.[" + strTable + "] " +
                                 "WHERE [" + strClm + "] IS NOT NULL AND LEN(dbo.[CM - Check]([" + strClm + "])) < 8 AND CAST(dbo.[CM - Check]([" + strClm + "]) AS BIGINT)<> 0  " +
@@ -579,8 +579,8 @@ namespace Identification
                     break;
                 case 4:
                     #region Numberic
-                    int1 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) <> 0 ");
-                    int2 = SqlCountColumn(strTable, sqlConnection, " [" + strClm + "] IS NOT NULL AND CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) = 0 ");
+                    int1 = SqlCountColumn(strTable, strDbName, sqlConnection, " [" + strClm + "] IS NOT NULL AND CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) <> 0 ");
+                    int2 = SqlCountColumn(strTable, strDbName, sqlConnection, " [" + strClm + "] IS NOT NULL AND CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) = 0 ");
 
                     strQuery3 = "SELECT COUNT(*) b_count FROM dbo.[" + strTable + "] " +
                                 "WHERE [" + strClm + "] IS NOT NULL AND CAST(dbo.[CM-Check]([" + strClm + "]) AS BIGINT) <> 0 " +
@@ -684,19 +684,17 @@ namespace Identification
 
         //  SqlDropColumn
         #region SqlDropColumn
-        public string SqlDropColumn(string strTable, string strColumn, SqlConnection sqlConnection, string strDbName = "")
+        public string SqlDropColumn(string strTable, string strColumn, string strDbName, SqlConnection sqlConnection)
         {
             string strQuery = "ALTER TABLE dbo.[" + strTable + "] DROP COLUMN [" + strColumn + "]";
 
-            //  connection change database name
-            if (strDbName != "") { sqlConnection = SqlConnectionChangeDB(strDbName, sqlConnection); }
 
-            return SqlExcutCommand(strQuery, sqlConnection, strColumn + " ==> DropColumn");
+            return SqlExcutCommand(strQuery, sqlConnection, strColumn + " ==> DropColumn", strDbName);
         }
         #endregion
 
         //  SqlCopyColumn
-        public string SqlCopyColumn(string strTableName, string strColumnName,string strDbName, SqlConnection sqlConnection)
+        public string SqlCopyColumn(string strTableName, string strColumnName, string strDbName, SqlConnection sqlConnection)
         {
             DataTable dtClmInfo = SqlColumns(strTableName, sqlConnection, strColumnName);
 
@@ -716,26 +714,26 @@ namespace Identification
         //  SqlCountColumn
         #region SqlCountColumn
 
-        public int SqlCountDataBase(SqlConnection sqlConnection)
+        public int SqlCountDataBase(string strDbName, SqlConnection sqlConnection)
         {
             string strQuery = "SELECT COUNT(*) FROM sys.databases";
 
 
-            return SqlExecuteScalar(strQuery, sqlConnection);
+            return SqlExecuteScalar(strQuery, sqlConnection, strDbName);
         }
 
-        public int SqlCountColumn(string strTableName, string strColumnName, SqlConnection sqlConnection)
+        public int SqlCountColumn(string strTableName, string strColumnName, string strDbName, SqlConnection sqlConnection)
         {
             string strQuery = "SELECT COUNT([" + strColumnName + "]) FROM dbo.[" + strTableName + "]";
 
-            return SqlExecuteScalar(strQuery, sqlConnection);
+            return SqlExecuteScalar(strQuery, sqlConnection, strDbName);
         }
 
-        public int SqlCountColumn(string strTableName, SqlConnection sqlConnection, string strWhere = "")
+        public int SqlCountColumn(string strTableName, string strDbName, SqlConnection sqlConnection, string strWhere = "")
         {
             string strQuery = "SELECT COUNT(*) FROM dbo.[" + strTableName + "] WHERE " + strWhere;
 
-            return SqlExecuteScalar(strQuery, sqlConnection);
+            return SqlExecuteScalar(strQuery, sqlConnection, strDbName);
         }
 
         public int SqlCountColumnKey(string strTableName, string strColumnName, SqlConnection sqlConnection)
@@ -813,22 +811,24 @@ namespace Identification
             return SqlRunQuery(strQuery, sqlConnection);
         }
         #endregion
+        
         //  SqlDropColumnSpace
         #region SqlDropColumnSpace
-        public string SqlDropColumnSpace(string strTableName, string strColumnName, SqlConnection sqlConnection)
+        public string SqlDropColumnSpace(string strTableName, string strColumnName, string strDbName, SqlConnection sqlConnection)
         {
             string strReturn = "";
 
-            int intCount = SqlCountColumn(strTableName, strColumnName, sqlConnection);
+            int intCount = SqlCountColumn(strTableName, strColumnName, strDbName, sqlConnection);
 
             if (intCount == 0)
             {
-                strReturn = SqlDropColumn(strTableName, strColumnName, sqlConnection);
+                strReturn = SqlDropColumn(strTableName, strColumnName, strDbName, sqlConnection);
             }
             return strReturn;
         }
 
         #endregion
+
         //  SqlEditColumn
         #region SqlEditColumn
         /// <summary>
@@ -916,7 +916,7 @@ namespace Identification
 
         //  SqlExecuteScalar
         #region SqlExecuteScalar
-        public int SqlExecuteScalar(string strQuery, SqlConnection sqlConnection, string strState = "", string strDbName = "")
+        public int SqlExecuteScalar(string strQuery, SqlConnection sqlConnection, string strDbName, string strState = "")
         {
             //  connection change db
             sqlConnection = (strDbName != "") ? SqlConnectionChangeDB(strDbName, sqlConnection) : sqlConnection;
@@ -1065,14 +1065,16 @@ namespace Identification
 
         //  SqlDropRows
         #region SqlDropRows
-        public string SqlDropRows(string strTableName, SqlConnection sqlConnection, string strWhere = "")
+        public int SqlDropRows(string strTableName, string strDbName, SqlConnection sqlConnection, string strWhere = "")
         {
             string strQuery = "";
 
             if (strWhere == "")
             { strQuery = "DELETE FROM " + strTableName; }
-            else strQuery = "DELETE FROM " + strTableName + " WHERE " + strWhere;
-            return SqlExcutCommand(strQuery, sqlConnection, " DropRows ");
+            else strQuery = "DELETE FROM " + strTableName + " WHERE " + strWhere + " SELECT @@ROWCOUNT";
+
+
+            return SqlExecuteScalar(strQuery, sqlConnection, strDbName, " DropRows ");
         }
         #endregion
 
