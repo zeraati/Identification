@@ -324,6 +324,14 @@ namespace Identification
             if (lstbxMain.SelectedIndex != -1) { lstbxMain.Items.RemoveAt(lstbxMain.SelectedIndex); }
         }
 
+        private void trvDatabase_DoubleClick(object sender, EventArgs e)
+        {
+            btnAddToList_Click(null, null);
+        }
 
+        private void lstbxMain_DoubleClick(object sender, EventArgs e)
+        {
+            if (lstbxMain.SelectedIndex != -1) { lstbxMain.Items.RemoveAt(lstbxMain.SelectedIndex); }
+        }
     }
 }

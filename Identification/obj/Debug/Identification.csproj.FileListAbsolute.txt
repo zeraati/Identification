@@ -104,3 +104,21 @@ E:\Projects\Identification\Identification\obj\Debug\Identification.Substring.res
 E:\Projects\Identification\Identification\obj\Debug\Identification.Uniqe.resources
 E:\Projects\Identification\Identification\obj\Debug\Identification.csproj.GenerateResource.Cache
 E:\Projects\Identification\Identification\obj\Debug\Identification.DataBasesReport.resources
+D:\Computer\My Project Work\New\Identification\Identification\bin\Debug\Identification.exe.config
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.exe
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.pdb
+D:\Computer\My Project Work\New\Identification\Identification\bin\Debug\Identification.exe
+D:\Computer\My Project Work\New\Identification\Identification\bin\Debug\Identification.pdb
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.csprojResolveAssemblyReference.cache
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.DataBasesReport.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.DateConvert.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.Estandard.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.FindDuplicate.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.Form1.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.InfoColumns.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.Properties.Resources.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.SetPerson.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.SQLDBbackup.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.Substring.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.Uniqe.resources
+D:\Computer\My Project Work\New\Identification\Identification\obj\Debug\Identification.csproj.GenerateResource.Cache

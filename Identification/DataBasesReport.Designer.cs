@@ -75,6 +75,7 @@
             this.lstbxMain.Name = "lstbxMain";
             this.lstbxMain.Size = new System.Drawing.Size(256, 173);
             this.lstbxMain.TabIndex = 17;
+            this.lstbxMain.DoubleClick += new System.EventHandler(this.lstbxMain_DoubleClick);
             // 
             // tabControl1
             // 
@@ -97,6 +98,7 @@
             this.trvDatabase.SelectedImageIndex = 0;
             this.trvDatabase.Size = new System.Drawing.Size(262, 173);
             this.trvDatabase.TabIndex = 23;
+            this.trvDatabase.DoubleClick += new System.EventHandler(this.trvDatabase_DoubleClick);
             // 
             // imageListTreeView
             // 
